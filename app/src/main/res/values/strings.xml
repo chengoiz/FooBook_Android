@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FooBook_Android</string>
+    <string name="login_userName">UserName</string>
+    <string name="login_login_btn">Log In</string>
+    <string name="password">Password</string>
+    <string name="login_signUp">Sign Up for foobook</string>
+
 </resources>
