@@ -1,7 +1,5 @@
 package com.example.foobook_android;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class LogInActivity extends AppCompatActivity {
 
     private EditText inputUsername, inputPassword;
     Button btnSignup;
