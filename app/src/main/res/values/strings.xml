@@ -1,8 +1,16 @@
 <resources>
-    <string name="app_name">FooBook_Android</string>
+    <string name="app_name">FooBook</string>
     <string name="login_userName">UserName</string>
     <string name="login_login_btn">Log In</string>
     <string name="password">Password</string>
     <string name="login_signUp">Sign Up for foobook</string>
+    <string name="password_confirm">Confirm Password</string>
+    <string name="signUp_DisplayName">Display name</string>
+    <string name="signUp_choose_file">Choose File</string>
+    <string name="signUp_TakePhoto">Take photo</string>
+    <string name="signUp_imageText">No file chosen</string>
+    <string name="btnSignup">Sign up</string>
+    <string name="signUpTitle">Sign up</string>
+    <string name="registerBtnBack">BACK</string>
 
 </resources>
