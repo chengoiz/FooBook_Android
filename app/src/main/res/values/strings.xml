@@ -12,5 +12,7 @@
     <string name="btnSignup">Sign up</string>
     <string name="signUpTitle">Sign up</string>
     <string name="registerBtnBack">BACK</string>
+    <string name="feedPostHint">What\'s on your mind?</string>
+    <string name="feedBtnPost">Post</string>
 
 </resources>
