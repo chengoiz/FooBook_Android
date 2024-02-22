@@ -1,0 +1,74 @@
+{
+  "posts": [
+    {
+      "userName": "Tomer",
+      "timestamp": "July 17 at 1:23 pm",
+      "content": "Here's my first post!",
+      "profileImage": "https://source.unsplash.com/random/100",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=1&profile"
+    },
+    {
+      "userName": "Alice",
+      "timestamp": "July 18 at 2:30 pm",
+      "content": "Another day, another adventure.",
+      "profileImage": "https://source.unsplash.com/random/101",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=2&profile"
+    },
+    {
+      "userName": "Bob",
+      "timestamp": "July 18 at 5:30 pm",
+      "content": "Got Accepted to Harvard!",
+      "profileImage": "https://source.unsplash.com/random/102",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=3&profile"
+    },
+    {
+      "userName": "Yosi",
+      "timestamp": "July 24 at 2:30 pm",
+      "content": "I'm so lucky!",
+      "profileImage": "https://source.unsplash.com/random/103",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=4&profile"
+    },
+    {
+      "userName": "Ofek",
+      "timestamp": "July 20 at 4:30 am",
+      "content": "Love my mom!",
+      "profileImage": "https://source.unsplash.com/random/104",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=5&profile"
+    },
+    {
+      "userName": "Michael",
+      "timestamp": "March 18 at 7:30 pm",
+      "content": "I love dogs",
+      "profileImage": "https://source.unsplash.com/random/105",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=6&profile"
+    },
+    {
+      "userName": "Ziv",
+      "timestamp": "February 1 at 6:30 pm",
+      "content": "I love food",
+      "profileImage": "https://source.unsplash.com/random/106",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=7&profile"
+    },
+    {
+      "userName": "Ronit",
+      "timestamp": "March 11 at 2:30 pm",
+      "content": "Love myself so much!",
+      "profileImage": "https://source.unsplash.com/random/107",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=8&profile"
+    },
+    {
+      "userName": "Amit",
+      "timestamp": "July 30 at 2:30 pm",
+      "content": "Im such a good kisser",
+      "profileImage": "https://source.unsplash.com/random/108",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=9&profile"
+    },
+    {
+      "userName": "Dolev",
+      "timestamp": "September 11 at 2:30 pm",
+      "content": "Rip twin towers",
+      "profileImage": "https://source.unsplash.com/random/109",
+      "postImage": "https://source.unsplash.com/random/300x300?sig=10&profile"
+    }
+  ]
+}

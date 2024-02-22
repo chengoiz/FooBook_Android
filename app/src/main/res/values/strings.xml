@@ -14,5 +14,8 @@
     <string name="registerBtnBack">BACK</string>
     <string name="feedPostHint">What\'s on your mind?</string>
     <string name="feedBtnPost">Post</string>
+    <string name="write_a_comment">Write a comment</string>
+    <string name="user_name">User Name</string>
+    <string name="timestamp">Timestamp</string>
 
 </resources>
