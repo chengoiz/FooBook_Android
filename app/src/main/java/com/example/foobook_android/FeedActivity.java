@@ -32,16 +32,16 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         postAdapter = new PostAdapter(this, PostManager.getPosts(), this);
         recyclerView.setAdapter(postAdapter);
 
-    public void onAdd() {
-    // add
-    }
 
+}
+
+    @Override
     public void onEdit(int position) {
-    // add
+
     }
 
-
+    @Override
     public void onDelete(int position) {
-    // add
+
     }
 }
