@@ -1,18 +1,23 @@
 package com.example.foobook_android;
 
-
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.function.Consumer;
 
 public class PhotoSelectorHelper {
@@ -27,6 +32,18 @@ public class PhotoSelectorHelper {
         this.cameraRequestCode = cameraRequestCode;
         this.galleryRequestCode = galleryRequestCode;
         this.onPhotoSelected = onPhotoSelected;
+    }
+    public Uri saveBitmapToFile(Context context, Bitmap bitmap, String fileName) {
+        File cachePath = new File(context.getExternalCacheDir(), "my_images");
+        cachePath.mkdirs();
+        File imagePath = new File(cachePath, fileName);
+        try (FileOutputStream fos = new FileOutputStream(imagePath)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", imagePath);
+        } catch (IOException e) {
+            Log.e("ImageUtil", "Error saving image", e);
+            return null;
+        }
     }
 
     public void checkCameraPermissionAndOpen() {
@@ -69,4 +86,3 @@ public class PhotoSelectorHelper {
         }
     }
 }
-
