@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 
-public class EditPostActivity extends AppCompatActivity implements PostAdapter.PostItemListener {
+public class EditPostActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
 
@@ -42,40 +42,9 @@ public class EditPostActivity extends AppCompatActivity implements PostAdapter.P
         setupListeners();
         initializeHelpers();
         handleIncomingIntent();
-
-
-        postEditText = findViewById(R.id.postEditText);
-        selectedImage = findViewById(R.id.selectedImage);
-        postButton = findViewById(R.id.postButton);
-        btnGallery = findViewById(R.id.btnGallery);
-        btnCamera = findViewById(R.id.btnCamera);
-        removePhoto = findViewById(R.id.removePhoto);
-        postAdapter = new PostAdapter(this, PostManager.getPosts(), this);
-
-        photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
-
-        btnGallery.setOnClickListener(v -> {
-            photoSelectorHelper.openGallery();
-        });
-        btnCamera.setOnClickListener(v -> photoSelectorHelper.checkCameraPermissionAndOpen());
-
-        removePhoto.setOnClickListener(v -> {
-            currentPost.setPostImage(null);
-            selectedImage.invalidate();
-            selectedImage.setVisibility(View.GONE);
-            isPhotoSelected = false;
-            currentPost.setIsPhotoPicked(Post.NO_PHOTO);
-        });
-
-        postButton.setOnClickListener(v -> savePost());
-
-
-        // Handle incoming intent for editing
-        handleIncomingIntent();
     }
 
     private void initializeViewComponents() {
-        Log.i("EditPostActivity", "onCreate");
         postEditText = findViewById(R.id.postEditText);
         selectedImage = findViewById(R.id.selectedImage);
         postButton = findViewById(R.id.postButton);
@@ -92,8 +61,9 @@ public class EditPostActivity extends AppCompatActivity implements PostAdapter.P
     }
 
     private void initializeHelpers() {
-        postAdapter = new PostAdapter(this, PostManager.getPosts(), this);
-        photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
+        postAdapter = new PostAdapter(this, PostManager.getPosts(), null);
+        photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE,
+                                                        GALLERY_REQUEST_CODE, this::setImage);
     }
 
 
@@ -159,7 +129,8 @@ public class EditPostActivity extends AppCompatActivity implements PostAdapter.P
             resultIntent.putExtra("postPosition", postPosition);
             setResult(RESULT_OK);
         } else {
-            Toast.makeText(EditPostActivity.this, "post text cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPostActivity.this, "post text cannot be empty",
+                    Toast.LENGTH_SHORT).show();
         }
         finish();
     }
@@ -168,15 +139,5 @@ public class EditPostActivity extends AppCompatActivity implements PostAdapter.P
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         photoSelectorHelper.handleActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onEdit(int position) {
-
-    }
-
-    @Override
-    public void onDelete(int position) {
-
     }
 }

@@ -27,19 +27,23 @@ public class PhotoSelectorHelper {
     private final int galleryRequestCode;
     private final Consumer<Bitmap> onPhotoSelected;
 
-    public PhotoSelectorHelper(Activity activity, int cameraRequestCode, int galleryRequestCode, Consumer<Bitmap> onPhotoSelected) {
+    public PhotoSelectorHelper(Activity activity, int cameraRequestCode, int galleryRequestCode,
+                               Consumer<Bitmap> onPhotoSelected) {
         this.activity = activity;
         this.cameraRequestCode = cameraRequestCode;
         this.galleryRequestCode = galleryRequestCode;
         this.onPhotoSelected = onPhotoSelected;
     }
+
     public Uri saveBitmapToFile(Context context, Bitmap bitmap, String fileName) {
         File cachePath = new File(context.getExternalCacheDir(), "my_images");
         cachePath.mkdirs();
         File imagePath = new File(cachePath, fileName);
         try (FileOutputStream fos = new FileOutputStream(imagePath)) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", imagePath);
+            return FileProvider.getUriForFile(context,
+                    context.getApplicationContext().getPackageName() + ".provider",
+                    imagePath);
         } catch (IOException e) {
             Log.e("ImageUtil", "Error saving image", e);
             return null;
@@ -47,8 +51,11 @@ public class PhotoSelectorHelper {
     }
 
     public void checkCameraPermissionAndOpen() {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, cameraRequestCode);
+        if (ContextCompat.checkSelfPermission(activity,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.CAMERA},
+                    cameraRequestCode);
         } else {
             openCamera();
         }
@@ -65,7 +72,8 @@ public class PhotoSelectorHelper {
 
 
     public void openGallery() {
-        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         activity.startActivityForResult(pickPhotoIntent, galleryRequestCode);
     }
 
@@ -77,7 +85,8 @@ public class PhotoSelectorHelper {
             } else if (requestCode == galleryRequestCode && data != null) {
                 Uri imageUri = data.getData();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), imageUri);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(),
+                            imageUri);
                     onPhotoSelected.accept(bitmap);
                 } catch (Exception e) {
                     e.printStackTrace();

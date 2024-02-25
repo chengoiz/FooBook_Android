@@ -10,8 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foobook_android.adapters.CommentAdapter;
-
 
 import java.util.ArrayList;
 
@@ -27,26 +25,29 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         Log.i("CommentActivity", "onCreate");
+        setupCommentRecyclerView();
+        setupButtons();
+    }
 
-        postPosition = getIntent().getIntExtra("postPosition", -1);
-        if (postPosition == -1) {
-            finish();
-            return;
-        }
-
-        // Retrieve comments for this post from the CommentsDataHolder
-        commentsList = new ArrayList<>(CommentsDataHolder.getComments(postPosition));
-        commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
-        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        commentAdapter = new CommentAdapter(this, commentsList, this);
-        commentsRecyclerView.setAdapter(commentAdapter);
-
-        // Adding a comment
+    public void setupButtons() {
         ImageButton sendCommentBtn = findViewById(R.id.sendCommentButton);
         sendCommentBtn.setOnClickListener(v -> {
             addComment();
         });
     }
+
+    private void setupCommentRecyclerView() {
+        postPosition = getIntent().getIntExtra("postPosition", -1);
+        if (postPosition == -1) {
+            finish();
+        }
+        commentsList = new ArrayList<>(CommentsDataHolder.getComments(postPosition));
+        commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
+        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        commentAdapter = new CommentAdapter(this, commentsList, this);
+        commentsRecyclerView.setAdapter(commentAdapter);
+    }
+
     public void addComment() {
         EditText writeTextComment = findViewById(R.id.commentItemComment);
         String commentText = writeTextComment.getText().toString().trim();
@@ -65,14 +66,16 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         } else {
             Toast.makeText(CommentActivity.this, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
         }
+
+
     }
+
     @Override
     public void onDeleteComment(int position) {
         CommentsDataHolder.removeComment(postPosition, position);
         commentsList.remove(position);
         commentAdapter.notifyItemRemoved(position);
     }
-
 
     @Override
     protected void onStart() {

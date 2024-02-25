@@ -1,4 +1,4 @@
-package com.example.foobook_android.adapters;
+package com.example.foobook_android;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,20 +6,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.foobook_android.Comment;
-import com.example.foobook_android.FieldValidation;
-import com.example.foobook_android.R;
 
 import java.util.List;
 
@@ -28,7 +21,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private Context context;
     private List<Comment> comments;
     private final LayoutInflater mInflater;
-    private CommentItemListener listener; // Listener for delete button
+    // Interface for handling delete actions, adheres to OOP encapsulation principles.
+    private CommentItemListener listener;
 
     public interface CommentItemListener {
         void onDeleteComment(int position);
@@ -50,70 +44,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        Comment comment = comments.get(position);
-        holder.commenterNameTextView.setText(comment.getCommenterName());
-        holder.commentText.setText(comment.getCommentText());
-
-        holder.commentMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Creating the instance of comment menu
-                PopupMenu commentMenu = new PopupMenu(context, holder.commentMenu);
-                // Inflating the menu using xml file
-                commentMenu.getMenuInflater().inflate(R.menu.comment_menu, commentMenu.getMenu());
-
-                commentMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        // edit comment
-                        if (item.getItemId() == R.id.menuEditComment) {
-                            // Enable EditText for editing
-                            holder.commentText.setFocusable(true);
-                            holder.commentText.setClickable(true);
-                            holder.commentText.setFocusableInTouchMode(true);
-                            holder.commentText.requestFocus();
-                            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.showSoftInput(holder.commentText, InputMethodManager.SHOW_IMPLICIT);
-                            FieldValidation.setupFieldValidation(holder.commentText);
-                            // Show save button
-
-                            holder.commentItemSaveBtn.setVisibility(View.VISIBLE);
-                        } else if (item.getItemId() == R.id.menuDeleteComment) {
-                            // delete comment
-                            listener.onDeleteComment(position);
-                        }
-                        return true;
-                    }
-                });
-
-                commentMenu.show(); //showing comment menu
-            }
-        });
-
-
-        // save button for the comment edit
-        holder.commentItemSaveBtn.setOnClickListener(v -> {
-            if (!holder.commentText.getText().toString().isEmpty()) {
-
-
-                // Update the comment object with the new text
-                comment.setCommentText(holder.commentText.getText().toString());
-
-                // Make EditText non-editable again
-                holder.commentText.setFocusable(false);
-                holder.commentText.setFocusableInTouchMode(false); // important for non-touch screen devices
-                holder.commentText.setClickable(false);
-
-                // Optionally, hide the keyboard
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(holder.commentText.getWindowToken(), 0);
-
-                // Hide the save button
-                holder.commentItemSaveBtn.setVisibility(View.GONE);
-
-                // Notify the adapter that the item has changed to refresh the item view
-                notifyItemChanged(position);
-            }
-        });
+        // Moved the binding logic to a method within the ViewHolder
+        holder.bind(comments.get(position), position);
     }
 
     @Override
@@ -121,14 +53,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         return comments.size();
     }
 
-    public static class CommentViewHolder extends RecyclerView.ViewHolder {
+    public class CommentViewHolder extends RecyclerView.ViewHolder {
         TextView commenterNameTextView;
         EditText commentText;
         ImageView commenterProfileImageView;
         ImageButton commentMenu;
         ImageButton commentItemSaveBtn;
-        Button menuEditComment;
-
 
         CommentViewHolder(View itemView) {
             super(itemView);
@@ -136,9 +66,73 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             commentText = itemView.findViewById(R.id.commentItemComment);
             commenterProfileImageView = itemView.findViewById(R.id.commentItemImage);
             commentMenu = itemView.findViewById(R.id.commentMenu);
-            menuEditComment = itemView.findViewById(R.id.menuEditComment);
             commentItemSaveBtn = itemView.findViewById(R.id.commentItemSaveBtn);
+        }
 
+        // Encapsulates ViewHolder binding logic for cleaner onBindViewHolder method
+        void bind(Comment comment, int position) {
+            commenterNameTextView.setText(comment.getCommenterName());
+            commentText.setText(comment.getCommentText());
+
+            setupPopupMenu(comment, position);
+            setupSaveButton(comment, position);
+        }
+
+        // Handles the setup and functionality of the PopupMenu
+        private void setupPopupMenu(Comment comment, int position) {
+            commentMenu.setOnClickListener(v -> {
+                PopupMenu commentMenu = new PopupMenu(context, this.commentMenu);
+                commentMenu.getMenuInflater().inflate(R.menu.comment_menu, commentMenu.getMenu());
+                commentMenu.setOnMenuItemClickListener(item -> onMenuItemClick(item, comment, position));
+                commentMenu.show();
+            });
+        }
+
+        // Separates the logic for handling menu item clicks
+        private boolean onMenuItemClick(MenuItem item, Comment comment, int position) {
+            if (item.getItemId() == R.id.menuEditComment) {
+                makeCommentEditable();
+                return true;
+            } else if (item.getItemId() == R.id.menuDeleteComment) {
+                listener.onDeleteComment(position);
+                return true;
+            }
+            return false;
+        }
+
+
+
+        // Prepares the EditText for editing and shows the save button
+        private void makeCommentEditable() {
+            commentText.setFocusable(true);
+            commentText.setClickable(true);
+            commentText.setFocusableInTouchMode(true);
+            commentText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(commentText, InputMethodManager.SHOW_IMPLICIT);
+            FieldValidation.setupFieldValidation(commentText); // Assuming it configures validation
+            commentItemSaveBtn.setVisibility(View.VISIBLE);
+        }
+
+        // Configures the save button behavior
+        private void setupSaveButton(Comment comment, int position) {
+            commentItemSaveBtn.setOnClickListener(v -> {
+                if (!commentText.getText().toString().isEmpty()) {
+                    comment.setCommentText(commentText.getText().toString());
+                    disableEditing();
+                    notifyItemChanged(position); // Notify adapter directly from ViewHolder for encapsulation
+                }
+            });
+        }
+
+        // Disables editing for the comment EditText and hides the keyboard
+        private void disableEditing() {
+            commentText.setFocusable(false);
+            commentText.setFocusableInTouchMode(false);
+            commentText.setClickable(false);
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(commentText.getWindowToken(), 0);
+            commentItemSaveBtn.setVisibility(View.GONE);
         }
     }
 }

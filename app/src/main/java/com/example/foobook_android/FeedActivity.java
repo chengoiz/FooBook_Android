@@ -76,6 +76,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     public void onDelete(int position) {
         PostManager.deletePost(position);
         postAdapter.notifyItemRemoved(position);
+        CommentsDataHolder.onPostDeleted(position);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
