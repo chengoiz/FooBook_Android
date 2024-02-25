@@ -17,5 +17,14 @@
     <string name="write_a_comment">Write a comment</string>
     <string name="user_name">User Name</string>
     <string name="timestamp">Timestamp</string>
+    <string name="remove_photo">Remove photo</string>
+    <string name="comments">Comments: 0</string>
+    <string name="share">share</string>
+    <string name="likes">Likes: 0</string>
+    <string name="post_content_goes_here">Post content goes here...</string>
+
+    <string name="likes_count">Likes: %d</string>
+    <string name="comments_count">Comments: %d</string>
+    <string name="logout">Logout</string>
 
 </resources>

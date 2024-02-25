@@ -1,53 +1,44 @@
 package com.example.foobook_android;
 
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
-
-    public interface PostItemListener {
-        void onEdit(int position);
-        void onDelete(int position);
-    }
+    private static final int PHOTO_PICKED = 1;
+    private static final int NO_PHOTO = 0;
 
     private final Context context;
     private final List<Post> posts;
-    private final LayoutInflater mInflater;
+    private final LayoutInflater inflater;
     private final PostItemListener listener;
 
     public PostAdapter(Context context, List<Post> posts, PostItemListener listener) {
         this.context = context;
         this.posts = posts;
         this.listener = listener;
-        mInflater = LayoutInflater.from(context);
+        this.inflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.post_item, parent, false);
+        View itemView = inflater.inflate(R.layout.post_item, parent, false);
         return new PostViewHolder(itemView);
     }
 
@@ -57,48 +48,75 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.userNameTextView.setText(post.getUserName());
         holder.timeStampTextView.setText(post.getTimestamp());
         holder.postContentTextView.setText(post.getContent());
-        loadImage(holder.profileImageView, post.getProfileImage());
-        loadImage(holder.postImageView, post.getPostImage());
+        loadImage(holder.profileImageView, post.getProfileImageUrl());
 
+        if (post.getIsPhotoPicked() == PHOTO_PICKED) {
+            holder.postImageView.setVisibility(View.VISIBLE);
+            if (post.getIsJsonFile() == Post.JSON_FILE) {
+                loadImage(holder.postImageView, post.getPostImageUrl());
+            }
 
-
-        // comment button
-        holder.feedCommentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Intent to start CommentActivity
-                if (position != RecyclerView.NO_POSITION) {
-                    Intent intent = new Intent(context, CommentActivity.class);
-                    intent.putExtra("postPosition", position);
-                    context.startActivity(intent);
+            if (post.getIsJsonFile() == Post.NOT_JSON_FILE) {
+                if (post.getPostImageUrl() != null) {
+                    Glide.with(context).load(post.getPostImageUrl()).into(holder.postImageView);
                 }
+                if (post.getPostImageUri() != null) {
+                    Glide.with(context).load(post.getPostImageUri()).into(holder.postImageView);
+                }
+            }
+        } else {
+            holder.postImageView.setVisibility(View.GONE);
+        }
+        updateLikesAndComments(holder, post, position);
+
+        // Like button click handling
+        holder.feedBtnLike.setOnClickListener(v -> updateLikes(holder, post));
+
+        // Comment button click handling
+        holder.feedCommentBtn.setOnClickListener(v -> startCommentActivity(position));
+
+        // Menu button handling
+        holder.editPostMenu.setOnClickListener(v -> {
+            int adapterPosition = holder.getAdapterPosition(); // Use getAdapterPosition()
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                showPostMenu(v, listener, adapterPosition);
             }
         });
 
+        // share button click
+        holder.shareButton.setOnClickListener(this::showShareMenu);
+    }
+
+    private void updateLikesAndComments(PostViewHolder holder, Post post, int position) {
+        holder.likesCountTextView.setText(context.getString(R.string.likes_count, post.getLikesCount()));
+        int commentCount = CommentsDataHolder.getCommentCount(position);
+        holder.commentsCountTextView.setText(context.getString(R.string.comments_count, commentCount));
+    }
+
+    private void updateLikes(PostViewHolder holder, Post post) {
+        post.toggleLike();
+        holder.likesCountTextView.setText(context.getString(R.string.likes_count, post.getLikesCount()));
+    }
+
+    private void startCommentActivity(int position) {
+        Intent intent = new Intent(context, CommentActivity.class);
+        intent.putExtra("postPosition", position);
+        context.startActivity(intent);
     }
 
     public void loadImage(ImageView imageView, String imageUrl) {
         Glide.with(context)
                 .load(imageUrl)
                 .placeholder(R.drawable.defaultpic)
-                .error(R.drawable.ic_launcher_background)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(GlideException e, Object model,
-                                                Target<Drawable> target, boolean isFirstResource) {
-                        Log.e("Glide", "Load failed for " + imageUrl, e);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model,
-                                                   Target<Drawable> target, DataSource dataSource,
-                                                   boolean isFirstResource) {
-                        Log.d("Glide", "Load succeeded for " + imageUrl);
-                        return false;
-                    }
-                })
+                .error(R.drawable.saved)
                 .into(imageView);
+    }
+
+    private void showShareMenu(View view) {
+        PopupMenu shareMenu = new PopupMenu(view.getContext(), view);
+        shareMenu.inflate(R.menu.share_button_menu);
+        shareMenu.setOnMenuItemClickListener(item -> false);
+        shareMenu.show();
     }
 
     @Override
@@ -106,17 +124,34 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         return posts.size();
     }
 
+    private void showPostMenu(View view, PostItemListener listener, int position) {
+        PopupMenu postMenu = new PopupMenu(view.getContext(), view);
+        postMenu.inflate(R.menu.post_menu);
+        postMenu.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.menuEditPost) {
+                listener.onEdit(position);
+                return true;
+            } else if (item.getItemId() == R.id.menuDeletePost) {
+                listener.onDelete(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, getItemCount());
+                return true;
+            }
+            return false;
+        });
+        postMenu.show();
+    }
+
+    public interface PostItemListener {
+        void onEdit(int position);
+
+        void onDelete(int position);
+    }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
-        TextView userNameTextView;
-        TextView timeStampTextView;
-        TextView postContentTextView;
-        ImageView profileImageView;
-        ImageView postImageView;
-        ImageButton feedCommentBtn;
-        ImageButton feedBtnLike;
-
-
+        TextView userNameTextView, timeStampTextView, postContentTextView, likesCountTextView, commentsCountTextView;
+        ImageView profileImageView, postImageView;
+        ImageButton feedCommentBtn, feedBtnLike, editPostMenu, shareButton;
 
         PostViewHolder(View itemView) {
             super(itemView);
@@ -125,12 +160,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             postContentTextView = itemView.findViewById(R.id.postContentTextView);
             profileImageView = itemView.findViewById(R.id.profileImageView);
             postImageView = itemView.findViewById(R.id.postImageView);
+            likesCountTextView = itemView.findViewById(R.id.likesCountTextView);
+            commentsCountTextView = itemView.findViewById(R.id.commentsCountTextView);
             feedCommentBtn = itemView.findViewById(R.id.feedBtnComment);
             feedBtnLike = itemView.findViewById(R.id.feedBtnLike);
-
-
+            editPostMenu = itemView.findViewById(R.id.editPostMenu);
+            shareButton = itemView.findViewById(R.id.feedBtnShare);
         }
-
-
     }
 }

@@ -1,0 +1,136 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FeedActivity">
+
+  <LinearLayout
+      android:id="@+id/title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingHorizontal="10dp">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/facebolt"
+        android:layout_weight="1"
+        android:text="@string/app_name"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="40sp"
+        />
+
+
+    <View
+        android:layout_width="100dp"
+        android:layout_height="0dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/btn_search"
+        android:layout_weight="1"
+        >
+    </ImageButton>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/btn_messenger"
+        android:layout_weight="1">
+    </ImageButton>
+
+  </LinearLayout>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/newPostLayout"
+      android:layout_width="380dp"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/title"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginEnd="16dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/postTextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/feedPostHint"
+        app:layout_constraintEnd_toStartOf="@+id/btnGallery"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+      <EditText
+          android:id="@+id/postEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="text"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/btnGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/postTextInputLayout"
+        app:layout_constraintEnd_toStartOf="@+id/btnCamera"
+        app:layout_constraintTop_toTopOf="@+id/postTextInputLayout"
+        app:srcCompat="@drawable/btn_gallery" />
+
+    <ImageButton
+        android:id="@+id/btnCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/postTextInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/postTextInputLayout"
+        app:srcCompat="@drawable/btn_camera" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <ImageView
+      android:id="@+id/selectedImage"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="20dp"
+      android:layout_below="@id/postButton"
+      android:layout_centerHorizontal="true"
+      android:layout_marginHorizontal="10dp"
+      android:layout_marginTop="8dp"
+      android:scaleType="centerCrop"
+      android:visibility="visible" />
+
+
+  <Button
+      android:id="@+id/postButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/newPostLayout"
+      android:layout_alignParentEnd="true"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="5dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="16dp"
+      android:text="@string/feedBtnPost" />
+
+  <Button
+      android:id="@+id/removePhoto"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/newPostLayout"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="5dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="16dp"
+      android:text="@string/remove_photo"
+      android:visibility="gone" />
+
+</RelativeLayout>

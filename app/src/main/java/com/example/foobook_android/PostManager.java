@@ -36,6 +36,10 @@ public class PostManager {
             List<Post> loadedPosts = wrapper.getPosts();
             posts.clear();
             posts.addAll(loadedPosts);
+            for (Post post : posts) {
+                post.setIsPhotoPicked(Post.PHOTO_PICKED);
+                post.setIsJsonFile(Post.JSON_FILE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("PostManager", "Error loading JSON", e);
@@ -50,7 +54,7 @@ public class PostManager {
         posts.add(0, post);
     }
 
-    public static void editPost(int position, Post updatedPost) {
+    public static void updatePost(int position, Post updatedPost) {
         if (position >= 0 && position < posts.size()) {
             posts.set(position, updatedPost);
         }
