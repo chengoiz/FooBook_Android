@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:layout_centerHorizontal="true"
+    android:layout_margin="1dp"
     app:cardElevation="4dp">
 
     <LinearLayout
@@ -15,6 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -50,37 +52,22 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <LinearLayout
+            <ImageButton
+                android:id="@+id/editPostMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_gravity="top"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/btn_edit" />
 
-                <ImageButton
-                    android:id="@+id/editPostMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/btn_edit" />
-
-                <ImageButton
-                    android:id="@+id/postItemSaveBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:src="@android:drawable/ic_menu_save"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/btn_comment_post" />
-            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="10dp">
+            android:layout_marginHorizontal="15dp"
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/postContentTextView"
@@ -91,7 +78,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:paddingTop="4dp"
-                android:text="Post content goes here..." />
+                android:text="@string/post_content_goes_here" />
 
             <ImageButton
                 android:id="@+id/btnGallery"
@@ -99,10 +86,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/postContentTextView"
                 app:layout_constraintEnd_toStartOf="@+id/btnCamera"
                 app:layout_constraintTop_toTopOf="@+id/postTextInputLayout"
-                android:visibility="gone"
                 app:srcCompat="@drawable/btn_gallery" />
 
             <ImageButton
@@ -111,21 +98,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/postTextInputLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/postTextInputLayout"
-                android:visibility="gone"
                 app:srcCompat="@drawable/btn_camera" />
+
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/postImageView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="8dp"
             android:scaleType="centerCrop"
-            android:layout_marginHorizontal="10dp"/>
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -133,6 +122,7 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="8dp">
+
 
             <ImageButton
                 android:id="@+id/feedBtnLike"
@@ -159,6 +149,7 @@
                 app:srcCompat="@drawable/btn_share" />
         </LinearLayout>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -166,23 +157,33 @@
             android:orientation="horizontal"
             android:paddingTop="4dp">
 
+
             <TextView
                 android:id="@+id/likesCountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Likes: 0" />
+                android:layout_weight="1"
+                android:text="@string/likes" />
 
-            <View
-                android:layout_width="100dp"
-                android:layout_height="0dp" />
 
             <TextView
                 android:id="@+id/commentsCountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Comments: 0" />
+                android:layout_weight="1"
+                android:text="@string/comments" />
+
+            <TextView
+                android:id="@+id/shareTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/share"
+                android:textAlignment="center" />
+
 
         </LinearLayout>
     </LinearLayout>
