@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.utility;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

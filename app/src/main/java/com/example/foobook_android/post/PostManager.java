@@ -1,9 +1,10 @@
-package com.example.foobook_android;
+package com.example.foobook_android.post;
 
 
 import android.content.Context;
 import android.util.Log;
 
+import com.example.foobook_android.utility.PostListWrapper;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;

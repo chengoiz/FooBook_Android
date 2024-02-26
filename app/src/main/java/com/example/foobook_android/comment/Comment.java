@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.comment;
 
 public class Comment {
     private String commenterName;

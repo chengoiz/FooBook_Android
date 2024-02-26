@@ -26,7 +26,9 @@ To login, use our hardcoded credentials:
 - Password: a5k8b123
 
 ### Registration
-If you register and then try to register with the same username, you will get an error because we used a local session for this step before implementing a hardcoded user. All the fields must to
+- All the fields must to.
+- note: For this part of the project registration is not saved and you can login only with the hardcoded details, valid registration will transport you back to the login page.
+
 
 ### Feed
 - **Adding a Post**: To add a post, click the "PLUS" button at the top of the screen. This will transport you to a new page where you can manage all your input. Blank posts are permitted.
@@ -39,3 +41,32 @@ If you register and then try to register with the same username, you will get an
 - **Liking a Post**: To like a post, simply click the like button.
 - **Logging Out**: To logout, click the logout button located on the lower right side of the page.
 - **Dark Mode**: To switch to dark mode, press the dark mode button on the top of the screen.
+
+
+# Project Development Approach
+
+## Starting Out
+
+- Initial inspiration came from examining the Facebook app to determine the design elements and views we wanted to incorporate.
+- With a vision for our basic structure, we began crafting the activity layouts using XML within Android Studio.
+
+## Adding Functionality
+
+- With our main layouts established, we turned our attention to incorporating various functionalities across the app.
+- To maintain organization and adhere to the principle of separation of concerns, we introduced new classes responsible for distinct functionalities such as managing posts and comments, implementing validators, and more.
+- Efforts were also placed on enhancing user interactions, adding navigational flows between different app pages, managing permissions, among other enhancements.
+
+## Updating the Design
+
+- After embedding the core functionalities, we revisited our design, implementing adjustments to refine the app's aesthetics and user experience.
+
+## Testing and Fixing
+
+- The app underwent rigorous testing on a variety of devices and Android versions to identify and rectify any issues, ensuring compatibility and a smooth user experience across different platforms.
+
+## Wrap-up
+
+- Our development journey began with a simple conceptual sketch to capture the envisioned look and feel of the app. Following this, we laid out the foundational design, progressively building upon it with essential functionalities. Subsequent phases focused on design refinement, extensive testing on multiple devices, and necessary adjustments to deliver an app that performs seamlessly across a wide range of devices, embodying our initial vision and objectives.
+
+
+

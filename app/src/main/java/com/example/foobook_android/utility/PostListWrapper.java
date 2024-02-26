@@ -1,4 +1,6 @@
-package com.example.foobook_android;
+package com.example.foobook_android.utility;
+
+import com.example.foobook_android.post.Post;
 
 import java.util.List;
 
