@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:background="@color/background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,14 +44,9 @@
 
                 <EditText
                     android:id="@+id/commentItemComment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/textBox"
                     android:hint="@string/write_a_comment"
-                    android:inputType="textMultiLine"
-                    android:textSize="12sp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:clickable="false" />
+                    />
             </LinearLayout>
 
             <LinearLayout

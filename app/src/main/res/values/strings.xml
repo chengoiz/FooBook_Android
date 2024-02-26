@@ -26,5 +26,8 @@
     <string name="likes_count">Likes: %d</string>
     <string name="comments_count">Comments: %d</string>
     <string name="logout">Logout</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="night_mode">Dark</string>
+    <string name="comments_title">comments</string>
 
 </resources>
