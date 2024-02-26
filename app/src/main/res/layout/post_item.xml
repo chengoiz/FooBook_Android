@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
     android:layout_margin="1dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    >
 
     <LinearLayout
-        android:layout_width="407dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:background="@color/background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,14 +71,11 @@
             android:layout_marginHorizontal="15dp"
             android:orientation="horizontal">
 
+
             <EditText
                 android:id="@+id/postContentTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/textBox"
                 android:layout_weight="10"
-                android:clickable="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 android:paddingTop="4dp"
                 android:text="@string/post_content_goes_here" />
 
@@ -160,29 +159,22 @@
 
             <TextView
                 android:id="@+id/likesCountTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                style="@style/postText"
                 android:layout_weight="1"
                 android:text="@string/likes" />
 
 
             <TextView
                 android:id="@+id/commentsCountTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                style="@style/postText"
                 android:layout_weight="1"
                 android:text="@string/comments" />
 
             <TextView
                 android:id="@+id/shareTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                style="@style/postText"
                 android:layout_weight="1"
-                android:text="@string/share"
-                android:textAlignment="center" />
+                android:text="@string/share" />
 
 
         </LinearLayout>

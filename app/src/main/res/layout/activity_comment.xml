@@ -7,12 +7,9 @@
 
     <TextView
         android:id="@+id/commentActivityTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/facebolt"
-        android:text="Comments"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="40sp"
+        style="@style/pageTitle"
+        android:text="@string/comments_title"
+
         android:layout_centerHorizontal="true"
         />
 

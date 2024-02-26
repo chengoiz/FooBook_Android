@@ -64,8 +64,10 @@ public class CreatePostActivity extends AppCompatActivity  {
     }
 
     private void removeSelectedPhoto() {
+        selectedImage.invalidate();
         selectedImage.setVisibility(View.GONE);
         isPhotoSelected = false;
+        currentPost.setIsPhotoPicked(Post.NO_PHOTO);
     }
 
     private void setImage(Bitmap bitmap) {
@@ -82,7 +84,7 @@ public class CreatePostActivity extends AppCompatActivity  {
         String postAuthor = "username";
         String authorProfileImage = getResources().getResourceName(R.drawable.defaultpic);
         String postText = postEditText.getText().toString();
-        if (!postText.isEmpty()) {
+        if (!postText.isEmpty() || isPhotoSelected) {
             Post newPost;
             if (isPhotoSelected && postImageUri != null) {
                 newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage, postImageUri.toString());
@@ -95,10 +97,10 @@ public class CreatePostActivity extends AppCompatActivity  {
             PostManager.addPost(newPost);
             postAdapter.notifyItemInserted(0);
             setResult(RESULT_OK);
+            finish();
         } else {
             Toast.makeText(CreatePostActivity.this, "post text cannot be empty", Toast.LENGTH_SHORT).show();
         }
-        finish();
     }
 
     @Override

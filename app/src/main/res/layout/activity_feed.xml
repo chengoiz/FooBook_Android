@@ -5,55 +5,66 @@
     android:layout_height="match_parent"
     tools:context=".FeedActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="10dp">
+        android:paddingHorizontal="1dp">
 
         <TextView
             android:id="@+id/textView4"
+            style="@style/pageTitle"
+            android:text="@string/app_name"
+             />
+
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/nightMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/facebolt"
-            android:text="@string/app_name"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="40sp" />
-
-
-        <View
-            android:layout_width="80dp"
-            android:layout_height="1dp" />
+            android:layout_marginStart="2dp"
+            android:layout_toStartOf="@+id/addPost"
+            android:text="@string/night_mode"
+            android:textStyle="bold"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <ImageButton
             android:id="@+id/addPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:paddingRight="10dp"
-            app:srcCompat="@drawable/btn_add_post">
+            android:paddingRight="1dp"
+            app:srcCompat="@drawable/btn_add_post"
+            android:layout_toStartOf="@+id/search_button">
 
         </ImageButton>
 
         <ImageButton
+            android:id="@+id/search_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:paddingRight="10dp"
-            app:srcCompat="@drawable/btn_search">
+            android:paddingRight="1dp"
+            app:srcCompat="@drawable/btn_search"
+            android:layout_toStartOf="@+id/messageView">
 
         </ImageButton>
 
         <ImageButton
+            android:id="@+id/messageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btn_messenger">
+            android:paddingHorizontal="1dp"
+            app:srcCompat="@drawable/btn_messenger"
+            android:layout_alignParentEnd="true">
 
         </ImageButton>
 
-    </LinearLayout>
+
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feedRecyclerView"

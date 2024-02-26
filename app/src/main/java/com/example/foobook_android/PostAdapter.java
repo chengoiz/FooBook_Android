@@ -40,6 +40,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = inflater.inflate(R.layout.post_item, parent, false);
         return new PostViewHolder(itemView);
+
     }
 
     @Override
@@ -78,7 +79,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         // Menu button handling
         holder.editPostMenu.setOnClickListener(v -> {
-            int adapterPosition = holder.getAdapterPosition(); // Use getAdapterPosition()
+            int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 showPostMenu(v, listener, adapterPosition);
             }
@@ -89,14 +90,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     private void updateLikesAndComments(PostViewHolder holder, Post post, int position) {
-        holder.likesCountTextView.setText(context.getString(R.string.likes_count, post.getLikesCount()));
+        holder.likesCountTextView.setText(context.getString(R.string.likes_count,
+                                        post.getLikesCount()));
         int commentCount = CommentsDataHolder.getCommentCount(position);
-        holder.commentsCountTextView.setText(context.getString(R.string.comments_count, commentCount));
+        holder.commentsCountTextView.setText(context.getString(R.string.comments_count,
+                                        commentCount));
     }
 
     private void updateLikes(PostViewHolder holder, Post post) {
         post.toggleLike();
-        holder.likesCountTextView.setText(context.getString(R.string.likes_count, post.getLikesCount()));
+        holder.likesCountTextView.setText(context.getString(R.string.likes_count,
+                post.getLikesCount()));
     }
 
     private void startCommentActivity(int position) {

@@ -7,7 +7,7 @@
     tools:context=".FeedActivity">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,12 +16,8 @@
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/facebolt"
             android:text="@string/app_name"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="40sp" />
+            style="@style/pageTitle" />
 
 
         <View
@@ -31,9 +27,10 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="11dp"
+            android:layout_toStartOf="@+id/messageView"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btn_search"
-            >
+            app:srcCompat="@drawable/btn_search">
 
         </ImageButton>
 
@@ -41,13 +38,15 @@
             android:id="@+id/messageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="10dp"
+            android:paddingEnd="1dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btn_messenger">
+            app:srcCompat="@drawable/btn_messenger"
+            android:layout_alignParentEnd="true">
+
 
         </ImageButton>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

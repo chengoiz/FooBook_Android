@@ -63,7 +63,7 @@ public class EditPostActivity extends AppCompatActivity {
     private void initializeHelpers() {
         postAdapter = new PostAdapter(this, PostManager.getPosts(), null);
         photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE,
-                                                        GALLERY_REQUEST_CODE, this::setImage);
+                GALLERY_REQUEST_CODE, this::setImage);
     }
 
 
@@ -103,6 +103,7 @@ public class EditPostActivity extends AppCompatActivity {
             }
         }
     }
+
     private void clearSelectedPhoto() {
         selectedImage.invalidate();
         selectedImage.setVisibility(View.GONE);
@@ -112,7 +113,7 @@ public class EditPostActivity extends AppCompatActivity {
 
     private void savePost() {
         String postText = postEditText.getText().toString();
-        if (!postText.isEmpty()) {
+        if (!postText.isEmpty() || isPhotoSelected) {
             currentPost.setContent(postText);
 
             // Update the image URI if a new photo was selected
@@ -128,11 +129,11 @@ public class EditPostActivity extends AppCompatActivity {
             resultIntent.putExtra("postDetails", currentPost);
             resultIntent.putExtra("postPosition", postPosition);
             setResult(RESULT_OK);
+            finish();
         } else {
             Toast.makeText(EditPostActivity.this, "post text cannot be empty",
                     Toast.LENGTH_SHORT).show();
         }
-        finish();
     }
 
     @Override
