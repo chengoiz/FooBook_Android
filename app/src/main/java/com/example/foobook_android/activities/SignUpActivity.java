@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,6 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void attemptSignUp() {
         if (inputValidator.isInputValid()) {
+            Toast.makeText(SignUpActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
             navigateToLogInActivity();
         }
     }

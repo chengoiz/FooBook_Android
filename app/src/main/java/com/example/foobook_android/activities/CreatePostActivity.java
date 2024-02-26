@@ -106,7 +106,7 @@ public class CreatePostActivity extends AppCompatActivity  {
             setResult(RESULT_OK);
             finish();
         } else {
-            Toast.makeText(CreatePostActivity.this, "post text cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreatePostActivity.this, "Post text cannot be empty", Toast.LENGTH_SHORT).show();
         }
     }
 

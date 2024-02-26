@@ -7,5 +7,5 @@
         android:title="Whatsapp"/>
     <item
         android:id="@+id/Instegram"
-        android:title="Instegram"/>
+        android:title="Instagram"/>
 </menu>
