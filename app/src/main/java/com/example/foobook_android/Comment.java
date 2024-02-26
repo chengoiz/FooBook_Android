@@ -24,7 +24,7 @@ public class Comment {
         return commentText;
     }
 
-    // Setters (if needed)
+    // Setters
     public void setCommenterName(String commenterName) {
         this.commenterName = commenterName;
     }

@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
-public class CreatePostActivity extends AppCompatActivity implements PostAdapter.PostItemListener {
+public class CreatePostActivity extends AppCompatActivity  {
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
 
@@ -59,7 +59,7 @@ public class CreatePostActivity extends AppCompatActivity implements PostAdapter
     }
 
     private void initializeHelpers() {
-        postAdapter = new PostAdapter(this, PostManager.getPosts(), this);
+        postAdapter = new PostAdapter(this, PostManager.getPosts(), null);
         photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
     }
 
@@ -105,13 +105,6 @@ public class CreatePostActivity extends AppCompatActivity implements PostAdapter
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         photoSelectorHelper.handleActivityResult(requestCode, resultCode, data);
-    }
-
-    public void onEdit(int position) {
-    }
-
-    @Override
-    public void onDelete(int position) {
     }
 }
 

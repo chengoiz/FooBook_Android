@@ -43,7 +43,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull PostViewHolder holder,
+                                 @SuppressLint("RecyclerView") int position) {
         Post post = posts.get(position);
         holder.userNameTextView.setText(post.getUserName());
         holder.timeStampTextView.setText(post.getTimestamp());
@@ -149,7 +150,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
-        TextView userNameTextView, timeStampTextView, postContentTextView, likesCountTextView, commentsCountTextView;
+        TextView userNameTextView, timeStampTextView, postContentTextView, likesCountTextView,
+                commentsCountTextView;
         ImageView profileImageView, postImageView;
         ImageButton feedCommentBtn, feedBtnLike, editPostMenu, shareButton;
 

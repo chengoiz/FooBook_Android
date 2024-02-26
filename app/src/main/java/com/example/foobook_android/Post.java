@@ -33,7 +33,8 @@ public class Post implements Serializable {
         this.isJsonFile = 0;
         this.isPhotoPicked = NO_PHOTO;
     }
-    public Post(String userName, String timestamp, String content,  String profileImage, String postImageUri) {
+    public Post(String userName, String timestamp, String content,  String profileImage,
+                String postImageUri) {
         this.userName = userName;
         this.timestamp = timestamp;
         this.content = content;

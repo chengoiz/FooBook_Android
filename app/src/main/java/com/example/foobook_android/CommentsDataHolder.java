@@ -38,4 +38,24 @@ public class CommentsDataHolder {
         assert comments != null;
         return comments.size();
     }
+
+    // Method to handle post remove
+    public static void onPostDeleted(int deletedPostPosition) {
+        // Remove the comments of the deleted post
+        commentsMap.remove(deletedPostPosition);
+
+        // Adjust the positions for remaining posts' comments
+        HashMap<Integer, List<Comment>> updatedCommentsMap = new HashMap<>();
+        commentsMap.forEach((postPosition, comments) -> {
+            if (postPosition > deletedPostPosition) {
+                updatedCommentsMap.put(postPosition - 1, comments);
+            } else {
+                updatedCommentsMap.put(postPosition, comments);
+            }
+        });
+
+        // Apply the updated map
+        commentsMap.clear();
+        commentsMap.putAll(updatedCommentsMap);
+    }
 }
