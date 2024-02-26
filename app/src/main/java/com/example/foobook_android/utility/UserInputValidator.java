@@ -1,10 +1,8 @@
-package com.example.foobook_android;
+package com.example.foobook_android.utility;
 
 import android.content.Context;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.foobook_android.PasswordValidator;
 
 public class UserInputValidator {
     private final EditText inputUserName, inputPassword, inputPasswordVer, inputDisplayName;

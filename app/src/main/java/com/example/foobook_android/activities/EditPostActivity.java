@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +15,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.foobook_android.utility.PhotoSelectorHelper;
+import com.example.foobook_android.post.Post;
+import com.example.foobook_android.post.PostManager;
+import com.example.foobook_android.R;
+import com.example.foobook_android.adapters.PostAdapter;
 
 
 public class EditPostActivity extends AppCompatActivity {

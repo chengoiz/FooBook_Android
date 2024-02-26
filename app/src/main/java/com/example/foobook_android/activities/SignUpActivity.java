@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,10 +9,14 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.foobook_android.utility.FieldValidation;
+import com.example.foobook_android.utility.PhotoSelectorHelper;
+import com.example.foobook_android.R;
+import com.example.foobook_android.utility.UserInputValidator;
 
 public class SignUpActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.adapters;
 
 
 import android.annotation.SuppressLint;
@@ -19,6 +19,11 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.foobook_android.activities.CommentActivity;
+import com.example.foobook_android.comment.CommentsDataHolder;
+import com.example.foobook_android.post.Post;
+import com.example.foobook_android.R;
+
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {

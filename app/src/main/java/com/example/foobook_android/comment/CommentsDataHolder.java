@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.comment;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,5 +1,7 @@
-package com.example.foobook_android;
+package com.example.foobook_android.post;
 import android.net.Uri;
+
+import com.example.foobook_android.comment.Comment;
 
 import java.io.Serializable;
 import java.util.ArrayList;

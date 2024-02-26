@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.utility;
 
 import android.Manifest;
 import android.app.Activity;

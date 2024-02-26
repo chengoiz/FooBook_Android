@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.foobook_android.comment.Comment;
+import com.example.foobook_android.utility.FieldValidation;
+import com.example.foobook_android.R;
 
 import java.util.List;
 

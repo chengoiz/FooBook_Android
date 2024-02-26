@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.foobook_android.utility.FieldValidation;
+import com.example.foobook_android.R;
 
 public class LogInActivity extends AppCompatActivity {
 
