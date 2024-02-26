@@ -41,7 +41,7 @@
                 android:id="@+id/commentItemUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User Name"
+                android:text="@string/tomer"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -49,7 +49,7 @@
                 android:id="@+id/commentItemComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="write your comment here..."
+                android:hint="@string/write_your_comment_here"
                 android:textSize="12sp" />
         </LinearLayout>
         <ImageButton

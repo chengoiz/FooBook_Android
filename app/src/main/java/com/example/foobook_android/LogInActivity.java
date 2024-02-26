@@ -40,7 +40,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     public void logIn(String username, String password) {
-        if (username.equals("username") && password.equals("password")) {
+        if (username.equals("Tomer") && password.equals("a5k8b123")) {
             Intent feed = new Intent(this, FeedActivity.class);
             startActivity(feed);
         } else {

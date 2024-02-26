@@ -17,7 +17,7 @@ public class Post implements Serializable {
     private int likesCount;
     private boolean isLikedByCurrentUser;
     private String profileImage;
-    private String postImage; // Assuming Uri.toString() is stored here
+    private String postImage;
     private boolean isImageSetByUser;
     private int isPhotoPicked;
     private int isJsonFile;

@@ -29,5 +29,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="night_mode">Dark</string>
     <string name="comments_title">comments</string>
+    <string name="tomer">Tomer</string>
+    <string name="write_your_comment_here">write your comment here...</string>
 
 </resources>
