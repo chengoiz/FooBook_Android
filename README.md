@@ -17,8 +17,14 @@ A step-by-step series to get a development environment running:
         - Minimal API Level: 29.
         - Optimal API Level: 34.
 
-3. **Make sure you have an emulator or device set up.**
-4. **Build and run the application.**
+3. **Sync project with gradle files and add configuration**
+   - After cloning, at the top right of your IDE, press the "Sync Project with Gradle Files".
+   - At the top of your screen click on "Add configuration" -> Add new -> Android App
+   - -> Pick a name for the app, and in the 'Module' category, choose: FooBook_Android.app.main
+
+4. **Make sure you have an emulator or device set up.**
+
+5. **Build and run the application.**
 
 ### Login
 To login, use our hardcoded credentials:
@@ -26,9 +32,9 @@ To login, use our hardcoded credentials:
 - Password: a5k8b123
 
 ### Registration
-- All the fields must to.
-- note: For this part of the project registration is not saved and you can login only with the hardcoded details, valid registration will transport you back to the login page.
-
+- All the fields are required for the registration.
+- Your password must be of size 8 characters and include at least one letter and one number.
+- Note: For this part of the project registration is not saved and you can login only with the hardcoded details, valid registration will transport you back to the login page.
 
 ### Feed
 - **Adding a Post**: To add a post, click the "PLUS" button at the top of the screen. This will transport you to a new page where you can manage all your input. Blank posts are permitted.
@@ -42,13 +48,13 @@ To login, use our hardcoded credentials:
 - **Logging Out**: To logout, click the logout button located on the lower right side of the page.
 - **Dark Mode**: To switch to dark mode, press the dark mode button on the top of the screen.
 
-
 # Project Development Approach
 
 ## Starting Out
 
 - Initial inspiration came from examining the Facebook app to determine the design elements and views we wanted to incorporate.
 - With a vision for our basic structure, we began crafting the activity layouts using XML within Android Studio.
+- We drew each page on a piece of paper to give us a sense of direction as for the design part.
 
 ## Adding Functionality
 
@@ -67,6 +73,3 @@ To login, use our hardcoded credentials:
 ## Wrap-up
 
 - Our development journey began with a simple conceptual sketch to capture the envisioned look and feel of the app. Following this, we laid out the foundational design, progressively building upon it with essential functionalities. Subsequent phases focused on design refinement, extensive testing on multiple devices, and necessary adjustments to deliver an app that performs seamlessly across a wide range of devices, embodying our initial vision and objectives.
-
-
-

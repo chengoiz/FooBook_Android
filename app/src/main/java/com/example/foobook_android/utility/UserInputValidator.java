@@ -32,12 +32,12 @@ public class UserInputValidator {
         if (userName.isEmpty()) {
             Toast.makeText(context, "Must insert username", Toast.LENGTH_SHORT).show();
         } else if (!PasswordValidator.validatePassword(password)) {
-            Toast.makeText(context, "password must be at least 8 figures\n" +
-                            "password must contain at least 1 letter & 1 number",
+            Toast.makeText(context, "Password must be at least 8 figures\n" +
+                            "and contain at least 1 letter and 1 number.",
                     Toast.LENGTH_SHORT).show();
         }
         else if (!passwordVer.equals(password)) {
-            Toast.makeText(context, "password not equal", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Password not equal", Toast.LENGTH_SHORT).show();
         } else if (displayName.isEmpty()) {
             Toast.makeText(context, "Must insert display name", Toast.LENGTH_SHORT).show();
 

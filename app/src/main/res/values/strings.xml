@@ -1,25 +1,25 @@
 <resources>
     <string name="app_name">FooBook</string>
-    <string name="login_userName">UserName</string>
-    <string name="login_login_btn">Log In</string>
+    <string name="login_userName">Username</string>
+    <string name="login_login_btn">Login</string>
     <string name="password">Password</string>
-    <string name="login_signUp">Sign Up for foobook</string>
+    <string name="login_signUp">Sign up for FooBook</string>
     <string name="password_confirm">Confirm Password</string>
-    <string name="signUp_DisplayName">Display name</string>
+    <string name="signUp_DisplayName">Display Name</string>
     <string name="signUp_choose_file">Choose File</string>
-    <string name="signUp_TakePhoto">Take photo</string>
-    <string name="signUp_imageText">No file chosen</string>
-    <string name="btnSignup">Sign up</string>
-    <string name="signUpTitle">Sign up</string>
-    <string name="registerBtnBack">BACK</string>
+    <string name="signUp_TakePhoto">Take Photo</string>
+    <string name="signUp_imageText">No File Chosen</string>
+    <string name="btnSignup">Sign Up</string>
+    <string name="signUpTitle">Sign Up</string>
+    <string name="registerBtnBack">Back</string>
     <string name="feedPostHint">What\'s on your mind?</string>
     <string name="feedBtnPost">Post</string>
     <string name="write_a_comment">Write a comment</string>
-    <string name="user_name">User Name</string>
+    <string name="user_name">Username</string>
     <string name="timestamp">Timestamp</string>
-    <string name="remove_photo">Remove photo</string>
+    <string name="remove_photo">Remove Photo</string>
     <string name="comments">Comments: 0</string>
-    <string name="share">share</string>
+    <string name="share">Share</string>
     <string name="likes">Likes: 0</string>
     <string name="post_content_goes_here">Post content goes here...</string>
 
@@ -28,8 +28,8 @@
     <string name="logout">Logout</string>
     <string name="sign_up">Sign Up</string>
     <string name="night_mode">Dark</string>
-    <string name="comments_title">comments</string>
+    <string name="comments_title">Comments</string>
     <string name="tomer">Tomer</string>
-    <string name="write_your_comment_here">write your comment here...</string>
+    <string name="write_your_comment_here">Write your comment here...</string>
 
 </resources>
