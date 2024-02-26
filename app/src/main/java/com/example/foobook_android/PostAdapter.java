@@ -4,6 +4,8 @@ package com.example.foobook_android;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,25 +52,32 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.userNameTextView.setText(post.getUserName());
         holder.timeStampTextView.setText(post.getTimestamp());
         holder.postContentTextView.setText(post.getContent());
-        loadImage(holder.profileImageView, post.getProfileImageUrl());
 
-        if (post.getIsPhotoPicked() == PHOTO_PICKED) {
-            holder.postImageView.setVisibility(View.VISIBLE);
-            if (post.getIsJsonFile() == Post.JSON_FILE) {
+        if (post.getIsJsonFile() == Post.JSON_FILE) {
+            loadImage(holder.profileImageView, post.getProfileImageUrl());
+            if (post.getIsPhotoPicked() == PHOTO_PICKED) {
+                holder.postImageView.setVisibility(View.VISIBLE);
                 loadImage(holder.postImageView, post.getPostImageUrl());
+            } else {
+                holder.postImageView.setVisibility(View.GONE);
             }
+        }
 
-            if (post.getIsJsonFile() == Post.NOT_JSON_FILE) {
+        if (post.getIsJsonFile() == Post.NOT_JSON_FILE) {
+            setImageFromDrawableName(holder.profileImageView, post.getProfileImageUrl());
+            if (post.getIsPhotoPicked() == PHOTO_PICKED) {
+                holder.postImageView.setVisibility(View.VISIBLE);
                 if (post.getPostImageUrl() != null) {
                     Glide.with(context).load(post.getPostImageUrl()).into(holder.postImageView);
-                }
-                if (post.getPostImageUri() != null) {
+                } else if (post.getPostImageUri() != null) {
                     Glide.with(context).load(post.getPostImageUri()).into(holder.postImageView);
                 }
+            } else {
+                holder.postImageView.setVisibility(View.GONE);
             }
-        } else {
-            holder.postImageView.setVisibility(View.GONE);
         }
+
+
         updateLikesAndComments(holder, post, position);
 
         // Like button click handling
@@ -115,6 +124,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 .placeholder(R.drawable.defaultpic)
                 .error(R.drawable.saved)
                 .into(imageView);
+    }
+    public void setImageFromDrawableName(ImageView imageView, String drawableName) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier(drawableName, "drawable", context.getPackageName());
+        if (resourceId != 0) {
+            imageView.setImageResource(resourceId);
+        } else {
+            Log.e("setImageFromDrawableName", "Resource not found: " + drawableName);
+        }
     }
 
     private void showShareMenu(View view) {

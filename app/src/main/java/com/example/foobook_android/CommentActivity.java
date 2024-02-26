@@ -52,8 +52,8 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         EditText writeTextComment = findViewById(R.id.commentItemComment);
         String commentText = writeTextComment.getText().toString().trim();
         // Hard coded for now
-        String commenterName = "username";
-        String commenterProfileImage = "URL or Path to Image";
+        String commenterName = "Tomer";
+        String commenterProfileImage = "drawable/defaultpic.png";
 
         if (!commentText.isEmpty()) {
             Comment newComment = new Comment(commenterName, commentText, commenterProfileImage);

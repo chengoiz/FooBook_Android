@@ -81,7 +81,7 @@ public class CreatePostActivity extends AppCompatActivity  {
 
     private void savePost() {
         // hard coded for now
-        String postAuthor = "username";
+        String postAuthor = "Tomer";
         String authorProfileImage = getResources().getResourceName(R.drawable.defaultpic);
         String postText = postEditText.getText().toString();
         if (!postText.isEmpty() || isPhotoSelected) {

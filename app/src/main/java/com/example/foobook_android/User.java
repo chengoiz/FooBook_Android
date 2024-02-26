@@ -1,5 +1,8 @@
 package com.example.foobook_android;
 
+// This class will be implemented in the next part of the project
+
+
 public class User {
     private String username;
     private String password;
