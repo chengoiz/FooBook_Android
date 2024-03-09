@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.foobook_android.database.PostDB;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
@@ -25,6 +26,8 @@ import com.example.foobook_android.adapters.PostAdapter;
 public class EditPostActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
+
+    private PostDB db;
 
     private EditText postEditText;
     private ImageView selectedImage;
@@ -42,6 +45,7 @@ public class EditPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_post);
+        db = PostDB.getInstance(this);
         Log.i("EditPostActivity", "onCreate");
         initializeViewComponents();
         setupListeners();
@@ -83,28 +87,46 @@ public class EditPostActivity extends AppCompatActivity {
 
 
     private void handleIncomingIntent() {
-        currentPost = (Post) getIntent().getSerializableExtra("postDetails");
-        assert currentPost != null;
-        populateUIWithPostDetails(currentPost);
-        postPosition = getIntent().getIntExtra("postPosition", -1);
-
+        long postId = getIntent().getLongExtra("postId", -1);
+        if (postId != -1) {
+            new Thread(() -> {
+                currentPost = db.postDao().get(postId);
+                runOnUiThread(this::populateUIWithPostDetails);
+            }).start();
+        }
     }
 
-    private void populateUIWithPostDetails(Post currentPost) {
-        postEditText.setText(currentPost.getContent());
-        if (currentPost.getIsPhotoPicked() == Post.PHOTO_PICKED) {
-            // If post have image url (json)
-            if (currentPost.getPostImageUrl() != null) {
-                selectedImage.setImageURI(Uri.parse(currentPost.getPostImageUrl()));
-                removePhoto.setVisibility(View.VISIBLE);
-                Glide.with(this).load(currentPost.getPostImageUrl()).into(selectedImage);
-            }
+//    private void handleIncomingIntent() {
+//        if (getIntent().hasExtra("postDetails")) {
+//            currentPost = (Post) getIntent().getSerializableExtra("postDetails");
+//            if (currentPost != null) {
+//                populateUIWithPostDetails(); // This now matches the method signature
+//            }
+//        }
+//    }
 
-            // If post have image URI
-            else if (currentPost.getPostImageUri() != null) {
-                selectedImage.setImageURI(currentPost.getPostImageUri());
-                removePhoto.setVisibility(View.VISIBLE);
-                Glide.with(this).load(currentPost.getPostImageUri()).into(selectedImage);
+
+
+    private void populateUIWithPostDetails() {
+        // Check if currentPost is not null
+        if (currentPost != null) {
+            // Set the post content
+            postEditText.setText(currentPost.getContent());
+
+            // Check if a photo was picked for the post
+            if (currentPost.getIsPhotoPicked() == Post.PHOTO_PICKED) {
+                // If there's an image URI available
+                if (currentPost.getPostImage() != null && !currentPost.getPostImage().isEmpty()) {
+                    Uri imageUri = Uri.parse(currentPost.getPostImage());
+                    // Use Glide or another image loading library to set the image
+                    Glide.with(this).load(imageUri).into(selectedImage);
+                    selectedImage.setVisibility(View.VISIBLE); // Make the ImageView visible
+                    removePhoto.setVisibility(View.VISIBLE); // Show the remove photo button if applicable
+                }
+            } else {
+                // If no photo was picked, ensure the ImageView is not visible
+                selectedImage.setVisibility(View.GONE);
+                removePhoto.setVisibility(View.GONE); // Hide the remove photo button if no photo is set
             }
         }
     }
@@ -121,23 +143,23 @@ public class EditPostActivity extends AppCompatActivity {
         if (!postText.isEmpty() || isPhotoSelected) {
             currentPost.setContent(postText);
 
-            // Update the image URI if a new photo was selected
             if (isPhotoSelected && postImageUri != null) {
                 currentPost.setPostImage(postImageUri.toString());
                 currentPost.setImageSetByUser(isPhotoSelected);
-                selectedImage.setVisibility(View.VISIBLE);
             }
 
-            PostManager.updatePost(postPosition, currentPost);
-            postAdapter.notifyItemChanged(postPosition, currentPost);
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("postDetails", currentPost);
-            resultIntent.putExtra("postPosition", postPosition);
-            setResult(RESULT_OK);
-            finish();
+            // Update the post in the database
+            new Thread(() -> {
+                db.postDao().update(currentPost);
+                runOnUiThread(() -> {
+                    Toast.makeText(EditPostActivity.this, "Post updated successfully", Toast.LENGTH_SHORT).show();
+                    Intent resultIntent = new Intent();
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                });
+            }).start();
         } else {
-            Toast.makeText(EditPostActivity.this, "post text cannot be empty",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPostActivity.this, "Post text cannot be empty", Toast.LENGTH_SHORT).show();
         }
     }
 

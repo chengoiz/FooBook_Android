@@ -1,6 +1,7 @@
 package com.example.foobook_android.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +15,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.foobook_android.daos.PostDao;
+import com.example.foobook_android.database.PostDB;
+import com.example.foobook_android.databinding.ActivityCreatePostBinding;
+import com.example.foobook_android.databinding.ActivityMainBinding;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
@@ -23,6 +28,9 @@ import com.example.foobook_android.adapters.PostAdapter;
 
 
 public class CreatePostActivity extends AppCompatActivity  {
+    private ActivityCreatePostBinding binding;
+    private PostDB db;
+    private PostDao postDao;
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
 
@@ -41,11 +49,16 @@ public class CreatePostActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setContentView(R.layout.activity_create_post);
         Log.i("CreatePostActivity", "onCreate");
         initializeViews();
         setupListeners();
         initializeHelpers();
+        db = Room.databaseBuilder(getApplicationContext(), PostDB.class, "post_database")
+                .allowMainThreadQueries().build();
+        postDao = db.postDao();
     }
 
     private void initializeViews() {
@@ -87,24 +100,25 @@ public class CreatePostActivity extends AppCompatActivity  {
     }
 
     private void savePost() {
-        // hard coded for now
-        String postAuthor = "Tomer";
+        String postAuthor = "Tomer"; // This should eventually be replaced with dynamic data
         String authorProfileImage = getResources().getResourceName(R.drawable.defaultpic);
         String postText = postEditText.getText().toString();
+        String postImageUriString = isPhotoSelected ? postImageUri.toString() : "";
+
         if (!postText.isEmpty() || isPhotoSelected) {
-            Post newPost;
-            if (isPhotoSelected && postImageUri != null) {
-                newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage, postImageUri.toString());
-                newPost.setImageSetByUser(isPhotoSelected);
-                newPost.setIsPhotoPicked(Post.PHOTO_PICKED);
-            } else {
-                newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage);
-                newPost.setIsPhotoPicked(Post.NO_PHOTO);
-            }
-            PostManager.addPost(newPost);
-            postAdapter.notifyItemInserted(0);
-            setResult(RESULT_OK);
-            finish();
+            Post newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage, postImageUriString);
+            newPost.setImageSetByUser(isPhotoSelected);
+            newPost.setIsPhotoPicked(Post.PHOTO_PICKED);
+
+            // Save to database
+            new Thread(() -> {
+                db.postDao().insert(newPost);
+                runOnUiThread(() -> {
+                    Toast.makeText(CreatePostActivity.this, "Post saved successfully", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                });
+            }).start();
         } else {
             Toast.makeText(CreatePostActivity.this, "Post text cannot be empty", Toast.LENGTH_SHORT).show();
         }
