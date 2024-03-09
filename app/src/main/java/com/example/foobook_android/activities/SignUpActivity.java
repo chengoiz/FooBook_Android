@@ -13,7 +13,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.foobook_android.SignUpViewModel;
+import com.example.foobook_android.User;
 import com.example.foobook_android.utility.FieldValidation;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.R;
@@ -24,8 +27,11 @@ public class SignUpActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 102;
     private static final int GALLERY_REQUEST_CODE = 103;
+    public static final int USER_CREATED_SUCCESSFULY = 201;
+    public static final int USERNAME_TAKEN = 400;
 
     private ImageView selectedImage;
+    private String profileImage;
     private Button btnCamera, btnGallery, btnClose, btnSignup;
     private EditText inputUserName, inputPassword, inputPasswordVer, inputDisplayName;
 
@@ -74,8 +80,17 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void attemptSignUp() {
         if (inputValidator.isInputValid()) {
-            Toast.makeText(SignUpActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
-            navigateToLogInActivity();
+            SignUpViewModel signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+            User newUser = new User(inputUserName.getText().toString(),
+                    inputPassword.getText().toString(),
+                    inputDisplayName.getText().toString(),
+                    profileImage);
+            signUpViewModel.signUpUser(newUser).observe(this,userResponse -> {
+                Toast.makeText(getApplicationContext(),userResponse.getMessage(), Toast.LENGTH_LONG).show();
+                if (userResponse.getCode() == USER_CREATED_SUCCESSFULY) {
+                    navigateToLogInActivity();
+                }
+            });
         }
     }
 
@@ -90,9 +105,11 @@ public class SignUpActivity extends AppCompatActivity {
     private void setImage(Bitmap bitmap) {
         String filename = "photo_" + System.currentTimeMillis() + ".png";
         Uri imageUri = photoSelectorHelper.saveBitmapToFile(this, bitmap, filename);
+        profileImage = imageUri.toString();
         selectedImage.setImageURI(null);
         selectedImage.setImageURI(imageUri);
         inputValidator.setPhotoSelected(true);
+
     }
 
     @Override
