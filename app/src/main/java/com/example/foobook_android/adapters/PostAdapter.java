@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,19 +58,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         // Set profile image
         if (post.getIsJsonFile() == Post.JSON_FILE) {
-            loadImage(holder.profileImageView, post.getProfileImageUrl());
+            loadImage(holder.profileImageView, post.getProfileImage());
         } else {
-            setImageFromDrawableName(holder.profileImageView, post.getProfileImageUrl());
+            setImageFromDrawableName(holder.profileImageView, post.getProfileImage());
         }
 
         // Set post image or hide if not applicable
-        if (post.getIsPhotoPicked() == PHOTO_PICKED) {
+        // Set post image or hide if not applicable
+        if (post.getIsPhotoPicked() == PHOTO_PICKED && post.getPostImageUrl() != null && !post.getPostImageUrl().isEmpty()) {
             holder.postImageView.setVisibility(View.VISIBLE);
-            if (post.getIsJsonFile() == Post.JSON_FILE || post.getPostImageUrl() != null) {
-                loadImage(holder.postImageView, post.getPostImageUrl());
-            } else if (post.getPostImageUri() != null) {
-                Glide.with(context).load(post.getPostImageUri()).into(holder.postImageView);
-            }
+            loadImage(holder.postImageView, post.getPostImageUrl());
         } else {
             holder.postImageView.setVisibility(View.GONE);
         }
@@ -159,6 +155,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             return false;
         });
         postMenu.show();
+    }
+
+// Inside PostAdapter.java
+
+    // Method to delete a post by position
+    public void deletePost(int position) {
+        if (position >= 0 && position < posts.size()) {
+            posts.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, getItemCount());
+        }
+    }
+    public Post getPostAt(int position) {
+        if (position >= 0 && position < posts.size()) {
+            return posts.get(position);
+        }
+        return null; // Or throw an exception based on how you want to handle this scenario
     }
 
     public interface PostItemListener {

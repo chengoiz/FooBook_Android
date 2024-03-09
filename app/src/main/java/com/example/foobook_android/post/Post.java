@@ -1,29 +1,59 @@
 package com.example.foobook_android.post;
 import android.net.Uri;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.example.foobook_android.comment.Comment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Post implements Serializable {
     public static final int PHOTO_PICKED = 1;
     public static final int NO_PHOTO = 0;
     public static final int JSON_FILE = 1;
     public static final int NOT_JSON_FILE = 0;
-    private String userName;
-    private String timestamp;
-    private String content;
-    private List<Comment> comments = new ArrayList<>();
-    private int likesCount;
-    private boolean isLikedByCurrentUser;
-    private String profileImage;
-    private String postImage;
-    private boolean isImageSetByUser;
-    private int isPhotoPicked;
-    private int isJsonFile;
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private long id;
 
+    @ColumnInfo(name = "userName")
+    private String userName;
+
+    @ColumnInfo(name = "timestamp")
+    private String timestamp;
+
+    @ColumnInfo(name = "content")
+    private String content;
+
+    @Ignore /** Ignoring this field for Room database **/
+    private List<Comment> comments = new ArrayList<>();
+
+    @ColumnInfo(name = "likesCount")
+    private int likesCount;
+
+    @ColumnInfo(name = "isLikedByCurrentUser")
+    private boolean isLikedByCurrentUser;
+
+    @ColumnInfo(name = "profileImage")
+    private String profileImage;
+
+    @ColumnInfo(name = "postImage")
+    private String postImage;
+
+    @ColumnInfo(name = "isImageSetByUser")
+    private boolean isImageSetByUser;
+
+    @ColumnInfo(name = "isPhotoPicked")
+    private int isPhotoPicked;
+
+    @ColumnInfo(name = "isJsonFile")
+    private int isJsonFile;
 
 
 
@@ -80,7 +110,7 @@ public class Post implements Serializable {
     }
 
 
-    public String getProfileImageUrl() {
+    public String getProfileImage() {
         return profileImage;
     }
 
@@ -96,7 +126,7 @@ public class Post implements Serializable {
     public List<Comment> getComments() {
         return comments;
     }
-    public  int getIsJsonFile() {
+    public int getIsJsonFile() {
         return this.isJsonFile;
     }
 
@@ -135,5 +165,20 @@ public class Post implements Serializable {
     }
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    public void setIsLikedByCurrentUser(boolean isLikedByCurrentUser) {
+        this.isLikedByCurrentUser = isLikedByCurrentUser;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
