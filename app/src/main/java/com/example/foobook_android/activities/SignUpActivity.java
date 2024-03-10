@@ -15,8 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.foobook_android.SignUpViewModel;
-import com.example.foobook_android.User;
+import com.example.foobook_android.ViewModels.SignUpViewModel;
+import com.example.foobook_android.Api.SignUpRequest;
 import com.example.foobook_android.utility.FieldValidation;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.R;
@@ -28,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 102;
     private static final int GALLERY_REQUEST_CODE = 103;
-    public static final String USER_CREATED_SUCCESSFULLY = "User created successfully";
+    public static final String USER_CREATED_SUCCESSFULLY = "SignUpRequest created successfully";
     private SignUpViewModel signUpViewModel;
     private ImageView selectedImage;
     private String profileImage;
@@ -90,11 +90,11 @@ public class SignUpActivity extends AppCompatActivity {
     private void attemptSignUp() {
         if (inputValidator.isInputValid()) {
             SignUpViewModel signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
-            User newUser = new User(inputUserName.getText().toString(),
+            SignUpRequest signUpRequest = new SignUpRequest(inputUserName.getText().toString(),
                     inputPassword.getText().toString(),
                     inputDisplayName.getText().toString(),
                     profileImage);
-            signUpViewModel.signUpUser(newUser);
+            signUpViewModel.signUpUser(signUpRequest);
         }
     }
 
