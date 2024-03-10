@@ -18,14 +18,14 @@ public class UserApi {
     public static final int USERNAME_TAKEN = 400;
     public static final int SERVER_ERROR = 500;
     private Retrofit retrofit;
-    WebServiceUserApi webServiceUserApi;
+    WebServiceApi webServiceUserApi;
 
     public UserApi() {
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/").
                 addConverterFactory(GsonConverterFactory.create()).
                 build(); // change the baseUrl later
-        webServiceUserApi = retrofit.create(WebServiceUserApi.class);
+        webServiceUserApi = retrofit.create(WebServiceApi.class);
     }
 
     public LiveData<UserResponse> addUser(User newUser) {
@@ -35,24 +35,20 @@ public class UserApi {
         call.enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                UserResponse responseBody;
-
-                if (response.isSuccessful()) {
-                    responseBody = response.body();
-                    responseBody.setCode(response.code());
-                    responseBody.setMessage(response.message());
-                    userResponseData.setValue(responseBody);
-                } else if (response.code() == USERNAME_TAKEN) {
+                if (response.isSuccessful() && response.body() != null) {
+                    userResponseData.postValue(response.body());
+                } else {
                     try {
-                        String errorString = response.errorBody().string();
+                        String errorString = response.errorBody() != null ? response.errorBody().string() : "{}";
                         JSONObject errorObject = new JSONObject(errorString);
                         String errorMessage = errorObject.getString("message");
-                        userResponseData.setValue(new UserResponse(errorMessage, response.code()));
-                    } catch (IOException | JSONException e) {
-                        throw new RuntimeException(e);
+                        userResponseData.postValue(new UserResponse(errorMessage, response.code()));
+                    } catch (Exception e) {
+                        userResponseData.postValue(new UserResponse("Error parsing error response", SERVER_ERROR));
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
                 userResponseData.setValue(new UserResponse(t.getMessage(), SERVER_ERROR));

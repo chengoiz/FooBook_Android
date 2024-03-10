@@ -22,14 +22,14 @@ import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.UserInputValidator;
 
-public class SignUpActivity extends AppCompatActivity {
+import java.util.Objects;
 
+public class SignUpActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 102;
     private static final int GALLERY_REQUEST_CODE = 103;
-    public static final int USER_CREATED_SUCCESSFULY = 201;
-    public static final int USERNAME_TAKEN = 400;
-
+    public static final String USER_CREATED_SUCCESSFULLY = "User created successfully";
+    private SignUpViewModel signUpViewModel;
     private ImageView selectedImage;
     private String profileImage;
     private Button btnCamera, btnGallery, btnClose, btnSignup;
@@ -48,6 +48,15 @@ public class SignUpActivity extends AppCompatActivity {
         initializeViews();
         setupListeners();
         setupFieldValidation();
+        signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+
+        signUpViewModel.getUserResponseLiveData().observe(this, userResponse -> {
+            Toast.makeText(getApplicationContext(), userResponse.getMessage(), Toast.LENGTH_LONG).show();
+            if (Objects.equals(userResponse.getMessage(), USER_CREATED_SUCCESSFULLY)) {
+                navigateToLogInActivity();
+            }
+        });
+
         photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
         inputValidator = new UserInputValidator(this, inputUserName, inputPassword, inputPasswordVer, inputDisplayName, isPhotoSelected);
     }
@@ -85,12 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
                     inputPassword.getText().toString(),
                     inputDisplayName.getText().toString(),
                     profileImage);
-            signUpViewModel.signUpUser(newUser).observe(this,userResponse -> {
-                Toast.makeText(getApplicationContext(),userResponse.getMessage(), Toast.LENGTH_LONG).show();
-                if (userResponse.getCode() == USER_CREATED_SUCCESSFULY) {
-                    navigateToLogInActivity();
-                }
-            });
+            signUpViewModel.signUpUser(newUser);
         }
     }
 
@@ -109,7 +113,6 @@ public class SignUpActivity extends AppCompatActivity {
         selectedImage.setImageURI(null);
         selectedImage.setImageURI(imageUri);
         inputValidator.setPhotoSelected(true);
-
     }
 
     @Override
