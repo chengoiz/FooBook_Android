@@ -1,4 +1,4 @@
-package com.example.foobook_android;
+package com.example.foobook_android.Api;
 
 
 
@@ -10,12 +10,11 @@ public interface WebServiceApi {
 
     // signUp
     @POST("api/users")
-    Call<UserResponse> registerUser(@Body User user);
-/*
+    Call<UserResponse> registerUser(@Body SignUpRequest user);
+
     // login
     @POST("api/tokens")
     Call<LoginResponse> loginUser(@Body LoginRequest loginRequest);
 
- */
 }
 

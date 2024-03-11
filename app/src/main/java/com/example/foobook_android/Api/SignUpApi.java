@@ -1,12 +1,9 @@
-package com.example.foobook_android;
+package com.example.foobook_android.Api;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,23 +11,21 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class UserApi {
-    public static final int USERNAME_TAKEN = 400;
-    public static final int SERVER_ERROR = 500;
+public class SignUpApi {
     private Retrofit retrofit;
-    WebServiceApi webServiceUserApi;
+    WebServiceApi webServiceApi;
 
-    public UserApi() {
+    public SignUpApi() {
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/").
                 addConverterFactory(GsonConverterFactory.create()).
                 build(); // change the baseUrl later
-        webServiceUserApi = retrofit.create(WebServiceApi.class);
+        webServiceApi = retrofit.create(WebServiceApi.class);
     }
 
-    public LiveData<UserResponse> addUser(User newUser) {
+    public LiveData<UserResponse> addUser(SignUpRequest singUpRequest) {
         final MutableLiveData<UserResponse> userResponseData = new MutableLiveData<>();
-        Call<UserResponse> call = webServiceUserApi.registerUser(newUser);
+        Call<UserResponse> call = webServiceApi.registerUser(singUpRequest);
 
         call.enqueue(new Callback<UserResponse>() {
             @Override
@@ -42,16 +37,16 @@ public class UserApi {
                         String errorString = response.errorBody() != null ? response.errorBody().string() : "{}";
                         JSONObject errorObject = new JSONObject(errorString);
                         String errorMessage = errorObject.getString("message");
-                        userResponseData.postValue(new UserResponse(errorMessage, response.code()));
+                        userResponseData.postValue(new UserResponse(errorMessage));
                     } catch (Exception e) {
-                        userResponseData.postValue(new UserResponse("Error parsing error response", SERVER_ERROR));
+                        userResponseData.postValue(new UserResponse("Error parsing error response"));
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-                userResponseData.setValue(new UserResponse(t.getMessage(), SERVER_ERROR));
+                userResponseData.setValue(new UserResponse(t.getMessage()));
             }
 
 

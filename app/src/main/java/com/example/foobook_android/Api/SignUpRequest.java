@@ -1,5 +1,5 @@
 
-package com.example.foobook_android;
+package com.example.foobook_android.Api;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity
-public class User implements Serializable {
+public class SignUpRequest implements Serializable {
     private String username;
     private String password;
     private String displayname;
@@ -16,14 +16,14 @@ public class User implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    public User(String username, String password, String displayname, String profilePic) {
+    public SignUpRequest(String username, String password, String displayname, String profilePic) {
         this.username = username;
         this.password = password;
         this.displayname = displayname;
         this.profilePic = profilePic;
     }
 
-    public User(String username, String password, String displayname) {
+    public SignUpRequest(String username, String password, String displayname) {
         this.username = username;
         this.password = password;
         this.displayname = displayname;
