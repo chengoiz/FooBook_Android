@@ -44,11 +44,14 @@ public class LogInActivity extends AppCompatActivity {
 
     public void logIn(String username, String password) {
         if (username.equals("Tomer") && password.equals("a5k8b123")) {
+            // Display a success message
+            Toast.makeText(this, "You're successfully logged in.", Toast.LENGTH_SHORT).show();
+
+            // Proceed with navigation to FeedActivity
             Intent feed = new Intent(this, FeedActivity.class);
             startActivity(feed);
         } else {
-            Toast.makeText(this, "Username or Password incorrect",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Oops! We couldn't log you in. Please check your details and try again.",                    Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.foobook_android.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.foobook_android.database.PostDB;
+import com.example.foobook_android.post.PostViewModel;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
@@ -26,9 +28,8 @@ import com.example.foobook_android.adapters.PostAdapter;
 public class EditPostActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
-
     private PostDB db;
-
+    private PostViewModel postViewModel;
     private EditText postEditText;
     private ImageView selectedImage;
     private Button postButton, removePhoto;
@@ -48,6 +49,8 @@ public class EditPostActivity extends AppCompatActivity {
         db = PostDB.getInstance(this);
         Log.i("EditPostActivity", "onCreate");
         initializeViewComponents();
+        // Initialize PostViewModel
+        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         setupListeners();
         initializeHelpers();
         handleIncomingIntent();
@@ -89,23 +92,14 @@ public class EditPostActivity extends AppCompatActivity {
     private void handleIncomingIntent() {
         long postId = getIntent().getLongExtra("postId", -1);
         if (postId != -1) {
-            new Thread(() -> {
-                currentPost = db.postDao().get(postId);
-                runOnUiThread(this::populateUIWithPostDetails);
-            }).start();
+            postViewModel.getPostById(postId).observe(this, post -> {
+                currentPost = post;
+                if (post != null) {
+                    populateUIWithPostDetails();
+                }
+            });
         }
     }
-
-//    private void handleIncomingIntent() {
-//        if (getIntent().hasExtra("postDetails")) {
-//            currentPost = (Post) getIntent().getSerializableExtra("postDetails");
-//            if (currentPost != null) {
-//                populateUIWithPostDetails(); // This now matches the method signature
-//            }
-//        }
-//    }
-
-
 
     private void populateUIWithPostDetails() {
         // Check if currentPost is not null
@@ -140,24 +134,19 @@ public class EditPostActivity extends AppCompatActivity {
 
     private void savePost() {
         String postText = postEditText.getText().toString();
-        if (!postText.isEmpty() || isPhotoSelected) {
+        boolean isPhotoChanged = isPhotoSelected && postImageUri != null;
+        String postImageUriString = isPhotoChanged ? postImageUri.toString() : currentPost.getPostImage();
+
+        if (!postText.isEmpty() || isPhotoChanged) {
             currentPost.setContent(postText);
+            currentPost.setPostImage(postImageUriString);
+            currentPost.setImageSetByUser(isPhotoSelected);
 
-            if (isPhotoSelected && postImageUri != null) {
-                currentPost.setPostImage(postImageUri.toString());
-                currentPost.setImageSetByUser(isPhotoSelected);
-            }
+            // Update the post using ViewModel
+            postViewModel.update(currentPost);
 
-            // Update the post in the database
-            new Thread(() -> {
-                db.postDao().update(currentPost);
-                runOnUiThread(() -> {
-                    Toast.makeText(EditPostActivity.this, "Post updated successfully", Toast.LENGTH_SHORT).show();
-                    Intent resultIntent = new Intent();
-                    setResult(RESULT_OK, resultIntent);
-                    finish();
-                });
-            }).start();
+            Toast.makeText(EditPostActivity.this, "Post updated successfully", Toast.LENGTH_SHORT).show();
+            finish();
         } else {
             Toast.makeText(EditPostActivity.this, "Post text cannot be empty", Toast.LENGTH_SHORT).show();
         }

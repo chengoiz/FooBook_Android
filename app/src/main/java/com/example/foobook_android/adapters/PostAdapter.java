@@ -30,7 +30,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     private static final int NO_PHOTO = 0;
 
     private final Context context;
-    private final List<Post> posts;
+    private List<Post> posts;
     private final LayoutInflater inflater;
     private final PostItemListener listener;
 
@@ -127,6 +127,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         imageView.setImageResource(resourceId != 0 ? resourceId : R.drawable.defaultpic);
     }
 
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+        notifyDataSetChanged();
+    }
+
     private void showShareMenu(View view) {
         PopupMenu shareMenu = new PopupMenu(view.getContext(), view);
         shareMenu.inflate(R.menu.share_button_menu);
@@ -143,11 +148,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         PopupMenu postMenu = new PopupMenu(view.getContext(), view);
         postMenu.inflate(R.menu.post_menu);
         postMenu.setOnMenuItemClickListener(item -> {
+            // Obtain the Post object from the adapter's current dataset using the position.
+            Post postToEdit = posts.get(position);
+
             if (item.getItemId() == R.id.menuEditPost) {
-                listener.onEdit(position);
+                listener.onEdit(postToEdit);
                 return true;
             } else if (item.getItemId() == R.id.menuDeletePost) {
-                listener.onDelete(position);
+                listener.onDelete((int)postToEdit.getId());
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, getItemCount());
                 return true;
@@ -157,16 +165,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         postMenu.show();
     }
 
-// Inside PostAdapter.java
-
-    // Method to delete a post by position
-    public void deletePost(int position) {
-        if (position >= 0 && position < posts.size()) {
+    public void removePostById(long postId) {
+        int position = -1;
+        for (int i = 0; i < posts.size(); i++) {
+            if (posts.get(i).getId() == postId) {
+                position = i;
+                break;
+            }
+        }
+        if (position != -1) {
             posts.remove(position);
             notifyItemRemoved(position);
-            notifyItemRangeChanged(position, getItemCount());
+            notifyItemRangeChanged(position, posts.size());
         }
     }
+
     public Post getPostAt(int position) {
         if (position >= 0 && position < posts.size()) {
             return posts.get(position);
@@ -175,9 +188,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     public interface PostItemListener {
-        void onEdit(int position);
+        void onEdit(Post post);
 
-        void onDelete(int position);
+        void onDelete(long position);
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {

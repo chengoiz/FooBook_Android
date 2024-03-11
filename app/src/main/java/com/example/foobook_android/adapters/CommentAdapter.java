@@ -105,7 +105,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         }
 
 
-
         // Prepares the EditText for editing and shows the save button
         private void makeCommentEditable() {
             commentText.setFocusable(true);

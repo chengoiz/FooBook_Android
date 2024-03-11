@@ -1,6 +1,7 @@
 package com.example.foobook_android.daos;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -14,13 +15,11 @@ import java.util.List;
 @Dao
 public interface PostDao {
     @Query("SELECT * FROM post ORDER BY timestamp DESC LIMIT 25")
-    List<Post> getLatestPosts();
+    LiveData<List<Post>> getLatestPosts();
     @Query("SELECT * FROM post")
     List<Post> index();
-
     @Query("SELECT * FROM post WHERE id = :id")
-    Post get(int id);
-
+    Post get(long id);
     @Insert
     void insert(Post... posts);
 
@@ -29,10 +28,12 @@ public interface PostDao {
 
     @Delete
     void delete(Post... posts);
-    @Query("SELECT * FROM post WHERE id = :id")
-    Post get(long id);
+    @Query("DELETE FROM post WHERE id = :postId")
+    void deleteById(long postId);
+    @Query("SELECT * FROM Post WHERE id = :postId")
+    LiveData<Post> getPostById(long postId);
 
-    // Add methods to fetch posts as per requirements ------- need to create isFriend
+    //TODO: Add methods to fetch posts as per requirements ------- need to create isFriend
 //    @Query("SELECT * FROM post WHERE isFriend = 1 ORDER BY timestamp DESC LIMIT 20")
 //    List<Post> getLatestFriendPosts();
 //
