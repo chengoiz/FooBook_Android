@@ -8,51 +8,71 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.foobook_android.Api.LoginRequest;
+import com.example.foobook_android.ViewModels.LoginViewModel;
 import com.example.foobook_android.utility.FieldValidation;
 import com.example.foobook_android.R;
 
+import java.util.Objects;
+
 public class LogInActivity extends AppCompatActivity {
 
+    public static final String FAILURE = "Failure";
+    public static final String SUCCESS = "Success";
     private EditText inputUsername, inputPassword;
-    Button btnSignup;
+    Button btnSignup, btnLogin;
+    private LoginViewModel loginViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initializeViews();
+        setupFieldValidation();
+        setupListeners();
+        Log.i("LogInActivity", "onCreate");
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        loginViewModel.getloginResponseLiveData().observe(this, loginResponse -> {
+            if (Objects.equals(loginResponse.getResult(), SUCCESS)) {
+                navigateToFeedActivity();
+            } else if (Objects.equals(loginResponse.getResult(), FAILURE)) {
+                Toast.makeText(getApplicationContext(), loginResponse.getReason(), Toast.LENGTH_LONG).show();
+            }
+        });
 
-        inputUsername = findViewById(R.id.loginUsername);
-        inputPassword = findViewById(R.id.loginPassword);
-        btnSignup = findViewById(R.id.loginBenSignup);
+    }
 
-        // Signup button
+    private void setupListeners() {
         btnSignup.setOnClickListener(v -> {
             Intent signup = new Intent(this, SignUpActivity.class);
             startActivity(signup);
         });
-        Log.i("LogInActivity", "onCreate");
+        btnLogin.setOnClickListener(v -> attemptLogin(inputUsername.getText().toString(),
+                inputPassword.getText().toString()));
+    }
 
-        // Login button
-        Button btnLogin = findViewById(R.id.loginBtnLogin);
-        btnLogin.setOnClickListener(v -> logIn(inputUsername.getText().toString(),
-                                    inputPassword.getText().toString()));
-
+    private void setupFieldValidation() {
         FieldValidation.setupFieldValidation(inputUsername);
         FieldValidation.setupFieldValidation(inputPassword);
     }
 
-    public void logIn(String username, String password) {
-        if (username.equals("Tomer") && password.equals("a5k8b123")) {
-            // Display a success message
-            Toast.makeText(this, "You're successfully logged in.", Toast.LENGTH_SHORT).show();
+    private void initializeViews() {
+        inputUsername = findViewById(R.id.loginUsername);
+        inputPassword = findViewById(R.id.loginPassword);
+        btnSignup = findViewById(R.id.loginBenSignup);
+        btnLogin = findViewById(R.id.loginBtnLogin);
+    }
 
-            // Proceed with navigation to FeedActivity
-            Intent feed = new Intent(this, FeedActivity.class);
-            startActivity(feed);
-        } else {
-            Toast.makeText(this, "Oops! We couldn't log you in. Please check your details and try again.",                    Toast.LENGTH_SHORT).show();
-        }
+    public void attemptLogin(String username, String password) {
+        LoginRequest loginRequest = new LoginRequest(username, password);
+        loginViewModel.login(loginRequest);
+    }
+
+    private void navigateToFeedActivity() {
+        startActivity(new Intent(this, FeedActivity.class));
     }
 
     @Override
