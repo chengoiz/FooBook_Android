@@ -1,6 +1,7 @@
 package com.example.foobook_android.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import android.content.Intent;
@@ -19,6 +20,7 @@ import com.example.foobook_android.daos.PostDao;
 import com.example.foobook_android.database.PostDB;
 import com.example.foobook_android.databinding.ActivityCreatePostBinding;
 import com.example.foobook_android.databinding.ActivityMainBinding;
+import com.example.foobook_android.post.PostViewModel;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
@@ -29,8 +31,7 @@ import com.example.foobook_android.adapters.PostAdapter;
 
 public class CreatePostActivity extends AppCompatActivity  {
     private ActivityCreatePostBinding binding;
-    private PostDB db;
-    private PostDao postDao;
+    private PostViewModel postViewModel;
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
 
@@ -51,14 +52,12 @@ public class CreatePostActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setContentView(R.layout.activity_create_post);
         Log.i("CreatePostActivity", "onCreate");
         initializeViews();
+        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         setupListeners();
         initializeHelpers();
-        db = Room.databaseBuilder(getApplicationContext(), PostDB.class, "post_database")
-                .allowMainThreadQueries().build();
-        postDao = db.postDao();
+        // Removed direct database access initialization.
     }
 
     private void initializeViews() {
@@ -110,15 +109,12 @@ public class CreatePostActivity extends AppCompatActivity  {
             newPost.setImageSetByUser(isPhotoSelected);
             newPost.setIsPhotoPicked(Post.PHOTO_PICKED);
 
-            // Save to database
-            new Thread(() -> {
-                db.postDao().insert(newPost);
-                runOnUiThread(() -> {
-                    Toast.makeText(CreatePostActivity.this, "Post saved successfully", Toast.LENGTH_SHORT).show();
-                    setResult(RESULT_OK);
-                    finish();
-                });
-            }).start();
+            // Use ViewModel to save the post
+            postViewModel.insert(newPost); // Assuming postViewModel is already initialized in your activity
+
+            Toast.makeText(CreatePostActivity.this, "Post created successfully!", Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK);
+            finish();
         } else {
             Toast.makeText(CreatePostActivity.this, "Post text cannot be empty", Toast.LENGTH_SHORT).show();
         }
