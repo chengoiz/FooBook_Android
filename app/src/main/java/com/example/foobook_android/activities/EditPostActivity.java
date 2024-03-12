@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.foobook_android.database.PostDB;
-import com.example.foobook_android.post.PostViewModel;
+import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
@@ -112,7 +112,7 @@ public class EditPostActivity extends AppCompatActivity {
                 // If there's an image URI available
                 if (currentPost.getPostImage() != null && !currentPost.getPostImage().isEmpty()) {
                     Uri imageUri = Uri.parse(currentPost.getPostImage());
-                    // Use Glide or another image loading library to set the image
+                    // Use Glide to set the image
                     Glide.with(this).load(imageUri).into(selectedImage);
                     selectedImage.setVisibility(View.VISIBLE); // Make the ImageView visible
                     removePhoto.setVisibility(View.VISIBLE); // Show the remove photo button if applicable

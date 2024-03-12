@@ -1,6 +1,5 @@
 package com.example.foobook_android.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -17,11 +16,8 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
-import com.example.foobook_android.comment.CommentsDataHolder;
-import com.example.foobook_android.database.PostDB;
-import com.example.foobook_android.post.PostViewModel;
+import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
@@ -29,7 +25,6 @@ import com.example.foobook_android.R;
 import com.example.foobook_android.adapters.PostAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class FeedActivity extends AppCompatActivity implements PostAdapter.PostItemListener {
@@ -85,22 +80,28 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         ImageButton feedMenuBtn = findViewById(R.id.feedMenuBtn);
         feedMenuBtn.setOnClickListener(this::showFeedMenu);
 
-        SwitchCompat nightModeSwitch = findViewById(R.id.nightMode);
-        nightModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            toggleDarkMode(isChecked);
-        });
+        SwitchCompat nightMode = findViewById(R.id.nightMode);
+        nightMode.setOnClickListener(this::nightMode);
     }
 
-    private void toggleDarkMode(boolean enableDarkMode) {
-        if (enableDarkMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+    private void nightMode(View v) {
+        int nightModeFlags =
+                getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightModeFlags) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            default:
+                // Default to light mode
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-
-        // Manually refresh UI components to reflect the theme change here
-        // This involves setting background colors, text colors, etc., according to the theme
     }
+
 
     private void fetchAndDisplayPosts() {
         // Observe the LiveData of posts from PostViewModel
