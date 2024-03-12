@@ -1,6 +1,7 @@
 package com.example.foobook_android.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -37,6 +38,7 @@ public class LogInActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         loginViewModel.getloginResponseLiveData().observe(this, loginResponse -> {
             if (Objects.equals(loginResponse.getResult(), SUCCESS)) {
+                saveUserDetails(loginResponse.getUserId(), loginResponse.getToken());
                 navigateToFeedActivity();
             } else if (Objects.equals(loginResponse.getResult(), FAILURE)) {
                 Toast.makeText(getApplicationContext(), loginResponse.getReason(), Toast.LENGTH_LONG).show();
@@ -69,6 +71,14 @@ public class LogInActivity extends AppCompatActivity {
     public void attemptLogin(String username, String password) {
         LoginRequest loginRequest = new LoginRequest(username, password);
         loginViewModel.login(loginRequest);
+    }
+
+    private void saveUserDetails(String userId, String token) {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("userId", userId);
+        editor.putString("token", token);
+        editor.apply(); // apply() is asynchronous and returns void
     }
 
     private void navigateToFeedActivity() {

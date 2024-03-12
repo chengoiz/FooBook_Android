@@ -2,9 +2,9 @@ package com.example.foobook_android.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,11 +16,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.foobook_android.daos.PostDao;
-import com.example.foobook_android.database.PostDB;
 import com.example.foobook_android.databinding.ActivityCreatePostBinding;
-import com.example.foobook_android.databinding.ActivityMainBinding;
-import com.example.foobook_android.post.PostViewModel;
+import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
@@ -45,6 +42,8 @@ public class CreatePostActivity extends AppCompatActivity  {
     private PostAdapter postAdapter;
     private Post currentPost;
     private PhotoSelectorHelper photoSelectorHelper;
+    private String fetchedDisplayName;
+    private String fetchedProfilePic;
 
 
     @Override
@@ -54,10 +53,29 @@ public class CreatePostActivity extends AppCompatActivity  {
         setContentView(binding.getRoot());
         Log.i("CreatePostActivity", "onCreate");
         initializeViews();
-        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
+        setPostViewModel();
         setupListeners();
         initializeHelpers();
-        // Removed direct database access initialization.
+    }
+
+    private void setPostViewModel() {
+        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
+        postViewModel.setToken(token);
+        postViewModel.fetchUsername(token, this);
+        // Observe the username LiveData
+        postViewModel.getUsernameLiveData().observe(this, username -> {
+            if (username != null && !username.isEmpty()) {
+                this.fetchedDisplayName = username;
+            }
+        });
+        postViewModel.getProfilePicLiveData().observe(this, profilePic -> {
+            if (profilePic != null && !profilePic.isEmpty()) {
+                this.fetchedProfilePic = profilePic;
+                // Here you might want to load the profile picture into an ImageView or similar
+            }
+        });
     }
 
     private void initializeViews() {
@@ -69,6 +87,8 @@ public class CreatePostActivity extends AppCompatActivity  {
         btnCamera = findViewById(R.id.btnCamera);
         removePhoto = findViewById(R.id.removePhoto);
     }
+
+
 
     private void setupListeners() {
         btnGallery.setOnClickListener(v -> photoSelectorHelper.openGallery());
@@ -98,9 +118,13 @@ public class CreatePostActivity extends AppCompatActivity  {
         isPhotoSelected = true;
     }
 
+
     private void savePost() {
-        String postAuthor = "Tomer"; // This should eventually be replaced with dynamic data
-        String authorProfileImage = getResources().getResourceName(R.drawable.defaultpic);
+
+        String postAuthor = fetchedDisplayName;
+//        String authorProfileImage = getResources().getResourceName(R.drawable.defaultpic);
+        String authorProfileImage = fetchedProfilePic;
+
         String postText = postEditText.getText().toString();
         String postImageUriString = isPhotoSelected ? postImageUri.toString() : "";
 
@@ -119,6 +143,7 @@ public class CreatePostActivity extends AppCompatActivity  {
             Toast.makeText(CreatePostActivity.this, "Post text cannot be empty", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
