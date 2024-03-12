@@ -40,6 +40,7 @@
 
         </ImageButton>
 
+
         <ImageButton
             android:id="@+id/search_button"
             android:layout_width="wrap_content"
@@ -66,11 +67,21 @@
 
     </RelativeLayout>
 
+
+    <Button
+        android:id="@+id/viewFriendRequestsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Friend Requests"
+        android:layout_below="@id/title"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feedRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/title"
+        android:layout_below="@id/viewFriendRequestsButton"
         android:layout_marginTop="15dp"
         android:padding="8dp"
         tools:listitem="@layout/post_item" />
