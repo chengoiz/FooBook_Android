@@ -44,6 +44,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         postAdapter = new PostAdapter(this, new ArrayList<>(), this);
         recyclerView.setAdapter(postAdapter);
 
+
         // Initialize PostViewModel
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         postViewModel.getLatestPosts().observe(this, posts -> {
@@ -80,8 +81,11 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         ImageButton feedMenuBtn = findViewById(R.id.feedMenuBtn);
         feedMenuBtn.setOnClickListener(this::showFeedMenu);
 
-        SwitchCompat nightMode = findViewById(R.id.nightMode);
-        nightMode.setOnClickListener(this::nightMode);
+        SwitchCompat nightModeSwitch = findViewById(R.id.nightMode);
+        // Set the switch to reflect the current night mode state
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        nightModeSwitch.setChecked(nightModeFlags == Configuration.UI_MODE_NIGHT_YES);
+        nightModeSwitch.setOnClickListener(this::nightMode);
     }
 
 
