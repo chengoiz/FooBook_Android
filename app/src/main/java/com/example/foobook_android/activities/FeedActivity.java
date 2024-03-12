@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -77,6 +78,12 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     private void setupButtons() {
         ImageButton addPostBtn = findViewById(R.id.addPost);
         addPostBtn.setOnClickListener(v -> onAdd());
+
+        Button viewFriendRequestsButton = findViewById(R.id.viewFriendRequestsButton);
+        viewFriendRequestsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(FeedActivity.this, FriendRequestsActivity.class);
+            startActivity(intent);
+        });
 
         ImageButton feedMenuBtn = findViewById(R.id.feedMenuBtn);
         feedMenuBtn.setOnClickListener(this::showFeedMenu);
