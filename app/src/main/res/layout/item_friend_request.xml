@@ -1,34 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:layout_margin="4dp"
+    app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/displayNameTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Username"
-        app:layout_constraintEnd_toStartOf="@+id/acceptButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@color/background">
 
-    <Button
-        android:id="@+id/acceptButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Accept"
-        app:layout_constraintEnd_toStartOf="@+id/declineButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/commentItemImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/defaultpic" />
 
-    <Button
-        android:id="@+id/declineButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Decline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/displayNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_weight="1"
+            android:paddingStart="8dp"
+            android:text="@string/username" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/acceptButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/accept"
+            android:layout_gravity="center_vertical" />
+
+        <Button
+            android:id="@+id/declineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/decline"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

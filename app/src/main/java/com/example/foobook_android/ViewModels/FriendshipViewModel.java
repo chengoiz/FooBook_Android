@@ -1,17 +1,15 @@
 package com.example.foobook_android.ViewModels;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.foobook_android.Api.WebServiceApi;
+import com.example.foobook_android.Api.FriendRequestResponse;
 import com.example.foobook_android.models.User;
-
+import com.example.foobook_android.Repositories.FriendshipRepository;
 import java.util.List;
 
 import retrofit2.Call;
@@ -19,39 +17,68 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FriendshipViewModel extends AndroidViewModel {
-    private MutableLiveData<List<User>> friendRequests = new MutableLiveData<>();
-    private WebServiceApi webServiceApi; // Initialized elsewhere with Retrofit
+    private FriendshipRepository friendshipRepository;
+    private MutableLiveData<FriendRequestResponse> friendRequests = new MutableLiveData<>();
 
     public FriendshipViewModel(@NonNull Application application) {
         super(application);
-        // Initialize your WebServiceApi instance here, including the authentication token
+        friendshipRepository = new FriendshipRepository(application.getApplicationContext());
     }
 
-    public LiveData<List<User>> getFriendRequests(String userId) {
-        String authToken = "Bearer " + retrieveAuthToken(); // Implement retrieveAuthToken to get the current user's auth token
-        webServiceApi.getFriendRequests(userId, authToken).enqueue(new Callback<List<User>>() {
+    public LiveData<FriendRequestResponse> getFriendRequests(String userId) {
+        friendshipRepository.getFriendRequests(userId, new Callback<FriendRequestResponse>() {
             @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(Call<FriendRequestResponse> call, Response<FriendRequestResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
                     friendRequests.postValue(response.body());
                 } else {
-                    // Handle failure
                     friendRequests.postValue(null);
                 }
             }
 
             @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                // Handle network failure
+            public void onFailure(Call<FriendRequestResponse> call, Throwable t) {
                 friendRequests.postValue(null);
             }
         });
         return friendRequests;
     }
 
-    private String retrieveAuthToken() {
-        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("token", "");
+    public void acceptFriendRequest(String userId, String friendId) {
+        friendshipRepository.acceptFriendRequest(userId, friendId, new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                // Optionally, update LiveData or take other actions on success
+                //
+                //
+                //
+                ///
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Handle failure
+            }
+        });
     }
-    // Add methods for sendFriendRequest, acceptFriendRequest, and declineOrRemoveFriend here, similar to getFriendRequests
+
+    public void declineFriendRequest(String userId, String friendId) {
+        friendshipRepository.declineFriendRequest(userId, friendId, new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                // Optionally, update LiveData or take other actions on success
+                //
+                //
+                //
+                //
+                //
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Handle failure
+            }
+        });
+    }
 }

@@ -62,9 +62,9 @@ public class PostViewModel extends AndroidViewModel {
     public LiveData<String> getProfilePicLiveData() {
         return profilePicLiveData;
     }
-    public void fetchUsername(String token, Context context) {
-        UserRepository userRepository = new UserRepository(token, context);
-        userRepository.fetchUserDetails(token, new UserRepository.UserDetailsCallback() {
+    public void fetchUsername(Context context) {
+        UserRepository userRepository = new UserRepository(context);
+        userRepository.fetchUserDetails(new UserRepository.UserDetailsCallback() {
             @Override
             public void onSuccess(UserDetails userDetails) {
                 usernameLiveData.postValue(userDetails.getName());

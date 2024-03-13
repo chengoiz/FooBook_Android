@@ -63,7 +63,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             setImageFromDrawableName(holder.profileImageView, post.getProfileImage());
         }
 
-        // Set post image or hide if not applicable
+
         // Set post image or hide if not applicable
         if (post.getIsPhotoPicked() == PHOTO_PICKED && post.getPostImageUrl() != null && !post.getPostImageUrl().isEmpty()) {
             holder.postImageView.setVisibility(View.VISIBLE);

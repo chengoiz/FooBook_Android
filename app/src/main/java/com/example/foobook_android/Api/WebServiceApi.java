@@ -32,7 +32,7 @@ public interface WebServiceApi {
 
     // Fetch friend requests for a user
     @GET("users/{userId}/friend-requests")
-    Call<List<User>> getFriendRequests(@Path("userId") String userId, @Header("Authorization") String authToken);
+    Call<FriendRequestResponse> getFriendRequests(@Path("userId") String userId, @Header("Authorization") String authToken);
 
     // Send a friend request
     @POST("users/{userId}/friends")
@@ -40,7 +40,7 @@ public interface WebServiceApi {
 
     // Accept a friend request
     @PATCH("users/{userId}/friends/{fid}")
-    Call<User> acceptFriendRequest(@Path("userId") String userId, @Path("fid") String friendId, @Header("Authorization") String authToken);
+    Call<Void> acceptFriendRequest(@Path("userId") String userId, @Path("fid") String friendId, @Header("Authorization") String authToken);
 
     // Decline or remove a friend request/friend
     @DELETE("users/{userId}/friends/{fid}")

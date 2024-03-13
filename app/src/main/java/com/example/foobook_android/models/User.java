@@ -4,7 +4,7 @@ public class User {
     private String id; // Unique identifier
     private String username;
     private String displayname;
-    private String profilepic;
+    private String profilePic;
     // You can also add friendsList and friendRequests if you plan to fetch those
 
     // Constructor
@@ -12,7 +12,7 @@ public class User {
         this.id = id;
         this.username = username;
         this.displayname = displayname;
-        this.profilepic = profilepic;
+        this.profilePic = profilepic;
     }
 
     // Getters and Setters
@@ -25,8 +25,8 @@ public class User {
     public String getDisplayname() { return displayname; }
     public void setDisplayname(String displayname) { this.displayname = displayname; }
 
-    public String getProfilepic() { return profilepic; }
-    public void setProfilepic(String profilepic) { this.profilepic = profilepic; }
+    public String getProfilepic() { return profilePic; }
+    public void setProfilepic(String profilepic) { this.profilePic = profilepic; }
 
     // Additional methods for friendsList and friendRequests can be added as needed
 }

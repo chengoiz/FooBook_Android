@@ -79,7 +79,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         ImageButton addPostBtn = findViewById(R.id.addPost);
         addPostBtn.setOnClickListener(v -> onAdd());
 
-        Button viewFriendRequestsButton = findViewById(R.id.viewFriendRequestsButton);
+        Button viewFriendRequestsButton = findViewById(R.id.FriendRequestsButton);
         viewFriendRequestsButton.setOnClickListener(v -> {
             Intent intent = new Intent(FeedActivity.this, FriendRequestsActivity.class);
             startActivity(intent);
