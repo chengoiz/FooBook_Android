@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.example.foobook_android.R;
 
+
 public class ProfileActivity extends AppCompatActivity {
 
     @Override

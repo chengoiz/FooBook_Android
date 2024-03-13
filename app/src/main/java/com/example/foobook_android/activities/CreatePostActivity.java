@@ -65,7 +65,7 @@ public class CreatePostActivity extends AppCompatActivity  {
 
     private void setPostViewModel() {
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+//        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
 
       //  String token = sharedPreferences.getString("token", "");
       //  postViewModel.setToken(token);
@@ -140,12 +140,15 @@ public class CreatePostActivity extends AppCompatActivity  {
 
         if (!postText.isEmpty() || isPhotoSelected) {
             Post newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage, postImageUriString);
+            newPost.setCreatedBy(getCurrentUserId());
             newPost.setImageSetByUser(isPhotoSelected);
             newPost.setIsPhotoPicked(Post.PHOTO_PICKED);
 //            newPost.setCreatedBy(userId); // Set the creator's user ID
 
             // Use ViewModel to save the post
             postViewModel.insert(newPost); // Assuming postViewModel is already initialized in your activity
+            postViewModel.createPostForUser(userId, newPost, this);
+
 
             Toast.makeText(CreatePostActivity.this, "Post created successfully!", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK);

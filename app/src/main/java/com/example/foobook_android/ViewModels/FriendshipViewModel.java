@@ -90,7 +90,10 @@ public class FriendshipViewModel extends AndroidViewModel {
             }
         });
     }
-
+    private String retrieveAuthToken() {
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("token", "");
+    }
     private String getCurrentUserId() {
         SharedPreferences sharedPreferences = getApplication().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
         return sharedPreferences.getString("userId", "");

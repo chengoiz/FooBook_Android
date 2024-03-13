@@ -39,7 +39,7 @@ public class UserRepository {
     }
 
     public String getIdFromSharedPreferences() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("userId", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         return sharedPreferences.getString("userId", "");
     }
 

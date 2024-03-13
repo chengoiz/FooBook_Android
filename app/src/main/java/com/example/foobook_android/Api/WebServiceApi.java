@@ -3,6 +3,7 @@ package com.example.foobook_android.Api;
 
 
 import com.example.foobook_android.models.User;
+import com.example.foobook_android.post.Post;
 import com.example.foobook_android.utility.UserDetails;
 
 import java.util.List;
@@ -31,18 +32,21 @@ public interface WebServiceApi {
     Call<UserDetails> getUserDetails(@Path("id") String userId, @Header("Authorization") String authToken);
 
     // Fetch friend requests for a user
-    @GET("users/{userId}/friend-requests")
+    @GET("api/users/{userId}/friend-requests")
     Call<FriendRequestResponse> getFriendRequests(@Path("userId") String userId, @Header("Authorization") String authToken);
 
     // Send a friend request
-    @POST("users/{userId}/friends")
+    @POST("api/users/{userId}/friends")
     Call<Void> sendFriendRequest(@Path("userId") String receiverId, @Body RequestBody requestBody, @Header("Authorization") String authToken);
 
     // Accept a friend request
-    @PATCH("users/{userId}/friends/{fid}")
+    @PATCH("api/users/{userId}/friends/{fid}")
     Call<Void> acceptFriendRequest(@Path("userId") String userId, @Path("fid") String friendId, @Header("Authorization") String authToken);
 
     // Decline or remove a friend request/friend
-    @DELETE("users/{userId}/friends/{fid}")
+    @DELETE("api/users/{userId}/friends/{fid}")
     Call<Void> declineOrRemoveFriend(@Path("userId") String userId, @Path("fid") String friendId, @Header("Authorization") String authToken);
+
+    @POST("api/users/{userId}/posts")
+    Call<Post> createPostForUser(@Path("userId") String userId, @Body Post post, @Header("Authorization") String authToken);
 }
