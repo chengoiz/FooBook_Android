@@ -1,9 +1,12 @@
 package com.example.foobook_android.adapters;
 
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +15,31 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import com.bumptech.glide.Glide;
+import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.activities.CommentActivity;
 import com.example.foobook_android.comment.CommentsDataHolder;
+import com.example.foobook_android.models.FriendshipRequest;
+import com.example.foobook_android.models.User;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
+import com.example.foobook_android.utility.RetrofitClient;
+import com.google.gson.Gson;
 
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private static final int PHOTO_PICKED = 1;
@@ -49,6 +65,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     }
 
+//    public class ViewHolder extends RecyclerView.ViewHolder {
+//        // Other views
+//        ImageView profileImageView;
+//
+//        public ViewHolder(View itemView) {
+//            super(itemView);
+//            profileImageView = itemView.findViewById(R.id.profileImageView); // Assuming the ID is profileImageView
+//
+//            profileImageView.setOnClickListener(v -> {
+//                int position = getAdapterPosition();
+//                if (position != RecyclerView.NO_POSITION) {
+//                    Post post = posts.get(position);
+//                    sendFriendRequest(post.getCreatedBy()); // Assuming Post has a method getCreatedBy() returning the User ID
+//                }
+//            });
+//        }
+//    }
+
+
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Post post = posts.get(position);
@@ -73,6 +108,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
 
         updateLikesAndComments(holder, post, position);
+        holder.profileImageView.setOnClickListener(view -> showProfilePictureMenu(view, holder));
+
 
         // Like button click handling
         holder.feedBtnLike.setOnClickListener(v -> updateLikes(holder, post));
@@ -91,6 +128,68 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         // Share button click
         holder.shareButton.setOnClickListener(this::showShareMenu);
     }
+
+    private void showProfilePictureMenu(View anchor, PostViewHolder holder) {
+        PopupMenu popup = new PopupMenu(anchor.getContext(), anchor);
+        popup.getMenuInflater().inflate(R.menu.profile_picture_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(item -> {
+            int position = holder.getAdapterPosition();
+            int id = item.getItemId();
+            if (id == R.id.add_friend) {
+                // Use getCreatedBy() to get the user ID directly
+                String userId = posts.get(position).getCreatedBy();
+                sendFriendRequest(userId);
+                return true;
+            }   else if (id == R.id.view_profile) {
+                    // TODO: Implement the go to profile logic here
+                    return true;
+            }
+            return false;
+        });
+        popup.show();
+    }
+
+    private String getCurrentUserId() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
+        return sharedPreferences.getString("userId", "");
+    }
+
+    private String getAuthToken() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
+        return sharedPreferences.getString("token", "");
+        // Retrieve the auth token from SharedPreferences.
+    }
+
+    private void sendFriendRequest(String receiverUserId) {
+        String currentUserId = getCurrentUserId();
+        String authToken = "Bearer " + getAuthToken();
+
+        // Assuming you have a FriendshipRequest model and Gson setup
+        FriendshipRequest friendshipRequest = new FriendshipRequest(currentUserId, receiverUserId);
+        Gson gson = new Gson();
+        String json = gson.toJson(friendshipRequest);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+
+        // Adjust the Retrofit call to match the expected parameters
+        RetrofitClient.getClient("http://10.0.2.2:8080/", authToken).create(WebServiceApi.class)
+                .sendFriendRequest(receiverUserId, requestBody, authToken) // Now matching the expected signature
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(context, "Friend request sent!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Failed to send friend request.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
 
     private void updateLikesAndComments(PostViewHolder holder, Post post, int position) {

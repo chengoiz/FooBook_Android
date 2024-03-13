@@ -5,8 +5,12 @@
     <string name="password">Password</string>
     <string name="login_signUp">Sign up for FooBook</string>
     <string name="password_confirm">Confirm Password</string>
+    <string name="send_friend_request">Send Friend Request</string>
     <string name="signUp_DisplayName">Display Name</string>
     <string name="signUp_choose_file">Choose File</string>
+    <string name="my_profile">My Profile</string>
+    <string name="user_profile_picture">User Profile Picture</string>
+    <string name="add_friend">Add Friend</string>
     <string name="signUp_TakePhoto">Take Photo</string>
     <string name="signUp_imageText">No File Chosen</string>
     <string name="btnSignup">Sign Up</string>

@@ -58,6 +58,11 @@ public class CreatePostActivity extends AppCompatActivity  {
         initializeHelpers();
     }
 
+    private String getCurrentUserId() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        return sharedPreferences.getString("userId", ""); // Replace "userId" with the actual key you used to store the user's ID
+    }
+
     private void setPostViewModel() {
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
@@ -130,11 +135,14 @@ public class CreatePostActivity extends AppCompatActivity  {
 
         String postText = postEditText.getText().toString();
         String postImageUriString = isPhotoSelected ? postImageUri.toString() : "";
+        String userId = getCurrentUserId(); // Fetch the current user's ID
+
 
         if (!postText.isEmpty() || isPhotoSelected) {
             Post newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage, postImageUriString);
             newPost.setImageSetByUser(isPhotoSelected);
             newPost.setIsPhotoPicked(Post.PHOTO_PICKED);
+//            newPost.setCreatedBy(userId); // Set the creator's user ID
 
             // Use ViewModel to save the post
             postViewModel.insert(newPost); // Assuming postViewModel is already initialized in your activity

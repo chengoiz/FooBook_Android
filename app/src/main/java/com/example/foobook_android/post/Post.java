@@ -55,6 +55,9 @@ public class Post implements Serializable {
     @ColumnInfo(name = "isJsonFile")
     private int isJsonFile;
 
+    @ColumnInfo(name ="createdBy")
+    private String createdBy;
+
 
 
     public Post(String userName, String timestamp, String content, String profileImage) {
@@ -64,6 +67,7 @@ public class Post implements Serializable {
         this.profileImage = profileImage;
         this.isJsonFile = 0;
         this.isPhotoPicked = NO_PHOTO;
+        this.createdBy = null;
     }
     public Post(String userName, String timestamp, String content,  String profileImage,
                 String postImageUri) {
@@ -180,5 +184,13 @@ public class Post implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 }

@@ -20,7 +20,6 @@ public class UserRepository {
     private String userId;
     private Context context; // Add this
 
-
     public UserRepository(Context context) {
         this.context = context.getApplicationContext();
         token = getTokenFromSharedPreferences();
