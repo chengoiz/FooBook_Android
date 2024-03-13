@@ -20,8 +20,6 @@ public class UserRepository {
     private String thisUserId;
     private Context context; // Add this
 
-
-
     public UserRepository(String token, Context context) {
         this.context = context.getApplicationContext();
         this.webServiceApi = RetrofitClient.getClient("http://10.0.2.2:8080/", token).create(WebServiceApi.class);

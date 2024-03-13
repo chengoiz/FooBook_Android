@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.example.foobook_android.daos.PostDao;
 import com.example.foobook_android.post.Post;
 
-@Database(entities = {Post.class}, version = 1)
+@Database(entities = {Post.class}, version = 2)
 public abstract class PostDB extends RoomDatabase {
     private static volatile PostDB INSTANCE;
     private static final String DATABASE_NAME = "post_database";

@@ -36,7 +36,7 @@ public interface WebServiceApi {
 
     // Send a friend request
     @POST("users/{userId}/friends")
-    Call<User> sendFriendRequest(@Path("userId") String receiverId, @Body RequestBody requestBody, @Header("Authorization") String authToken);
+    Call<Void> sendFriendRequest(@Path("userId") String receiverId, @Body RequestBody requestBody, @Header("Authorization") String authToken);
 
     // Accept a friend request
     @PATCH("users/{userId}/friends/{fid}")

@@ -1,16 +1,20 @@
 package com.example.foobook_android.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.comment.Comment;
 import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.R;
@@ -20,8 +24,11 @@ import java.util.ArrayList;
 
 public class CommentActivity extends AppCompatActivity implements CommentAdapter.CommentItemListener {
     private ArrayList<Comment> commentsList;
+    private PostViewModel postViewModel;
     private RecyclerView commentsRecyclerView;
     private CommentAdapter commentAdapter;
+    private String fetchedDisplayName;
+    private String fetchedProfilePic;
     private int postPosition;
 
 
@@ -30,8 +37,11 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         Log.i("CommentActivity", "onCreate");
+        setPostViewModel();
         setupCommentRecyclerView();
         setupButtons();
+        TextView usernameTextView = findViewById(R.id.commentItemUsername);
+        usernameTextView.setText(fetchedDisplayName);
     }
 
     public void setupButtons() {
@@ -41,6 +51,40 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         });
     }
 
+    private String getCurrentUserId() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        return sharedPreferences.getString("userId", ""); // Replace "userId" with the actual key you used to store the user's ID
+    }
+
+    private void setPostViewModel() {
+        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
+        postViewModel.setToken(token);
+        postViewModel.fetchUsername(token, this);
+        // Observe the username LiveData
+        postViewModel.getUsernameLiveData().observe(this, username -> {
+            if (username != null && !username.isEmpty()) {
+                this.fetchedDisplayName = username;
+            }
+        });
+        postViewModel.getUsernameLiveData().observe(this, username -> {
+            // This lambda function will be called every time the usernameLiveData is updated
+            TextView usernameTextView = findViewById(R.id.commentItemUsername);
+            if (username != null) {
+                usernameTextView.setText(username);
+            } else {
+                // Handle the case where username is null - could be an error fetching data
+                usernameTextView.setText("Unknown User"); // or any other default text
+            }
+        });
+        postViewModel.getProfilePicLiveData().observe(this, profilePic -> {
+            if (profilePic != null && !profilePic.isEmpty()) {
+                this.fetchedProfilePic = profilePic;
+                // Here you might want to load the profile picture into an ImageView or similar
+            }
+        });
+    }
     private void setupCommentRecyclerView() {
         postPosition = getIntent().getIntExtra("postPosition", -1);
         if (postPosition == -1) {
@@ -57,7 +101,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         EditText writeTextComment = findViewById(R.id.commentItemComment);
         String commentText = writeTextComment.getText().toString().trim();
         // Hard coded for now
-        String commenterName = "Tomer";
+        String commenterName = fetchedDisplayName;
         String commenterProfileImage = "drawable/defaultpic.png";
 
         if (!commentText.isEmpty()) {

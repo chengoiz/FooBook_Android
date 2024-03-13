@@ -81,6 +81,11 @@ public class PostViewModel extends AndroidViewModel {
         });
     }
 
+    public LiveData<List<Post>> getPostsByUserId(String userId) {
+        // Implement fetching posts by userId
+        // This could involve setting userPosts to a LiveData returned from a Repository method
+        return latestPosts; // Need to fix it to return the specific user's posts.
+    }
     public LiveData<Post> getPostById(long postId) {
         return repository.getPostById(postId);
     }

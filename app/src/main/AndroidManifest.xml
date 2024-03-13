@@ -49,7 +49,12 @@
         <activity
             android:name=".activities.FeedActivity"
             android:exported="false" />
-        <activity android:name=".activities.FriendRequestsActivity"/>
+        <activity
+            android:name=".activities.FriendRequestsActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activities.UserProfileActivity"
+            android:exported="false"/>
         <activity
             android:name=".activities.SignUpActivity"
             android:theme="@style/Base.Theme.FooBook_Android"

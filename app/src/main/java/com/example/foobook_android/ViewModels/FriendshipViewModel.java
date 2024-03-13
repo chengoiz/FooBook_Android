@@ -3,6 +3,7 @@ package com.example.foobook_android.ViewModels;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,6 +11,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.foobook_android.Api.WebServiceApi;
+import com.example.foobook_android.models.Friendship;
+import com.example.foobook_android.models.FriendshipRequest;
 import com.example.foobook_android.models.User;
 
 import java.util.List;
@@ -53,5 +56,9 @@ public class FriendshipViewModel extends AndroidViewModel {
         SharedPreferences sharedPreferences = getApplication().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
         return sharedPreferences.getString("token", "");
     }
-    // Add methods for sendFriendRequest, acceptFriendRequest, and declineOrRemoveFriend here, similar to getFriendRequests
+
+    private String getCurrentUserId() {
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("userId", "");
+    }
 }

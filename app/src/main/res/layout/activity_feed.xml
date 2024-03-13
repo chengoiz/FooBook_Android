@@ -29,17 +29,18 @@
             android:textStyle="bold"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
+
         <ImageButton
             android:id="@+id/addPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:layout_toStartOf="@+id/search_button"
             android:background="@android:color/transparent"
             android:paddingRight="1dp"
-            app:srcCompat="@drawable/btn_add_post"
-            android:layout_toStartOf="@+id/search_button">
+            app:srcCompat="@drawable/btn_add_post">
 
         </ImageButton>
-
 
         <ImageButton
             android:id="@+id/search_button"
@@ -67,15 +68,25 @@
 
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/myProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="275dp"
+        android:text="@string/my_profile" />
 
     <Button
         android:id="@+id/viewFriendRequestsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View Friend Requests"
         android:layout_below="@id/title"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginStart="203dp"
+        android:layout_marginTop="7dp"
+        android:text="View Friend Requests" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feedRecyclerView"
