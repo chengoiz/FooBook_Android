@@ -66,9 +66,12 @@ public class CreatePostActivity extends AppCompatActivity  {
     private void setPostViewModel() {
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        String token = sharedPreferences.getString("token", "");
-        postViewModel.setToken(token);
-        postViewModel.fetchUsername(token, this);
+
+      //  String token = sharedPreferences.getString("token", "");
+      //  postViewModel.setToken(token);
+
+
+        postViewModel.fetchUsername(this);
         // Observe the username LiveData
         postViewModel.getUsernameLiveData().observe(this, username -> {
             if (username != null && !username.isEmpty()) {

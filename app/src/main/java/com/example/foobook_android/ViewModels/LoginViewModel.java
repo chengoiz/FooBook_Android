@@ -8,7 +8,7 @@ import com.example.foobook_android.Repositories.LoginRepository;
 import com.example.foobook_android.Api.LoginRequest;
 import com.example.foobook_android.Api.LoginResponse;
 
-public class LoginViewModel extends ViewModel {
+public class  LoginViewModel extends ViewModel {
     private final LoginRepository loginRepository;
     private final MutableLiveData<LoginResponse> loginResponseLiveData;
 

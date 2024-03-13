@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.FeedActivity">
+    tools:context=".activities.ProfileActivity">
 
     <RelativeLayout
         android:id="@+id/title"
@@ -16,7 +16,7 @@
             android:id="@+id/textView4"
             style="@style/pageTitle"
             android:text="@string/app_name"
-             />
+            />
 
 
         <androidx.appcompat.widget.SwitchCompat
@@ -29,18 +29,17 @@
             android:textStyle="bold"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-
         <ImageButton
             android:id="@+id/addPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="0dp"
-            android:layout_toStartOf="@+id/search_button"
             android:background="@android:color/transparent"
             android:paddingRight="1dp"
-            app:srcCompat="@drawable/btn_add_post">
+            app:srcCompat="@drawable/btn_add_post"
+            android:layout_toStartOf="@+id/search_button">
 
         </ImageButton>
+
 
         <ImageButton
             android:id="@+id/search_button"
@@ -68,35 +67,61 @@
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/myProfileButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="275dp"
-        android:text="@string/my_profile" />
 
-    <Button
-        android:id="@+id/FriendRequestsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/view_friend_requests"
-        android:layout_below="@id/title"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="203dp"
-        android:layout_marginTop="7dp"
-        android:text="View Friend Requests" />
+
+
+        <LinearLayout
+            android:id="@+id/profileDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/profileImageInProfile"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                android:layout_gravity="top"
+                android:src="@drawable/defaultpic" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="5"
+                android:paddingStart="8dp">
+
+                <TextView
+                    android:id="@+id/userNameInProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_name"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/FriendRequestsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_friend"
+                android:layout_marginTop="8dp"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feedRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/FriendRequestsButton"
+        android:layout_below="@id/profileDetails"
         android:layout_marginTop="15dp"
         android:padding="8dp"
-        tools:listitem="@layout/post_item" />
+        tools:listitem="@layout/post_item"
+        android:visibility="visible"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/feedMenuBtn"
