@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +90,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         Post post = posts.get(position);
         holder.userNameTextView.setText(post.getUserName());
         holder.timeStampTextView.setText(post.getTimestamp());
-        holder.postContentTextView.setText(post.getContent());
+        holder.postContentTextView.setText(post.getText());
 
         // Set profile image
         if (post.getIsJsonFile() == Post.JSON_FILE) {
@@ -98,11 +99,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             setImageFromDrawableName(holder.profileImageView, post.getProfileImage());
         }
 
-
         // Set post image or hide if not applicable
-        if (post.getIsPhotoPicked() == PHOTO_PICKED && post.getPostImageUrl() != null && !post.getPostImageUrl().isEmpty()) {
+        // Set post image or hide if not applicable
+        if (post.getIsPhotoPicked() == PHOTO_PICKED && post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
             holder.postImageView.setVisibility(View.VISIBLE);
-            loadImage(holder.postImageView, post.getPostImageUrl());
+            loadImage(holder.postImageView, post.getImageUrl());
         } else {
             holder.postImageView.setVisibility(View.GONE);
         }
@@ -137,8 +138,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             int id = item.getItemId();
             if (id == R.id.add_friend) {
                 // Use getCreatedBy() to get the user ID directly
-                String userId = posts.get(position).getCreatedBy();
-                sendFriendRequest(userId);
+                String receiverUserId = posts.get(position).getCreatedBy();
+                sendFriendRequest(receiverUserId);
                 return true;
             }   else if (id == R.id.view_profile) {
                     // TODO: Implement the go to profile logic here
@@ -162,7 +163,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     private void sendFriendRequest(String receiverUserId) {
         String currentUserId = getCurrentUserId();
-        String authToken = "Bearer " + getAuthToken();
+        String authToken = getAuthToken();
 
         // Assuming you have a FriendshipRequest model and Gson setup
         FriendshipRequest friendshipRequest = new FriendshipRequest(currentUserId, receiverUserId);
@@ -179,6 +180,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                         if (response.isSuccessful()) {
                             Toast.makeText(context, "Friend request sent!", Toast.LENGTH_SHORT).show();
                         } else {
+                            Log.e("FriendRequestError", "Failed to send friend request. HTTP status code: " + response.code() + " Message: " + response.message());
                             Toast.makeText(context, "Failed to send friend request.", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -221,9 +223,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     public void setImageFromDrawableName(ImageView imageView, String drawableName) {
-        Resources resources = context.getResources();
-        int resourceId = resources.getIdentifier(drawableName, "drawable", context.getPackageName());
-        imageView.setImageResource(resourceId != 0 ? resourceId : R.drawable.defaultpic);
+        if (drawableName != null && !drawableName.isEmpty()) {
+            Resources resources = context.getResources();
+            int resourceId = resources.getIdentifier(drawableName, "drawable", context.getPackageName());
+            imageView.setImageResource(resourceId != 0 ? resourceId : R.drawable.defaultpic);
+        } else {
+            imageView.setImageResource(R.drawable.defaultpic); // Default image if drawableName is null
+        }
     }
 
     public void setPosts(List<Post> posts) {

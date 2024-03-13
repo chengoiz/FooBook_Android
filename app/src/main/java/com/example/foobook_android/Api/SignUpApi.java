@@ -23,9 +23,9 @@ public class SignUpApi {
         webServiceApi = retrofit.create(WebServiceApi.class);
     }
 
-    public LiveData<UserResponse> addUser(SignUpRequest singUpRequest) {
+    public LiveData<UserResponse> addUser(SignUpRequest signUpRequest) {
         final MutableLiveData<UserResponse> userResponseData = new MutableLiveData<>();
-        Call<UserResponse> call = webServiceApi.registerUser(singUpRequest);
+        Call<UserResponse> call = webServiceApi.registerUser(signUpRequest);
 
         call.enqueue(new Callback<UserResponse>() {
             @Override

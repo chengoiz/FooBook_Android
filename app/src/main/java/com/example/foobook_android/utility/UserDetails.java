@@ -5,30 +5,44 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class UserDetails {
-    @SerializedName("displayName") // This tells Gson which JSON key to map to this field
-    private String name;
-    @SerializedName("profilePic")
-    private String imageUrl;
+    @SerializedName("displayname") // This tells Gson which JSON key to map to this field
+    private String displayname;
+    @SerializedName("profilepic")
+    private String profilepic;
+    @SerializedName("friendsList")
+    private List<String> friendsList;
 
     // Constructor, Getters, and Setters
-    public UserDetails(String name, String imageUrl) {
-        this.name = name;
-        this.imageUrl = imageUrl;
+    public UserDetails(String displayName, String profilePic, List<String> friendsList) {
+        this.displayname = displayName;
+        this.profilepic = profilePic;
+        this.friendsList = friendsList;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    // Getters
+    public String getDisplayName() {
+        return displayname;
     }
 
     public String getProfilePic() {
-        return imageUrl;
+        return profilepic;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public List<String> getFriendList() {
+        return friendsList;
     }
+
+    // Setters
+    public void setDisplayName(String displayName) {
+        this.displayname = displayName;
+    }
+
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilepic = profilePicUrl;
+    }
+
+    public void setFriendList(List<String> friendList) {
+        this.friendsList = friendList;
+    }
+
 }

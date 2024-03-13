@@ -39,6 +39,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         Log.i("CommentActivity", "onCreate");
         setPostViewModel();
         setupCommentRecyclerView();
+        fetchUserDetails();
         setupButtons();
         TextView usernameTextView = findViewById(R.id.commentItemUsername);
         usernameTextView.setText(fetchedDisplayName);
@@ -51,6 +52,12 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         });
     }
 
+    private void fetchUserDetails() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        fetchedDisplayName = sharedPreferences.getString("displayName", "Unknown User");
+        fetchedProfilePic = sharedPreferences.getString("profilePicUrl", "default_profile_pic_url"); // Adjust default value as needed
+    }
+
     private String getCurrentUserId() {
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
         return sharedPreferences.getString("userId", ""); // Replace "userId" with the actual key you used to store the user's ID
@@ -61,7 +68,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
         postViewModel.setToken(token);
-        postViewModel.fetchUsername(token, this);
+        postViewModel.fetchUsername(this);
         // Observe the username LiveData
         postViewModel.getUsernameLiveData().observe(this, username -> {
             if (username != null && !username.isEmpty()) {
@@ -100,24 +107,20 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
     public void addComment() {
         EditText writeTextComment = findViewById(R.id.commentItemComment);
         String commentText = writeTextComment.getText().toString().trim();
-        // Hard coded for now
-        String commenterName = fetchedDisplayName;
-        String commenterProfileImage = "drawable/defaultpic.png";
 
         if (!commentText.isEmpty()) {
-            Comment newComment = new Comment(commenterName, commentText, commenterProfileImage);
+            // Use fetchedDisplayName and fetchedProfilePic for new comments
+            Comment newComment = new Comment(fetchedDisplayName, commentText, fetchedProfilePic);
             CommentsDataHolder.addComment(postPosition, newComment);
             commentsList.add(newComment);
             commentAdapter.notifyItemInserted(commentsList.size() - 1);
             commentsRecyclerView.scrollToPosition(commentsList.size() - 1);
             writeTextComment.setText("");
-
         } else {
             Toast.makeText(CommentActivity.this, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
         }
-
-
     }
+
 
     @Override
     public void onDeleteComment(int position) {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foobook_android.R;
 import com.example.foobook_android.models.User;
 
@@ -22,6 +23,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     private List<User> users;
     private final LayoutInflater inflater;
     private final FriendRequestListener listener;
+    private String currentUserId;
 
     public interface FriendRequestListener {
         void onAcceptRequest(String userId, String friendId);
@@ -30,11 +32,12 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
 
     // Adapter constructor
-    public FriendRequestAdapter(Context context, List<User> users, FriendRequestListener listener) {
+    public FriendRequestAdapter(Context context, List<User> users, FriendRequestListener listener, String currentUserId) {
         this.context = context;
         this.users = users;
         this.inflater = LayoutInflater.from(context);
         this.listener = listener;
+        this.currentUserId = currentUserId;
     }
 
     @NonNull
@@ -48,8 +51,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = users.get(position);
         holder.displayNameTextView.setText(user.getDisplayname());
-        holder.profilePicImageView.setImageURI(Uri.parse(user.getProfilepic()));
-        // Implement onClickListeners for acceptButton and declineButton here
+
     }
 
     @Override
@@ -74,16 +76,18 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             acceptButton.setOnClickListener(view -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    User user = users.get(position);
-                    listener.onAcceptRequest("currentUserId", user.getId()); // Use actual IDs
+                    User friend = users.get(position); // Get the friend's User object from the adapter's data set
+                    String friendId = friend.getId();
+                    listener.onAcceptRequest(currentUserId, friendId); // Use actual IDs
                 }
             });
 
             declineButton.setOnClickListener(view -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    User user = users.get(position);
-                    listener.onDeclineRequest("currentUserId", user.getId()); // Use actual IDs
+                    User friend = users.get(position); // Get the friend's User object from the adapter's data set
+                    String friendId = friend.getId();
+                    listener.onDeclineRequest(currentUserId, friendId); // Use actual IDs
                 }
             });
         }

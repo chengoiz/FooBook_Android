@@ -85,6 +85,12 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
             startActivity(intent);
         });
 
+        Button myProfileButton = findViewById(R.id.myProfileButton);
+        myProfileButton.setOnClickListener(v -> {
+            Intent intent = new Intent(FeedActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
         ImageButton feedMenuBtn = findViewById(R.id.feedMenuBtn);
         feedMenuBtn.setOnClickListener(this::showFeedMenu);
 

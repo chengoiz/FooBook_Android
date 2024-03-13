@@ -2,6 +2,7 @@ package com.example.foobook_android.ViewModels;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -14,6 +15,10 @@ import com.example.foobook_android.Repositories.PostRepository;
 import com.example.foobook_android.utility.UserDetails;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostViewModel extends AndroidViewModel {
     private final PostRepository repository;
@@ -67,7 +72,7 @@ public class PostViewModel extends AndroidViewModel {
         userRepository.fetchUserDetails(new UserRepository.UserDetailsCallback() {
             @Override
             public void onSuccess(UserDetails userDetails) {
-                usernameLiveData.postValue(userDetails.getName());
+                usernameLiveData.postValue(userDetails.getDisplayName());
                 profilePicLiveData.postValue(userDetails.getProfilePic()); // Update profile pic live data
 
             }
@@ -77,6 +82,27 @@ public class PostViewModel extends AndroidViewModel {
                 // Handle error, maybe post a default value or an error message
                 usernameLiveData.postValue(null);
                 profilePicLiveData.postValue(null);
+            }
+        });
+    }
+
+    public void createPostForUser(String userId, Post post, Context context) {
+        repository.createPostForUser(userId, post, context, new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (response.isSuccessful()) {
+                    // Handle success
+                    Log.d("PostViewModel", "Post created successfully");
+                } else {
+                    // Handle request failure (e.g., validation error)
+                    Log.e("PostViewModel", "Failed to create post");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                // Handle failure to make the request (e.g., no internet connection)
+                Log.e("PostViewModel", "Error creating post", t);
             }
         });
     }

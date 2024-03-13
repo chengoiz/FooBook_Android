@@ -33,13 +33,14 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
         initialize();
         fetchFriendRequests(userId);
     }
+
     private void initialize() {
         userRepository = new UserRepository(this);
         userId = userRepository.getIdFromSharedPreferences();
 
         friendRequestsRecyclerView = findViewById(R.id.friendRequestsRecyclerView);
         friendRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new FriendRequestAdapter(this, new ArrayList<>(), this);
+        adapter = new FriendRequestAdapter(this, new ArrayList<>(), this, userId);
         friendRequestsRecyclerView.setAdapter(adapter);
 
         friendshipViewModel = new ViewModelProvider(this).get(FriendshipViewModel.class);

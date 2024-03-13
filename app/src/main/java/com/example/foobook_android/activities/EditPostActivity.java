@@ -105,13 +105,13 @@ public class EditPostActivity extends AppCompatActivity {
         // Check if currentPost is not null
         if (currentPost != null) {
             // Set the post content
-            postEditText.setText(currentPost.getContent());
+            postEditText.setText(currentPost.getText());
 
             // Check if a photo was picked for the post
             if (currentPost.getIsPhotoPicked() == Post.PHOTO_PICKED) {
                 // If there's an image URI available
-                if (currentPost.getPostImage() != null && !currentPost.getPostImage().isEmpty()) {
-                    Uri imageUri = Uri.parse(currentPost.getPostImage());
+                if (currentPost.getImageUrl() != null && !currentPost.getImageUrl().isEmpty()) {
+                    Uri imageUri = Uri.parse(currentPost.getImageUrl());
                     // Use Glide to set the image
                     Glide.with(this).load(imageUri).into(selectedImage);
                     selectedImage.setVisibility(View.VISIBLE); // Make the ImageView visible
@@ -135,11 +135,11 @@ public class EditPostActivity extends AppCompatActivity {
     private void savePost() {
         String postText = postEditText.getText().toString();
         boolean isPhotoChanged = isPhotoSelected && postImageUri != null;
-        String postImageUriString = isPhotoChanged ? postImageUri.toString() : currentPost.getPostImage();
+        String postImageUriString = isPhotoChanged ? postImageUri.toString() : currentPost.getImageUrl();
 
         if (!postText.isEmpty() || isPhotoChanged) {
             currentPost.setContent(postText);
-            currentPost.setPostImage(postImageUriString);
+            currentPost.setImageUrl(postImageUriString);
             currentPost.setImageSetByUser(isPhotoSelected);
 
             // Update the post using ViewModel

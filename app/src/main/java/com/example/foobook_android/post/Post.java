@@ -28,8 +28,8 @@ public class Post implements Serializable {
     @ColumnInfo(name = "timestamp")
     private String timestamp;
 
-    @ColumnInfo(name = "content")
-    private String content;
+    @ColumnInfo(name = "text")
+    private String text;
 
     @Ignore /** Ignoring this field for Room database **/
     private List<Comment> comments = new ArrayList<>();
@@ -43,8 +43,8 @@ public class Post implements Serializable {
     @ColumnInfo(name = "profileImage")
     private String profileImage;
 
-    @ColumnInfo(name = "postImage")
-    private String postImage;
+    @ColumnInfo(name = "imageUrl")
+    private String imageUrl;
 
     @ColumnInfo(name = "isImageSetByUser")
     private boolean isImageSetByUser;
@@ -60,22 +60,22 @@ public class Post implements Serializable {
 
 
 
-    public Post(String userName, String timestamp, String content, String profileImage) {
+    public Post(String userName, String timestamp, String text, String profileImage) {
         this.userName = userName;
         this.timestamp = timestamp;
-        this.content = content;
+        this.text = text;
         this.profileImage = profileImage;
         this.isJsonFile = 0;
         this.isPhotoPicked = NO_PHOTO;
         this.createdBy = null;
     }
-    public Post(String userName, String timestamp, String content,  String profileImage,
+    public Post(String userName, String timestamp, String text,  String profileImage,
                 String postImageUri) {
         this.userName = userName;
         this.timestamp = timestamp;
-        this.content = content;
+        this.text = text;
         this.profileImage = profileImage;
-        this.postImage = postImageUri;
+        this.imageUrl = postImageUri;
         this.isJsonFile = 0;
         this.isPhotoPicked = PHOTO_PICKED;
     }
@@ -109,8 +109,8 @@ public class Post implements Serializable {
         return timestamp;
     }
 
-    public String getContent() {
-        return content;
+    public String getText() {
+        return text;
     }
 
 
@@ -118,14 +118,11 @@ public class Post implements Serializable {
         return profileImage;
     }
 
-    public String getPostImageUrl() {
-        return postImage;
+    public String getImageUrl() {
+        return imageUrl;
     }
     public Uri getPostImageUri(){
-        return Uri.parse(postImage);
-    }
-    public String getPostImage(){
-        return postImage;
+        return Uri.parse(imageUrl);
     }
     public List<Comment> getComments() {
         return comments;
@@ -142,8 +139,8 @@ public class Post implements Serializable {
         this.isPhotoPicked = isPhotoPicked;
     }
 
-    public void setPostImage(String postImage) {
-        this.postImage = postImage;
+    public void setImageUrl(String postImage) {
+        this.imageUrl = postImage;
     }
 
     public void setImageSetByUser(boolean isImageSetByUser) {
@@ -160,8 +157,8 @@ public class Post implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContent(String text) {
+        this.text = text;
     }
 
     public void setProfileImage(String profileImage) {
