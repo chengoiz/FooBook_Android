@@ -11,6 +11,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.foobook_android.Api.FriendListResponse;
 import com.example.foobook_android.Api.FriendRequestResponse;
 
 import com.example.foobook_android.Api.WebServiceApi;
@@ -19,6 +20,7 @@ import com.example.foobook_android.models.FriendshipRequest;
 
 import com.example.foobook_android.models.User;
 import com.example.foobook_android.Repositories.FriendshipRepository;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -26,8 +28,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FriendshipViewModel extends AndroidViewModel {
-    private FriendshipRepository friendshipRepository;
-    private MutableLiveData<FriendRequestResponse> friendRequests = new MutableLiveData<>();
+    private final FriendshipRepository friendshipRepository;
+    private final MutableLiveData<FriendRequestResponse> friendRequests = new MutableLiveData<>();
+    private final MutableLiveData<FriendListResponse> friendList = new MutableLiveData<>();
 
     public FriendshipViewModel(@NonNull Application application) {
         super(application);
@@ -90,10 +93,33 @@ public class FriendshipViewModel extends AndroidViewModel {
             }
         });
     }
+
+
+    public LiveData<FriendListResponse> getFriendList(String userId) {
+        friendshipRepository.getFriendList(userId, new Callback<FriendListResponse>() {
+            @Override
+            public void onResponse(Call<FriendListResponse> call, Response<FriendListResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    friendList.postValue(response.body());
+                } else {
+                    friendList.postValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FriendListResponse> call, Throwable t) {
+                friendList.postValue(null);
+            }
+        });
+        return friendList;
+    }
+
+
     private String retrieveAuthToken() {
         SharedPreferences sharedPreferences = getApplication().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
         return sharedPreferences.getString("token", "");
     }
+
     private String getCurrentUserId() {
         SharedPreferences sharedPreferences = getApplication().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
         return sharedPreferences.getString("userId", "");

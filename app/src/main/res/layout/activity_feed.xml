@@ -68,31 +68,45 @@
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/myProfileButton"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="275dp"
-        android:text="@string/my_profile" />
+        android:layout_marginTop="8dp">
+        <Button
+            android:id="@+id/myProfileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:text="@string/my_profile" />
 
-    <Button
-        android:id="@+id/FriendRequestsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/view_friend_requests"
-        android:layout_below="@id/title"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="203dp"
-        android:layout_marginTop="7dp" />
+        <Button
+            android:id="@+id/FriendListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/friend_list"
+            android:layout_toEndOf="@id/FriendRequestsButton"
+            android:layout_marginStart="10dp"/>
+
+        <Button
+            android:id="@+id/FriendRequestsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/friend_requests"
+            android:layout_toEndOf="@id/myProfileButton"
+            android:layout_marginStart="10dp"/>
+
+
+    </RelativeLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feedRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/FriendRequestsButton"
+        android:layout_below="@id/buttons"
         android:layout_marginTop="15dp"
         android:padding="8dp"
         tools:listitem="@layout/post_item" />

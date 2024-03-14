@@ -73,7 +73,7 @@ public class PostViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(UserDetails userDetails) {
                 usernameLiveData.postValue(userDetails.getDisplayName());
-                profilePicLiveData.postValue(userDetails.getProfilePic()); // Update profile pic live data
+                profilePicLiveData.postValue(userDetails.getProfilePic());
 
             }
 

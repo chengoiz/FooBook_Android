@@ -12,10 +12,10 @@ import com.example.foobook_android.R;
 import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.ViewModels.FriendshipViewModel;
 import com.example.foobook_android.adapters.FriendRequestAdapter;
-import com.example.foobook_android.models.User;
+
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class FriendRequestsActivity extends AppCompatActivity implements FriendRequestAdapter.FriendRequestListener{
