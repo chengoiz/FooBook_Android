@@ -1,10 +1,12 @@
 package com.example.foobook_android.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -20,14 +22,23 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.foobook_android.Api.FriendListResponse;
+import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.ViewModels.PostViewModel;
+import com.example.foobook_android.models.User;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
 import com.example.foobook_android.R;
 import com.example.foobook_android.adapters.PostAdapter;
+import com.example.foobook_android.utility.RetrofitClient;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class FeedActivity extends AppCompatActivity implements PostAdapter.PostItemListener {
@@ -36,6 +47,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
     private PhotoSelectorHelper photoSelectorHelper;
+
 
 
     @Override
@@ -47,12 +59,13 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         postAdapter = new PostAdapter(this, new ArrayList<>(), this);
         recyclerView.setAdapter(postAdapter);
 
-
         // Initialize PostViewModel
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
+        postViewModel.fetchPostsFromServer(this);
         postViewModel.getLatestPosts().observe(this, posts -> {
             postAdapter.setPosts(posts);
         });
+
 
         // Setup buttons and other UI components
         setupButtons();
@@ -126,6 +139,22 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         }
     }
 
+    public static void adjustCanEditForPosts(List<Post> posts, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        String currentUserId = sharedPreferences.getString("userId", "");
+
+        for (Post post : posts) {
+            post.setCanEdit(post.getCreator().getId().equals(currentUserId));
+        }
+    }
+
+    private String getAuthToken() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        return sharedPreferences.getString("token", "");
+        // Retrieve the auth token from SharedPreferences.
+    }
+
+
 
     private void fetchAndDisplayPosts() {
         // Observe the LiveData of posts from PostViewModel
@@ -138,6 +167,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
             }
         });
     }
+
 
 
     private void showFeedMenu(View view) {

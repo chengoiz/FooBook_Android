@@ -50,12 +50,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     private List<Post> posts;
     private final LayoutInflater inflater;
     private final PostItemListener listener;
+    private List<String> friendIds;
+
 
     public PostAdapter(Context context, List<Post> posts, PostItemListener listener) {
         this.context = context;
         this.posts = posts;
         this.listener = listener;
         this.inflater = LayoutInflater.from(context);
+        this.friendIds = friendIds;
     }
 
     @NonNull
@@ -233,6 +236,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     public void setPosts(List<Post> posts) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        String currentUserId = sharedPreferences.getString("userId", "");
+//        for (Post post : posts) {
+//            post.setCanEdit(post.getCreator().getId().equals(currentUserId));
+//        }
         this.posts = posts;
         notifyDataSetChanged();
     }
@@ -253,25 +261,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         PopupMenu postMenu = new PopupMenu(view.getContext(), view);
         postMenu.inflate(R.menu.post_menu);
         postMenu.setOnMenuItemClickListener(item -> {
-            // Obtain the Post object from the adapter's current dataset using the position.
-            Post postToEdit = posts.get(position);
+            if (!posts.isEmpty()) {
+                Post postToEdit = posts.get(position);
 
-            // Check if the user is authorized to edit or delete the post
-            if (postToEdit.isCanEdit()) {
-                if (item.getItemId() == R.id.menuEditPost) {
-                    listener.onEdit(postToEdit);
-                    return true;
-                } else if (item.getItemId() == R.id.menuDeletePost) {
-                    listener.onDelete(postToEdit.getPostId());
-                    // Remove the post from the list and update the RecyclerView
-                    posts.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, posts.size());
-                    return true;
+                if (postToEdit.isCanEdit()) {
+                    if (item.getItemId() == R.id.menuEditPost) {
+                        listener.onEdit(postToEdit);
+                        postMenu.show();
+                        return true;
+                    } else if (item.getItemId() == R.id.menuDeletePost) {
+                        listener.onDelete(postToEdit.getPostId());
+//                        posts.remove(position);
+//                        notifyItemRemoved(position);
+//                        notifyItemRangeChanged(position, getItemCount());  todo: we can remove this after finished.
+                        postMenu.show();
+                        return true;
+                    }
+                } else {
+                    Toast.makeText(context, "User unauthorized to edit or delete this post.", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(context, "User unauthorized to edit or delete this post.", Toast.LENGTH_SHORT).show();
-                // The menu should not be re-shown here, as the user is simply informed about the lack of permission
+                Toast.makeText(view.getContext(), "Selected post is no longer available.", Toast.LENGTH_SHORT).show();
             }
             return false;
         });

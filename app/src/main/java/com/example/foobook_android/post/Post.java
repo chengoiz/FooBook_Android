@@ -72,6 +72,9 @@ public class Post implements Serializable {
     @ColumnInfo(name ="updatedBy")
     private String updatedAt;
 
+    @ColumnInfo(name = "isFriend")
+    private boolean isFriend;
+
 
 
     public Post(String userName, String timestamp, String text, String profileImage) {
@@ -187,6 +190,12 @@ public class Post implements Serializable {
 
     public void setIsLikedByCurrentUser(boolean isLikedByCurrentUser) {
         this.isLikedByCurrentUser = isLikedByCurrentUser;
+    }
+    public void setIsFriend(boolean isFriend) {
+        this.isFriend = true;
+    }
+    public boolean getIsFriend() {
+        return isFriend;
     }
 
 

@@ -15,4 +15,5 @@ public class FriendListResponse {
 
     @SerializedName("friendList")
     private List<User> friendList;
+
 }

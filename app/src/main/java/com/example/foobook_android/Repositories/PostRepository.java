@@ -12,11 +12,13 @@ import androidx.lifecycle.LiveData;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 import com.example.foobook_android.Api.ApiResponse;
+import com.example.foobook_android.Api.FeedResponse;
 import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.daos.PostDao;
 import com.example.foobook_android.database.PostDB;
 import com.example.foobook_android.post.Post;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -114,6 +116,41 @@ public class PostRepository {
             }
         });
     }
+
+    public void fetchAndProcessPosts(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
+        String authToken = sharedPreferences.getString("token", "");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
+        webServiceApi.fetchFeedPosts("Bearer " + authToken).enqueue(new Callback<FeedResponse>() {
+            @Override
+            public void onResponse(Call<FeedResponse> call, Response<FeedResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Post> allPosts = new ArrayList<>();
+                    allPosts.addAll(response.body().getFriendsPosts());
+                    allPosts.addAll(response.body().getNonFriendsPosts());
+
+                    // Now insert these posts into Room database
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        postDao.deleteAll();
+                        postDao.insertAll(allPosts);
+                    });
+                } else {
+                    Log.e("PostRepository", "Failed to fetch feed posts.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FeedResponse> call, Throwable t) {
+                Log.e("PostRepository", "Error fetching feed posts.", t);
+            }
+        });
+    }
+
 
 
 

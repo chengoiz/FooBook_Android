@@ -2,6 +2,7 @@ package com.example.foobook_android.post;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.foobook_android.utility.PostListWrapper;
@@ -50,6 +51,7 @@ public class PostManager {
     public static List<Post> getPosts() {
         return posts;
     }
+
 
     public static void addPost(Post post) {
         posts.add(0, post);

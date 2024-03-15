@@ -11,7 +11,7 @@ import com.example.foobook_android.daos.PostDao;
 import com.example.foobook_android.post.Converters;
 import com.example.foobook_android.post.Post;
 
-@Database(entities = {Post.class}, version = 7)
+@Database(entities = {Post.class}, version = 10)
 @TypeConverters({Converters.class})
 public abstract class PostDB extends RoomDatabase {
     private static volatile PostDB INSTANCE;

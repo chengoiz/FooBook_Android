@@ -37,6 +37,10 @@ public class PostViewModel extends AndroidViewModel {
     public LiveData<List<Post>> getLatestPosts() {
         return latestPosts;
     }
+
+    public void fetchPostsFromServer(Context context) {
+        repository.fetchAndProcessPosts(context);
+    }
     public void setToken(String token) {
         this.token = token;
     }
