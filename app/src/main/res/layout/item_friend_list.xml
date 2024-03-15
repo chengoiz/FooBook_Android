@@ -14,7 +14,7 @@
         android:background="@color/background">
 
         <ImageView
-            android:id="@+id/profileImageViewFriendRequest"
+            android:id="@+id/profileImageViewFriendList"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="4dp"
@@ -23,7 +23,7 @@
             android:src="@drawable/defaultpic" />
 
         <TextView
-            android:id="@+id/displayNameTextView"
+            android:id="@+id/displayNameFriendList"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
@@ -32,17 +32,17 @@
             android:text="@string/username" />
 
         <Button
-            android:id="@+id/acceptButton"
+            android:id="@+id/friendListOfFriend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/accept"
+            android:text="@string/friends"
             android:layout_gravity="center_vertical" />
 
         <Button
-            android:id="@+id/declineButton"
+            android:id="@+id/deleteFriendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/decline"
+            android:text="@string/delete"
             android:layout_gravity="center_vertical" />
 
     </LinearLayout>
