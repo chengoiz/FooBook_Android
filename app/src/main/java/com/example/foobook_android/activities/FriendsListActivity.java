@@ -29,7 +29,19 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
         setContentView(R.layout.activity_friends_list);
         initialize();
         fetchFriendList(userId);
+        observeViewModel();
     }
+
+    private void observeViewModel() {
+        friendshipViewModel.getDeclineRequestResult().observe(this, isSuccess -> {
+            if (isSuccess) {
+                Toast.makeText(this, "Successfully deleted from friends.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to delete friend.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void initialize() {
         userRepository = new UserRepository(this);
         userId = userRepository.getIdFromSharedPreferences();
@@ -54,6 +66,9 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
 
     @Override
     public void onDeleteFriend(String userId, String friendId) {
+    friendshipViewModel.declineFriendRequest(userId,friendId);
+   // fetchFriendList(userId);
+    Toast.makeText(this, "Successfully deleted from friends.", Toast.LENGTH_SHORT).show();
 
     }
 

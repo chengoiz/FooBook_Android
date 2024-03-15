@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
+import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.comment.Comment;
 import com.example.foobook_android.comment.CommentsDataHolder;
@@ -76,19 +76,18 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
             }
         });
         postViewModel.getUsernameLiveData().observe(this, username -> {
-            // This lambda function will be called every time the usernameLiveData is updated
             TextView usernameTextView = findViewById(R.id.commentItemUsername);
             if (username != null) {
                 usernameTextView.setText(username);
             } else {
-                // Handle the case where username is null - could be an error fetching data
-                usernameTextView.setText("Unknown User"); // or any other default text
+                usernameTextView.setText("Unknown User");
             }
         });
         postViewModel.getProfilePicLiveData().observe(this, profilePic -> {
             if (profilePic != null && !profilePic.isEmpty()) {
                 this.fetchedProfilePic = profilePic;
-                // Here you might want to load the profile picture into an ImageView or similar
+
+
             }
         });
     }

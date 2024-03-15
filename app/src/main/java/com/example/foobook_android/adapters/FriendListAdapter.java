@@ -58,7 +58,13 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         return users.size();
     }
 
-
+    public void removeItemAt(int position) {
+        if (position >= 0 && position < users.size()) {
+            users.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, users.size());
+        }
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView displayNameTextView;
         Button deleteFriend, friendList;
@@ -78,6 +84,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                     User friend = users.get(position);
                     String friendId = friend.getId();
                     listener.onDeleteFriend(currentUserId, friendId);
+                    removeItemAt(position);
                 }
             });
         }

@@ -62,7 +62,13 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     public int getItemCount() {
         return users.size();
     }
-
+    public void removeItemAt(int position) {
+        if (position >= 0 && position < users.size()) {
+            users.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, users.size());
+        }
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView displayNameTextView;
@@ -82,7 +88,8 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                 if (position != RecyclerView.NO_POSITION) {
                     User friend = users.get(position);
                     String friendId = friend.getId();
-                    listener.onAcceptRequest(currentUserId, friendId); // Use actual IDs
+                    listener.onAcceptRequest(currentUserId, friendId);
+                    removeItemAt(position);
                 }
             });
 
@@ -92,6 +99,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                     User friend = users.get(position);
                     String friendId = friend.getId();
                     listener.onDeclineRequest(currentUserId, friendId);
+                    removeItemAt(position);
                 }
             });
         }

@@ -144,7 +144,6 @@ public class CreatePostActivity extends AppCompatActivity  {
             newPost.setImageSetByUser(isPhotoSelected);
             newPost.setIsPhotoPicked(Post.PHOTO_PICKED);
 
-            // Use ViewModel to save the post
             postViewModel.createPostForUser(userId, newPost, this);
 //            postViewModel.insert(newPost);
 
