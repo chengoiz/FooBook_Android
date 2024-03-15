@@ -13,29 +13,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.foobook_android.R;
 import com.example.foobook_android.models.User;
 
-
 import java.util.List;
 
-public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdapter.ViewHolder> {
+public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
+
     private Context context;
     private List<User> users;
     private final LayoutInflater inflater;
-    private final FriendRequestListener listener;
+    private final FriendListAdapter.FriendListListener listener;
     private String currentUserId;
 
-    public interface FriendRequestListener {
-        void onAcceptRequest(String userId, String friendId);
+    public interface FriendListListener {
+        void onDeleteFriend(String userId, String friendId);
 
-        void onDeclineRequest(String userId, String friendId);
     }
 
-
-    // Adapter constructor
-    public FriendRequestAdapter(Context context, List<User> users, FriendRequestListener listener, String currentUserId) {
+    public FriendListAdapter(Context context, List<User> users, FriendListListener listener, String currentUserId) {
         this.context = context;
         this.users = users;
         this.inflater = LayoutInflater.from(context);
@@ -46,17 +42,16 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.item_friend_request, parent, false);
+        View view = inflater.inflate(R.layout.item_friend_list, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FriendListAdapter.ViewHolder holder, int position) {
         User user = users.get(position);
         holder.displayNameTextView.setText(user.getDisplayname());
         loadImage(holder.profilePicImageView, user.getProfilepic(), context);
     }
-
 
     @Override
     public int getItemCount() {
@@ -66,38 +61,28 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView displayNameTextView;
-        Button acceptButton, declineButton;
+        Button deleteFriend, friendList;
         ImageView profilePicImageView;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
-            displayNameTextView = itemView.findViewById(R.id.displayNameTextView);
-            acceptButton = itemView.findViewById(R.id.acceptButton);
-            declineButton = itemView.findViewById(R.id.declineButton);
-            profilePicImageView = itemView.findViewById(R.id.profileImageViewFriendRequest);
+            displayNameTextView = itemView.findViewById(R.id.displayNameFriendList);
+            friendList = itemView.findViewById(R.id.friendListOfFriend);
+            deleteFriend = itemView.findViewById(R.id.deleteFriendButton);
+            profilePicImageView = itemView.findViewById(R.id.profileImageViewFriendList);
 
-
-            acceptButton.setOnClickListener(view -> {
+            deleteFriend.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     User friend = users.get(position);
                     String friendId = friend.getId();
-                    listener.onAcceptRequest(currentUserId, friendId); // Use actual IDs
-                }
-            });
-
-            declineButton.setOnClickListener(view -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    User friend = users.get(position);
-                    String friendId = friend.getId();
-                    listener.onDeclineRequest(currentUserId, friendId);
+                    listener.onDeleteFriend(currentUserId, friendId);
                 }
             });
         }
     }
 
-    // Method to update the dataset and refresh the RecyclerView
     public void setUsers(List<User> users) {
         this.users = users;
         notifyDataSetChanged();

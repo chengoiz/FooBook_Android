@@ -39,6 +39,10 @@ public interface WebServiceApi {
     @POST("api/users/{userId}/friends")
     Call<Void> sendFriendRequest(@Path("userId") String receiverId, @Body RequestBody requestBody, @Header("Authorization") String authToken);
 
+    // Get friend list
+    @GET("api/users/{userId}/friends")
+    Call<FriendListResponse> fetchFriendList(@Path("userId") String userId, @Header("Authorization") String authToken);
+
     // Accept a friend request
     @PATCH("api/users/{userId}/friends/{fid}")
     Call<Void> acceptFriendRequest(@Path("userId") String userId, @Path("fid") String friendId, @Header("Authorization") String authToken);

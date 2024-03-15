@@ -3,6 +3,7 @@ package com.example.foobook_android.Repositories;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.foobook_android.Api.FriendListResponse;
 import com.example.foobook_android.Api.FriendRequestResponse;
 import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.models.User;
@@ -24,6 +25,9 @@ public class FriendshipRepository {
     private String retrieveAuthToken() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
         return sharedPreferences.getString("token", "");
+    }
+    public void getFriendList(String userId, Callback<FriendListResponse> callback) {
+        webServiceApi.fetchFriendList(userId, "Bearer " + retrieveAuthToken()).enqueue(callback);
     }
 
     public void getFriendRequests(String userId, Callback<FriendRequestResponse> callback) {

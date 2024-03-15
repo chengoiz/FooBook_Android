@@ -9,11 +9,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+
+import com.bumptech.glide.Glide;
+import com.example.foobook_android.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,6 +38,7 @@ public class PhotoSelectorHelper {
         this.galleryRequestCode = galleryRequestCode;
         this.onPhotoSelected = onPhotoSelected;
     }
+
 
     public Uri saveBitmapToFile(Context context, Bitmap bitmap, String fileName) {
         File cachePath = new File(context.getExternalCacheDir(), "my_images");
