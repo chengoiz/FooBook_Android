@@ -25,7 +25,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private Context context;
     private List<Comment> comments;
     private final LayoutInflater mInflater;
-    // Interface for handling delete actions, adheres to OOP encapsulation principles.
+
     private CommentItemListener listener;
 
     public interface CommentItemListener {
@@ -48,7 +48,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        // Moved the binding logic to a method within the ViewHolder
         holder.bind(comments.get(position), position);
     }
 
@@ -73,7 +72,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             commentItemSaveBtn = itemView.findViewById(R.id.commentItemSaveBtn);
         }
 
-        // Encapsulates ViewHolder binding logic for cleaner onBindViewHolder method
+
         void bind(Comment comment, int position) {
             commenterNameTextView.setText(comment.getCommenterName());
             commentText.setText(comment.getCommentText());
@@ -92,7 +91,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             });
         }
 
-        // Separates the logic for handling menu item clicks
+
         private boolean onMenuItemClick(MenuItem item, Comment comment, int position) {
             if (item.getItemId() == R.id.menuEditComment) {
                 makeCommentEditable();
@@ -113,7 +112,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             commentText.requestFocus();
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(commentText, InputMethodManager.SHOW_IMPLICIT);
-            FieldValidation.setupFieldValidation(commentText); // Assuming it configures validation
+            FieldValidation.setupFieldValidation(commentText);
             commentItemSaveBtn.setVisibility(View.VISIBLE);
         }
 

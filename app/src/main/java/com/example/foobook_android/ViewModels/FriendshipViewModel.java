@@ -14,15 +14,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.foobook_android.Api.FriendListResponse;
 import com.example.foobook_android.Api.FriendRequestResponse;
 
-import com.example.foobook_android.Api.WebServiceApi;
-import com.example.foobook_android.models.Friendship;
-import com.example.foobook_android.models.FriendshipRequest;
-
-import com.example.foobook_android.models.User;
 import com.example.foobook_android.Repositories.FriendshipRepository;
-
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,6 +23,18 @@ public class FriendshipViewModel extends AndroidViewModel {
     private final FriendshipRepository friendshipRepository;
     private final MutableLiveData<FriendRequestResponse> friendRequests = new MutableLiveData<>();
     private final MutableLiveData<FriendListResponse> friendList = new MutableLiveData<>();
+    private MutableLiveData<Boolean> acceptRequestResult = new MutableLiveData<>();
+    private MutableLiveData<Boolean> declineRequestResult = new MutableLiveData<>();
+    private MutableLiveData<Boolean> deleteFriend = new MutableLiveData<>();
+
+    public LiveData<Boolean> getAcceptRequestResult() {
+        return acceptRequestResult;
+    }
+
+    public LiveData<Boolean> getDeclineRequestResult() {
+        return declineRequestResult;
+    }
+
 
     public FriendshipViewModel(@NonNull Application application) {
         super(application);
@@ -60,17 +64,12 @@ public class FriendshipViewModel extends AndroidViewModel {
         friendshipRepository.acceptFriendRequest(userId, friendId, new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                // Optionally, update LiveData or take other actions on success
-                //
-                //
-                //
-                ///
-
+                acceptRequestResult.postValue(response.isSuccessful());
             }
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                // Handle failure
+                acceptRequestResult.postValue(false);
+
             }
         });
     }
@@ -79,17 +78,14 @@ public class FriendshipViewModel extends AndroidViewModel {
         friendshipRepository.declineFriendRequest(userId, friendId, new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                // Optionally, update LiveData or take other actions on success
-                //
-                //
-                //
-                //
-                //
+                declineRequestResult.postValue(response.isSuccessful());
+                deleteFriend.postValue(response.isSuccessful());
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                // Handle failure
+                declineRequestResult.postValue(false);
+                deleteFriend.postValue(false);
             }
         });
     }

@@ -32,6 +32,25 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
         setContentView(R.layout.activity_friendship_request);
         initialize();
         fetchFriendRequests(userId);
+        observeViewModel();
+    }
+
+    private void observeViewModel() {
+        friendshipViewModel.getAcceptRequestResult().observe(this, isSuccess -> {
+            if (isSuccess) {
+                Toast.makeText(this, "Friend request accepted.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to accept friend request.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        friendshipViewModel.getDeclineRequestResult().observe(this, isSuccess -> {
+            if (isSuccess) {
+                Toast.makeText(this, "Friend request declined.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to decline friend request.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initialize() {
@@ -58,16 +77,10 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
     @Override
     public void onAcceptRequest(String userId, String friendId) {
         friendshipViewModel.acceptFriendRequest(userId, friendId);
-        fetchFriendRequests(userId);
-        // Optionally, refresh the list or show a confirmation message
-        Toast.makeText(this, "Friend request accepted.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDeclineRequest(String userId, String friendId) {
         friendshipViewModel.declineFriendRequest(userId, friendId);
-        fetchFriendRequests(userId);
-        // Optionally, refresh the list or show a confirmation message
-        Toast.makeText(this, "Friend request declined.", Toast.LENGTH_SHORT).show();
     }
 }
