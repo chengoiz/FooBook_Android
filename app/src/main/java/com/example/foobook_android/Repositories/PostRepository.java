@@ -9,14 +9,21 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import okhttp3.logging.HttpLoggingInterceptor;
+
+import com.example.foobook_android.Api.ApiResponse;
 import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.daos.PostDao;
 import com.example.foobook_android.database.PostDB;
 import com.example.foobook_android.post.Post;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -41,16 +48,16 @@ public class PostRepository {
 
     // Method to delete a post
     public void delete(Post post) {
-        new Thread(() -> postDao.deleteById(post.getId())).start();
+        new Thread(() -> postDao.deleteById(post.getPostId())).start();
     }
     public void update(Post post) {
         // Run database operation in a background thread
         new Thread(() -> postDao.update(post)).start();
     }
     // Method to delete a post by its ID
-    public void deleteByPostId(long postId) {
+    public void deleteByPostId(String postId) {
         new Thread(() -> {
-            Post post = postDao.get(postId); // Fetch the post by ID
+            LiveData<Post> post = postDao.getPostById(postId); // Fetch the post by ID
             if (post != null) {
                 postDao.deleteById(postId);
             } else {
@@ -61,16 +68,57 @@ public class PostRepository {
     }
 
     public void createPostForUser(String userId, Post post, Context context, Callback<Post> callback) {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
                 .build();
+
         WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
         webServiceApi.createPostForUser(userId, post,"Bearer " + token).enqueue(callback);
     }
-    public LiveData<Post> getPostById(long postId) {
+
+    public void deletePostByUser(String userId, String postId, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
+        String authToken = sharedPreferences.getString("token", "");
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
+
+        webServiceApi.deletePostForUser(userId, postId, "Bearer " + authToken).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    // Execute on a background thread
+                    Executors.newSingleThreadExecutor().submit(() -> postDao.deleteById(postId));
+                    Log.i("PostRepository", "Post deleted successfully: " + response.body().getMessage());
+                } else {
+                    Log.e("PostRepository", "Failed to delete post, server responded with: " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.e("PostRepository", "Error deleting post", t);
+            }
+        });
+    }
+
+
+
+
+    public LiveData<Post> getPostById(String postId) {
         return postDao.getPostById(postId);
     }
     //Todo: We need to add methods for insert, delete, etc, similar to PostDao.

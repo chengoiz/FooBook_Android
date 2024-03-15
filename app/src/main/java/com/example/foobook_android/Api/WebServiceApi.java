@@ -49,4 +49,7 @@ public interface WebServiceApi {
 
     @POST("api/users/{userId}/posts")
     Call<Post> createPostForUser(@Path("userId") String userId, @Body Post post, @Header("Authorization") String authToken);
+
+    @DELETE("api/users/{userId}/posts/{postId}")
+    Call<ApiResponse> deletePostForUser(@Path("userId") String userId, @Path("postId") String postId, @Header("Authorization") String authToken);
 }

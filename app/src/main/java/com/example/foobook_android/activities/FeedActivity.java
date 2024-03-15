@@ -1,6 +1,7 @@
 package com.example.foobook_android.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -153,17 +154,19 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
 
     public void onEdit(Post post) {
         Intent editIntent = new Intent(FeedActivity.this, EditPostActivity.class);
-        editIntent.putExtra("postId", post.getId()); // Pass the post's ID
+        editIntent.putExtra("postId", post.getPostId()); // Pass the post's ID
         startActivity(editIntent);
     }
 
-    public void onDelete(long postId) {
-        if (postId < 0) {
+    public void onDelete(String postId) {
+        if (postId == null) {
             Toast.makeText(this, "Error deleting post.", Toast.LENGTH_SHORT).show();
             return;
         }
             // Now delete using the post's ID
             postViewModel.deleteByPostId(postId);
+            postViewModel.deletePostByUser(getCurrentUserId(), postId, this);
+
             postAdapter.removePostById(postId);
         Toast.makeText(this, "Post deleted successfully.", Toast.LENGTH_SHORT).show();
     }
@@ -188,6 +191,12 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
             }
         }
     }
+
+    private String getCurrentUserId() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        return sharedPreferences.getString("userId", ""); // Replace "userId" with the actual key you used to store the user's ID
+    }
+
 
     private void updateUI() {
         if (postAdapter == null) {

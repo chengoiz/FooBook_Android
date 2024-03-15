@@ -90,8 +90,8 @@ public class EditPostActivity extends AppCompatActivity {
 
 
     private void handleIncomingIntent() {
-        long postId = getIntent().getLongExtra("postId", -1);
-        if (postId != -1) {
+        String postId = getIntent().getStringExtra("postId");
+        if (postId != null) {
             postViewModel.getPostById(postId).observe(this, post -> {
                 currentPost = post;
                 if (post != null) {

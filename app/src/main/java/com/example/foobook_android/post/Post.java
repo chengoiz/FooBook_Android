@@ -1,12 +1,14 @@
 package com.example.foobook_android.post;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.foobook_android.comment.Comment;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,10 +20,11 @@ public class Post implements Serializable {
     public static final int NO_PHOTO = 0;
     public static final int JSON_FILE = 1;
     public static final int NOT_JSON_FILE = 0;
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    private long id;
 
+    @NonNull
+    @PrimaryKey
+    @SerializedName("_id")
+    private String postId;
     @ColumnInfo(name = "userName")
     private String userName;
 
@@ -35,15 +38,21 @@ public class Post implements Serializable {
     private List<Comment> comments = new ArrayList<>();
 
     @ColumnInfo(name = "likesCount")
+    @SerializedName("likeCount")
     private int likesCount;
 
     @ColumnInfo(name = "isLikedByCurrentUser")
+    @SerializedName("userLiked")
     private boolean isLikedByCurrentUser;
+
+    @SerializedName("canEdit")
+    private boolean canEdit;
 
     @ColumnInfo(name = "profileImage")
     private String profileImage;
 
     @ColumnInfo(name = "imageUrl")
+    @SerializedName("imageUrl")
     private String imageUrl;
 
     @ColumnInfo(name = "isImageSetByUser")
@@ -55,8 +64,13 @@ public class Post implements Serializable {
     @ColumnInfo(name = "isJsonFile")
     private int isJsonFile;
 
-    @ColumnInfo(name ="createdBy")
-    private String createdBy;
+    @SerializedName("createdBy")
+    private Creator creator;
+
+    @ColumnInfo(name ="createdAt")
+    private String createdAt;
+    @ColumnInfo(name ="updatedBy")
+    private String updatedAt;
 
 
 
@@ -67,7 +81,7 @@ public class Post implements Serializable {
         this.profileImage = profileImage;
         this.isJsonFile = 0;
         this.isPhotoPicked = NO_PHOTO;
-        this.createdBy = null;
+        this.creator = null;
     }
     public Post(String userName, String timestamp, String text,  String profileImage,
                 String postImageUri) {
@@ -175,19 +189,44 @@ public class Post implements Serializable {
         this.isLikedByCurrentUser = isLikedByCurrentUser;
     }
 
-    public long getId() {
-        return id;
+
+    public Creator getCreator() {
+        return creator;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setCreator(Creator createdBy) {
+        this.creator = createdBy;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getPostId() {
+        return postId;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
+    public boolean isCanEdit() {
+        return canEdit;
+    }
+
+    public void setCanEdit(boolean canEdit) {
+        this.canEdit = canEdit;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

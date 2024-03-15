@@ -58,6 +58,7 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
     @Override
     public void onAcceptRequest(String userId, String friendId) {
         friendshipViewModel.acceptFriendRequest(userId, friendId);
+        fetchFriendRequests(userId);
         // Optionally, refresh the list or show a confirmation message
         Toast.makeText(this, "Friend request accepted.", Toast.LENGTH_SHORT).show();
     }
@@ -65,6 +66,7 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
     @Override
     public void onDeclineRequest(String userId, String friendId) {
         friendshipViewModel.declineFriendRequest(userId, friendId);
+        fetchFriendRequests(userId);
         // Optionally, refresh the list or show a confirmation message
         Toast.makeText(this, "Friend request declined.", Toast.LENGTH_SHORT).show();
     }

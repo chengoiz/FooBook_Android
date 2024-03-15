@@ -18,20 +18,19 @@ public interface PostDao {
     LiveData<List<Post>> getLatestPosts();
     @Query("SELECT * FROM post")
     List<Post> index();
-    @Query("SELECT * FROM post WHERE id = :id")
-    Post get(long id);
     @Insert
     void insert(Post... posts);
 
     @Update
     void update(Post... posts);
 
+
     @Delete
     void delete(Post... posts);
-    @Query("DELETE FROM post WHERE id = :postId")
-    void deleteById(long postId);
-    @Query("SELECT * FROM Post WHERE id = :postId")
-    LiveData<Post> getPostById(long postId);
+    @Query("DELETE FROM post WHERE postId = :postId")
+    void deleteById(String postId);
+    @Query("SELECT * FROM Post WHERE postId = :postId")
+    LiveData<Post> getPostById(String postId);
 
 
     //TODO: Add methods to fetch posts as per requirements ------- need to create isFriend
