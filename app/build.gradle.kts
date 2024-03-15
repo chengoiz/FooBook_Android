@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")

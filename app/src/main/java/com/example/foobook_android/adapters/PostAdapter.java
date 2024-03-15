@@ -88,20 +88,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Post post = posts.get(position);
-        holder.userNameTextView.setText(post.getUserName());
+        holder.userNameTextView.setText(post.getCreator().getDisplayName());
         holder.timeStampTextView.setText(post.getTimestamp());
         holder.postContentTextView.setText(post.getText());
 
         // Set profile image
-        if (post.getIsJsonFile() == Post.JSON_FILE) {
-            loadImage(holder.profileImageView, post.getProfileImage());
+        if (post.getCreator().getProfilePic() != null && !post.getCreator().getProfilePic().isEmpty()) {
+            loadImage(holder.profileImageView, post.getCreator().getProfilePic());
         } else {
             setImageFromDrawableName(holder.profileImageView, post.getProfileImage());
         }
 
         // Set post image or hide if not applicable
         // Set post image or hide if not applicable
-        if (post.getIsPhotoPicked() == PHOTO_PICKED && post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
+        if (post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
             holder.postImageView.setVisibility(View.VISIBLE);
             loadImage(holder.postImageView, post.getImageUrl());
         } else {
@@ -138,7 +138,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             int id = item.getItemId();
             if (id == R.id.add_friend) {
                 // Use getCreatedBy() to get the user ID directly
-                String receiverUserId = posts.get(position).getCreatedBy();
+                String receiverUserId = posts.get(position).getCreator().getId();
                 sendFriendRequest(receiverUserId);
                 return true;
             }   else if (id == R.id.view_profile) {
@@ -256,24 +256,35 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             // Obtain the Post object from the adapter's current dataset using the position.
             Post postToEdit = posts.get(position);
 
-            if (item.getItemId() == R.id.menuEditPost) {
-                listener.onEdit(postToEdit);
-                return true;
-            } else if (item.getItemId() == R.id.menuDeletePost) {
-                listener.onDelete((int)postToEdit.getId());
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, getItemCount());
-                return true;
+            // Check if the user is authorized to edit or delete the post
+            if (postToEdit.isCanEdit()) {
+                if (item.getItemId() == R.id.menuEditPost) {
+                    listener.onEdit(postToEdit);
+                    return true;
+                } else if (item.getItemId() == R.id.menuDeletePost) {
+                    listener.onDelete(postToEdit.getPostId());
+                    // Remove the post from the list and update the RecyclerView
+                    posts.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, posts.size());
+                    return true;
+                }
+            } else {
+                Toast.makeText(context, "User unauthorized to edit or delete this post.", Toast.LENGTH_SHORT).show();
+                // The menu should not be re-shown here, as the user is simply informed about the lack of permission
             }
             return false;
         });
+
         postMenu.show();
     }
 
-    public void removePostById(long postId) {
+
+
+    public void removePostById(String postId) {
         int position = -1;
         for (int i = 0; i < posts.size(); i++) {
-            if (posts.get(i).getId() == postId) {
+            if (posts.get(i).getPostId().equals(postId)) {
                 position = i;
                 break;
             }
@@ -295,7 +306,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public interface PostItemListener {
         void onEdit(Post post);
 
-        void onDelete(long position);
+        void onDelete(String postId);
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {

@@ -53,7 +53,7 @@ public class PostViewModel extends AndroidViewModel {
     }
 
     // Method to delete a post by its ID
-    public void deleteByPostId(long postId) {
+    public void deleteByPostId(String postId) {
         repository.deleteByPostId(postId);
     }
 
@@ -74,7 +74,6 @@ public class PostViewModel extends AndroidViewModel {
             public void onSuccess(UserDetails userDetails) {
                 usernameLiveData.postValue(userDetails.getDisplayName());
                 profilePicLiveData.postValue(userDetails.getProfilePic());
-
             }
 
             @Override
@@ -91,8 +90,15 @@ public class PostViewModel extends AndroidViewModel {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
                 if (response.isSuccessful()) {
-                    // Handle success
                     Log.d("PostViewModel", "Post created successfully");
+
+                    // Get the Post object from the response
+                    Post newPost = response.body();
+
+                    if (newPost != null) {
+                        // Save the post in the local database
+                        repository.insert(newPost);
+                    }
                 } else {
                     // Handle request failure (e.g., validation error)
                     Log.e("PostViewModel", "Failed to create post");
@@ -107,12 +113,19 @@ public class PostViewModel extends AndroidViewModel {
         });
     }
 
+    public void deletePostByUser(String userId, String postId, Context context) {
+        repository.deletePostByUser(userId, postId, context);
+    }
+
+
+
+
     public LiveData<List<Post>> getPostsByUserId(String userId) {
         // Implement fetching posts by userId
         // This could involve setting userPosts to a LiveData returned from a Repository method
         return latestPosts; // Need to fix it to return the specific user's posts.
     }
-    public LiveData<Post> getPostById(long postId) {
+    public LiveData<Post> getPostById(String postId) {
         return repository.getPostById(postId);
     }
 }

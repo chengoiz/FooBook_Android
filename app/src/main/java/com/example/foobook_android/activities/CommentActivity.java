@@ -55,7 +55,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
     private void fetchUserDetails() {
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
         fetchedDisplayName = sharedPreferences.getString("displayName", "Unknown User");
-        fetchedProfilePic = sharedPreferences.getString("profilePicUrl", "default_profile_pic_url"); // Adjust default value as needed
+        fetchedProfilePic = sharedPreferences.getString("profilePicUrl", "default_profile_pic_url");
     }
 
     private String getCurrentUserId() {

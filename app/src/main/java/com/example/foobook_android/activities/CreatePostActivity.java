@@ -140,14 +140,13 @@ public class CreatePostActivity extends AppCompatActivity  {
 
         if (!postText.isEmpty() || isPhotoSelected) {
             Post newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage, postImageUriString);
-            newPost.setCreatedBy(getCurrentUserId());
+//            newPost.getCreator().setId(userId);
             newPost.setImageSetByUser(isPhotoSelected);
             newPost.setIsPhotoPicked(Post.PHOTO_PICKED);
-//            newPost.setCreatedBy(userId); // Set the creator's user ID
 
             // Use ViewModel to save the post
-            postViewModel.insert(newPost); // Assuming postViewModel is already initialized in your activity
             postViewModel.createPostForUser(userId, newPost, this);
+//            postViewModel.insert(newPost);
 
 
             Toast.makeText(CreatePostActivity.this, "Post created successfully!", Toast.LENGTH_SHORT).show();
