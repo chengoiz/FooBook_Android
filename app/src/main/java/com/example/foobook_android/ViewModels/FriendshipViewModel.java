@@ -60,19 +60,38 @@ public class FriendshipViewModel extends AndroidViewModel {
         return friendRequests;
     }
 
+//    public void acceptFriendRequest(String userId, String friendId) {
+//        friendshipRepository.acceptFriendRequest(userId, friendId, new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                acceptRequestResult.postValue(response.isSuccessful());
+//            }
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                acceptRequestResult.postValue(false);
+//
+//            }
+//        });
+//    }
+
     public void acceptFriendRequest(String userId, String friendId) {
         friendshipRepository.acceptFriendRequest(userId, friendId, new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                acceptRequestResult.postValue(response.isSuccessful());
+                if (response.isSuccessful()) {
+                    // Now fetch the updated friend list
+                    getFriendList(userId); // Assuming you have a method like this already
+                } else {
+                    Log.e("FriendRequestAccept", "Failed to accept friend request.");
+                }
             }
+
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                acceptRequestResult.postValue(false);
-
+                Log.e("FriendRequestAccept", "Error on accepting friend request: " + t.getMessage());
             }
         });
-    }
+    } // This method is possible fixture of the method above because it added the user as a friend of himself.
 
     public void declineFriendRequest(String userId, String friendId) {
         friendshipRepository.declineFriendRequest(userId, friendId, new Callback<Void>() {

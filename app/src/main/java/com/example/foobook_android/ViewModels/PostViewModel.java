@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.foobook_android.Api.PostsResponse;
 import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.Repositories.PostRepository;
@@ -25,6 +26,7 @@ public class PostViewModel extends AndroidViewModel {
     private final LiveData<List<Post>> latestPosts;
     private MutableLiveData<String> usernameLiveData = new MutableLiveData<>();
     private MutableLiveData<String> profilePicLiveData = new MutableLiveData<>();
+    private MutableLiveData<PostsResponse> postsLiveData = new MutableLiveData<>();
 
     private String token;
 
@@ -36,6 +38,10 @@ public class PostViewModel extends AndroidViewModel {
     }
     public LiveData<List<Post>> getLatestPosts() {
         return latestPosts;
+    }
+
+    public LiveData<PostsResponse> getPostsLiveData() {
+        return postsLiveData;
     }
 
     public void fetchPostsFromServer(Context context) {
@@ -63,6 +69,26 @@ public class PostViewModel extends AndroidViewModel {
 
     public void update(Post post) {
         repository.update(post);
+    }
+
+    public void fetchPostsByUserId(String userId, String authToken) {
+        repository.getPostsByUserId(userId, authToken, new Callback<PostsResponse>() {
+            @Override
+            public void onResponse(Call<PostsResponse> call, Response<PostsResponse> response) {
+                if (response.isSuccessful()) {
+                    postsLiveData.postValue(response.body());
+                } else {
+                    // Handle API error response
+                    postsLiveData.postValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostsResponse> call, Throwable t) {
+                // Handle call failure
+                postsLiveData.postValue(null);
+            }
+        });
     }
 
     public LiveData<String> getUsernameLiveData() {
@@ -122,13 +148,6 @@ public class PostViewModel extends AndroidViewModel {
     }
 
 
-
-
-    public LiveData<List<Post>> getPostsByUserId(String userId) {
-        // Implement fetching posts by userId
-        // This could involve setting userPosts to a LiveData returned from a Repository method
-        return latestPosts; // Need to fix it to return the specific user's posts.
-    }
     public LiveData<Post> getPostById(String postId) {
         return repository.getPostById(postId);
     }

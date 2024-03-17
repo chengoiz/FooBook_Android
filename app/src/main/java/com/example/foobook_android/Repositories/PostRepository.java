@@ -13,6 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 import com.example.foobook_android.Api.ApiResponse;
 import com.example.foobook_android.Api.FeedResponse;
+import com.example.foobook_android.Api.PostsResponse;
 import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.daos.PostDao;
 import com.example.foobook_android.database.PostDB;
@@ -152,7 +153,15 @@ public class PostRepository {
     }
 
 
+    public void getPostsByUserId(String userId, String authToken, Callback<PostsResponse> callback) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
+        webServiceApi.getPostsByUserId(userId, authToken).enqueue(callback);
+    }
 
 
     public LiveData<Post> getPostById(String postId) {

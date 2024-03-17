@@ -2,6 +2,8 @@ package com.example.foobook_android.Api;
 
 
 
+import android.util.Log;
+
 import com.example.foobook_android.models.User;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.utility.UserDetails;
