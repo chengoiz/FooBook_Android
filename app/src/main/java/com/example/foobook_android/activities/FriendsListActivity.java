@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -56,7 +57,7 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
     private void fetchFriendList(String userId) {
         friendshipViewModel.getFriendList(userId).observe(this, friendListResponse -> {
             if (friendListResponse != null && friendListResponse.getFriends() != null) {
-                adapter.setUsers(friendListResponse.getFriends());
+                adapter.setMyFriends(friendListResponse.getFriends());
             } else {
                 Toast.makeText(FriendsListActivity.this, "Failed to fetch friend list.", Toast.LENGTH_SHORT).show();
             }
@@ -67,9 +68,15 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
     @Override
     public void onDeleteFriend(String userId, String friendId) {
     friendshipViewModel.declineFriendRequest(userId,friendId);
-   // fetchFriendList(userId);
-    Toast.makeText(this, "Successfully deleted from friends.", Toast.LENGTH_SHORT).show();
 
+    Toast.makeText(this, "Successfully deleted from friends.", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onFriendItemClick(String friendId, String friendDisplayName) {
+        Intent intent = new Intent(this, FriendsOfFriendsActivity.class);
+        intent.putExtra("FRIEND_ID", friendId);
+        intent.putExtra("FRIEND_DISPLAY_NAME", friendDisplayName);
+        startActivity(intent);
     }
 
     @Override

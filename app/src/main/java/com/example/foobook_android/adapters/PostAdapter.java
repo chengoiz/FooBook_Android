@@ -169,6 +169,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         popup.show();
     }
 
+
     private void navigateToUserPosts(String userId) {
         Intent intent = new Intent(context, UserPostsActivity.class);
         intent.putExtra("VIEWED_USER_ID", userId);
