@@ -13,6 +13,7 @@
     <string name="add_friend">Add Friend</string>
     <string name="signUp_TakePhoto">Take Photo</string>
     <string name="signUp_imageText">No File Chosen</string>
+    <string name="default_username">Default User</string>
     <string name="btnSignup">Sign Up</string>
     <string name="signUpTitle">Sign Up</string>
     <string name="registerBtnBack">Back</string>
@@ -26,7 +27,6 @@
     <string name="share">Share</string>
     <string name="likes">Likes: 0</string>
     <string name="post_content_goes_here">Post content goes here...</string>
-
     <string name="likes_count">Likes: %d</string>
     <string name="comments_count">Comments: %d</string>
     <string name="logout">Logout</string>

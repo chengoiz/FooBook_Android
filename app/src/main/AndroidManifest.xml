@@ -42,7 +42,7 @@
             android:name=".activities.FriendsListActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ProfileActivity"
+            android:name=".activities.UserPostsActivity"
             android:exported="false" />
         <activity
             android:name=".activities.EditPostActivity"

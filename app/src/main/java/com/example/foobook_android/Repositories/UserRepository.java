@@ -43,7 +43,7 @@ public class UserRepository {
         return sharedPreferences.getString("userId", "");
     }
 
-    public void fetchUserDetails(UserDetailsCallback callback) {
+    public void fetchUserDetails(String userId, UserDetailsCallback callback) {
 
         if (userId == null || token == null) {
             Log.e("UserRepository", "User ID or Token is not available.");
@@ -51,7 +51,7 @@ public class UserRepository {
             return;
         }
 
-        Call<UserDetails> call = webServiceApi.getUserDetails(userId, "Bearer " + token);
+        Call<UserDetails> call = webServiceApi.getUserDetails(userId, "Bearer " + getTokenFromSharedPreferences());
         call.enqueue(new Callback<UserDetails>() {
             @Override
             public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {

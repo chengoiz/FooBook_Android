@@ -71,9 +71,9 @@ public class CreatePostActivity extends AppCompatActivity  {
       //  postViewModel.setToken(token);
 
 
-        postViewModel.fetchUsername(this);
+        postViewModel.fetchDisplayName(this, getCurrentUserId());
         // Observe the username LiveData
-        postViewModel.getUsernameLiveData().observe(this, username -> {
+        postViewModel.getDisplayNameLiveData().observe(this, username -> {
             if (username != null && !username.isEmpty()) {
                 this.fetchedDisplayName = username;
             }

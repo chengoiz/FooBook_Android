@@ -1,16 +1,13 @@
 package com.example.foobook_android.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,23 +19,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foobook_android.Api.FriendListResponse;
-import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.ViewModels.PostViewModel;
-import com.example.foobook_android.models.User;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
 import com.example.foobook_android.R;
 import com.example.foobook_android.adapters.PostAdapter;
-import com.example.foobook_android.utility.RetrofitClient;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class FeedActivity extends AppCompatActivity implements PostAdapter.PostItemListener {
@@ -107,7 +95,8 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
 
         Button myProfileButton = findViewById(R.id.myProfileButton);
         myProfileButton.setOnClickListener(v -> {
-            Intent intent = new Intent(FeedActivity.this, ProfileActivity.class);
+            Intent intent = new Intent(FeedActivity.this, UserPostsActivity.class);
+            intent.putExtra("VIEWED_USER_ID", getCurrentUserId());
             startActivity(intent);
         });
 
@@ -136,15 +125,6 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
             default:
                 // Default to light mode
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
-    }
-
-    public static void adjustCanEditForPosts(List<Post> posts, Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
-        String currentUserId = sharedPreferences.getString("userId", "");
-
-        for (Post post : posts) {
-            post.setCanEdit(post.getCreator().getId().equals(currentUserId));
         }
     }
 

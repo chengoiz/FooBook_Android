@@ -22,13 +22,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.SharedPreferences;
 import com.bumptech.glide.Glide;
 import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.activities.CommentActivity;
+import com.example.foobook_android.activities.UserPostsActivity;
 import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.models.FriendshipRequest;
-import com.example.foobook_android.models.User;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.RetrofitClient;
@@ -135,23 +134,47 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     private void showProfilePictureMenu(View anchor, PostViewHolder holder) {
         PopupMenu popup = new PopupMenu(anchor.getContext(), anchor);
-        popup.getMenuInflater().inflate(R.menu.profile_picture_menu, popup.getMenu());
+        // Clear the existing menu items
+        popup.getMenu().clear();
+        // Dynamically add menu items based on whether users are friends
+        int position = holder.getAdapterPosition();
+        if (position != RecyclerView.NO_POSITION) {
+            Post post = posts.get(position);
+            if (post.getIsFriend()) {
+                // If they are friends, show "View Posts"
+                popup.getMenu().add(0, R.id.view_posts, 0, "View Posts");
+            } else {
+                // If they are not friends, show "Add Friend"
+                popup.getMenu().add(0, R.id.add_friend, 0, "Add Friend");
+            }
+        }
         popup.setOnMenuItemClickListener(item -> {
-            int position = holder.getAdapterPosition();
             int id = item.getItemId();
             if (id == R.id.add_friend) {
-                // Use getCreatedBy() to get the user ID directly
-                String receiverUserId = posts.get(position).getCreator().getId();
-                sendFriendRequest(receiverUserId);
+                if (posts.get(position).getIsFriend()) {
+                    Toast.makeText(context, "You and the user are already friends.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Call your method to send friend request
+                    String receiverUserId = posts.get(position).getCreator().getId();
+                    sendFriendRequest(receiverUserId);
+                }
                 return true;
-            }   else if (id == R.id.view_profile) {
-                    // TODO: Implement the go to profile logic here
-                    return true;
+            } else if (id == R.id.view_posts) {
+                // Navigate to the user's mini profile to view their posts
+                navigateToUserPosts(posts.get(position).getCreator().getId());
+                return true;
             }
             return false;
         });
         popup.show();
     }
+
+    private void navigateToUserPosts(String userId) {
+        Intent intent = new Intent(context, UserPostsActivity.class);
+        intent.putExtra("VIEWED_USER_ID", userId);
+        context.startActivity(intent);
+    }
+
 
     private String getCurrentUserId() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
@@ -206,9 +229,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     private void updateLikes(PostViewHolder holder, Post post) {
-        post.toggleLike();
+        boolean isLiked = post.toggleLike();
         holder.likesCountTextView.setText(context.getString(R.string.likes_count,
                 post.getLikesCount()));
+        if (isLiked) {
+            holder.feedBtnLike.setImageResource(R.drawable.btn_like_blue);
+        } else {
+            holder.feedBtnLike.setImageResource(R.drawable.btn_like);
+        }
     }
 
     private void startCommentActivity(int position) {
@@ -236,11 +264,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     public void setPosts(List<Post> posts) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
-        String currentUserId = sharedPreferences.getString("userId", "");
-//        for (Post post : posts) {
-//            post.setCanEdit(post.getCreator().getId().equals(currentUserId));
-//        }
         this.posts = posts;
         notifyDataSetChanged();
     }
@@ -273,7 +296,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                         listener.onDelete(postToEdit.getPostId());
 //                        posts.remove(position);
 //                        notifyItemRemoved(position);
-//                        notifyItemRangeChanged(position, getItemCount());  todo: we can remove this after finished.
+//                        notifyItemRangeChanged(position, getItemCount());
                         postMenu.show();
                         return true;
                     }
