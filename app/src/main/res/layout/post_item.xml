@@ -77,7 +77,7 @@
                 style="@style/textBox"
                 android:layout_weight="10"
                 android:paddingTop="4dp"
-                android:text="@string/post_content_goes_here" />
+                android:text="@string/feedPostHint" />
 
             <ImageButton
                 android:id="@+id/btnGallery"

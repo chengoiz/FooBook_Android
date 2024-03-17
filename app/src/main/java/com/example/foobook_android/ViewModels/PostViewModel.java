@@ -24,7 +24,7 @@ import retrofit2.Response;
 public class PostViewModel extends AndroidViewModel {
     private final PostRepository repository;
     private final LiveData<List<Post>> latestPosts;
-    private MutableLiveData<String> usernameLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> displayNameLiveData = new MutableLiveData<>();
     private MutableLiveData<String> profilePicLiveData = new MutableLiveData<>();
     private MutableLiveData<PostsResponse> postsLiveData = new MutableLiveData<>();
 
@@ -91,29 +91,29 @@ public class PostViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<String> getUsernameLiveData() {
-        return usernameLiveData;
+    public LiveData<String> getDisplayNameLiveData() {
+        return displayNameLiveData;
     }
     public LiveData<String> getProfilePicLiveData() {
         return profilePicLiveData;
     }
-    public void fetchUsername(Context context) {
+    public void fetchDisplayName(Context context, String sentUserId) {
         UserRepository userRepository = new UserRepository(context);
-        userRepository.fetchUserDetails(new UserRepository.UserDetailsCallback() {
+        userRepository.fetchUserDetails(sentUserId, new UserRepository.UserDetailsCallback() {
             @Override
             public void onSuccess(UserDetails userDetails) {
-                usernameLiveData.postValue(userDetails.getDisplayName());
+                displayNameLiveData.postValue(userDetails.getDisplayName());
                 profilePicLiveData.postValue(userDetails.getProfilePic());
             }
 
             @Override
             public void onError(Throwable throwable) {
-                // Handle error, maybe post a default value or an error message
-                usernameLiveData.postValue(null);
+                displayNameLiveData.postValue(null);
                 profilePicLiveData.postValue(null);
             }
         });
     }
+
 
     public void createPostForUser(String userId, Post post, Context context) {
         repository.createPostForUser(userId, post, context, new Callback<Post>() {

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ProfileActivity">
+    tools:context=".activities.UserPostsActivity">
 
     <RelativeLayout
         android:id="@+id/title"
@@ -15,48 +15,9 @@
         <TextView
             android:id="@+id/textView4"
             style="@style/pageTitle"
-            android:text="@string/app_name"
-            />
-
-        <ImageButton
-            android:id="@+id/addPost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:paddingRight="1dp"
-            app:srcCompat="@drawable/btn_add_post"
-            android:layout_toStartOf="@+id/search_button">
-
-        </ImageButton>
-
-
-        <ImageButton
-            android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:paddingRight="1dp"
-            app:srcCompat="@drawable/btn_search"
-            android:layout_toStartOf="@+id/messageView">
-
-        </ImageButton>
-
-        <ImageButton
-            android:id="@+id/messageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:paddingHorizontal="1dp"
-            app:srcCompat="@drawable/btn_messenger"
-            android:layout_alignParentEnd="true">
-
-        </ImageButton>
-
-
+            android:text="@string/app_name" />
 
     </RelativeLayout>
-
-
 
 
         <LinearLayout
@@ -75,11 +36,12 @@
                 android:layout_gravity="top"
                 android:src="@drawable/defaultpic" />
 
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_weight="5"
+                android:orientation="vertical"
                 android:paddingStart="8dp">
 
                 <TextView
@@ -95,9 +57,9 @@
                 android:id="@+id/FriendRequestsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_friend"
                 android:layout_marginTop="8dp"
-                android:visibility="invisible"/>
+                android:text="@string/add_friend"
+                android:visibility="invisible" />
 
         </LinearLayout>
 

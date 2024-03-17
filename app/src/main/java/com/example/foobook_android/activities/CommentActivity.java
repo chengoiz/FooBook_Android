@@ -41,8 +41,8 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         setupCommentRecyclerView();
         fetchUserDetails();
         setupButtons();
-        TextView usernameTextView = findViewById(R.id.commentItemUsername);
-        usernameTextView.setText(fetchedDisplayName);
+        TextView displayNameTextView = findViewById(R.id.commentItemUsername);
+        displayNameTextView.setText(fetchedDisplayName);
     }
 
     public void setupButtons() {
@@ -60,7 +60,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
 
     private String getCurrentUserId() {
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", ""); // Replace "userId" with the actual key you used to store the user's ID
+        return sharedPreferences.getString("userId", "");
     }
 
     private void setPostViewModel() {
@@ -68,19 +68,19 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
         postViewModel.setToken(token);
-        postViewModel.fetchUsername(this);
-        // Observe the username LiveData
-        postViewModel.getUsernameLiveData().observe(this, username -> {
-            if (username != null && !username.isEmpty()) {
-                this.fetchedDisplayName = username;
+        postViewModel.fetchDisplayName(this, getCurrentUserId());
+        // Observe the display name LiveData
+        postViewModel.getDisplayNameLiveData().observe(this, displayName -> {
+            if (displayName != null && !displayName.isEmpty()) {
+                this.fetchedDisplayName = displayName;
             }
         });
-        postViewModel.getUsernameLiveData().observe(this, username -> {
-            TextView usernameTextView = findViewById(R.id.commentItemUsername);
-            if (username != null) {
-                usernameTextView.setText(username);
+        postViewModel.getDisplayNameLiveData().observe(this, displayName -> {
+            TextView displayNameTextView = findViewById(R.id.commentItemUsername);
+            if (displayName != null) {
+                displayNameTextView.setText(displayName);
             } else {
-                usernameTextView.setText("Unknown User");
+                displayNameTextView.setText("Unknown User");
             }
         });
         postViewModel.getProfilePicLiveData().observe(this, profilePic -> {
