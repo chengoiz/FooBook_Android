@@ -2,6 +2,7 @@ package com.example.foobook_android.Repositories;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.foobook_android.Api.FriendListResponse;
 import com.example.foobook_android.Api.FriendRequestResponse;
@@ -36,6 +37,7 @@ public class FriendshipRepository {
 
     public void acceptFriendRequest(String userId, String friendId, Callback<Void> callback) {
         webServiceApi.acceptFriendRequest(userId, friendId, "Bearer " + retrieveAuthToken()).enqueue(callback);
+        Log.e("FriendRequestAccept", "Accepted friend request from " + friendId + " into the friendlist of: " + userId);
     }
 
     public void declineFriendRequest(String userId, String friendId, Callback<Void> callback) {
