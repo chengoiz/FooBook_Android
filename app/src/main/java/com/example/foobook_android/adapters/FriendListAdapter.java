@@ -21,19 +21,19 @@ import java.util.List;
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
 
     private Context context;
-    private List<User> users;
+    private List<User> myFriends;
     private final LayoutInflater inflater;
     private final FriendListAdapter.FriendListListener listener;
     private String currentUserId;
 
     public interface FriendListListener {
         void onDeleteFriend(String userId, String friendId);
-
+        void onFriendItemClick(String friendId, String  friendDisplayName);
     }
 
     public FriendListAdapter(Context context, List<User> users, FriendListListener listener, String currentUserId) {
         this.context = context;
-        this.users = users;
+        this.myFriends = users;
         this.inflater = LayoutInflater.from(context);
         this.listener = listener;
         this.currentUserId = currentUserId;
@@ -48,21 +48,21 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull FriendListAdapter.ViewHolder holder, int position) {
-        User user = users.get(position);
+        User user = myFriends.get(position);
         holder.displayNameTextView.setText(user.getDisplayname());
         loadImage(holder.profilePicImageView, user.getProfilepic(), context);
     }
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return myFriends.size();
     }
 
     public void removeItemAt(int position) {
-        if (position >= 0 && position < users.size()) {
-            users.remove(position);
+        if (position >= 0 && position < myFriends.size()) {
+            myFriends.remove(position);
             notifyItemRemoved(position);
-            notifyItemRangeChanged(position, users.size());
+            notifyItemRangeChanged(position, myFriends.size());
         }
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -81,17 +81,26 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             deleteFriend.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    User friend = users.get(position);
+                    User friend = myFriends.get(position);
                     String friendId = friend.getId();
                     listener.onDeleteFriend(currentUserId, friendId);
                     removeItemAt(position);
                 }
             });
+            friendList.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    User friend = myFriends.get(position);
+                    String friendDisplayName = friend.getDisplayname();
+                    String friendId = friend.getId();
+                    listener.onFriendItemClick(friendId, friendDisplayName);
+                }
+            });
         }
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setMyFriends(List<User> myFriends) {
+        this.myFriends = myFriends;
         notifyDataSetChanged();
     }
 }

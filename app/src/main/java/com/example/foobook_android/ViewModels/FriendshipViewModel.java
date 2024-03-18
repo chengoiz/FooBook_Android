@@ -60,20 +60,6 @@ public class FriendshipViewModel extends AndroidViewModel {
         return friendRequests;
     }
 
-//    public void acceptFriendRequest(String userId, String friendId) {
-//        friendshipRepository.acceptFriendRequest(userId, friendId, new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                acceptRequestResult.postValue(response.isSuccessful());
-//            }
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//                acceptRequestResult.postValue(false);
-//
-//            }
-//        });
-//    }
-
     public void acceptFriendRequest(String userId, String friendId) {
         friendshipRepository.acceptFriendRequest(userId, friendId, new Callback<Void>() {
             @Override
@@ -91,7 +77,7 @@ public class FriendshipViewModel extends AndroidViewModel {
                 Log.e("FriendRequestAccept", "Error on accepting friend request: " + t.getMessage());
             }
         });
-    } // This method is possible fixture of the method above because it added the user as a friend of himself.
+    }
 
     public void declineFriendRequest(String userId, String friendId) {
         friendshipRepository.declineFriendRequest(userId, friendId, new Callback<Void>() {
@@ -127,17 +113,6 @@ public class FriendshipViewModel extends AndroidViewModel {
             }
         });
         return friendList;
-    }
-
-
-    private String retrieveAuthToken() {
-        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("token", "");
-    }
-
-    private String getCurrentUserId() {
-        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("userId", "");
     }
 
 }

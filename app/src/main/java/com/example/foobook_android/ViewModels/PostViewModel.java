@@ -104,6 +104,7 @@ public class PostViewModel extends AndroidViewModel {
             public void onSuccess(UserDetails userDetails) {
                 displayNameLiveData.postValue(userDetails.getDisplayName());
                 profilePicLiveData.postValue(userDetails.getProfilePic());
+                String title = userDetails.getDisplayName();
             }
 
             @Override
