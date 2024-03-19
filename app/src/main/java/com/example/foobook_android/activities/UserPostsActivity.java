@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import com.example.foobook_android.adapters.PostAdapter;
 import com.example.foobook_android.post.Post;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class UserPostsActivity extends AppCompatActivity implements PostAdapter.PostItemListener {
 
@@ -28,6 +31,8 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
     private PostAdapter postAdapter;
     private TextView displayNameTextView;
     private ImageView profileImageView;
+    String displayName;
+    String ProfilePic;
     String userId;
 
     @Override
@@ -41,36 +46,42 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
         displayNameTextView = findViewById(R.id.userNameInProfile);
         profileImageView = findViewById(R.id.profileImageInProfile);
 
-
-
         postAdapter = new PostAdapter(this, new ArrayList<>(), this);
 
         postsRecyclerView.setAdapter(postAdapter);
 
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         userId = getIntent().getStringExtra("VIEWED_USER_ID");
+        displayName = getIntent().getStringExtra("VIEWED_USER_DISPLAY_NAME");
+        ProfilePic = getIntent().getStringExtra("VIEWED_USER_PROFILE_PIC");
 
-        postViewModel.fetchDisplayName(this, userId);
 
         String authToken = getAuthToken();
 
-        postViewModel.getProfilePicLiveData().observe(this, profilePicUrl -> {
-            if (profilePicUrl != null && !profilePicUrl.isEmpty()) {
-                Glide.with(this).load(profilePicUrl).into(profileImageView);
-            } else {
-                // Set default or placeholder image
-                Glide.with(this).load(R.drawable.defaultpic).into(profileImageView);
-            }
-        });
+        Glide.with(this).load(ProfilePic).into(profileImageView);
 
-        postViewModel.getDisplayNameLiveData().observe(this, displayName -> {
-            if (displayName != null && !displayName.isEmpty()) {
-                displayNameTextView.setText(displayName + "'s posts");
-            } else {
-                Log.e("ProfileActivity", "Failed to fetch user details or display name is empty");
-                displayNameTextView.setText(getString(R.string.default_username)); // Set to a default value or prompt
-            }
-        });
+
+
+
+        if (!isFriend() && !(userId.equals(getCurrentUserId()))) {
+            Button friendRequestsButton = findViewById(R.id.FriendRequestsButton);
+            // Set the button to be visible
+            friendRequestsButton.setVisibility(View.VISIBLE);
+            displayNameTextView.setText(displayName + "'s Profile");
+            friendRequestsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    postAdapter.sendFriendRequest(userId);
+                    // Optionally, provide feedback or disable the button to prevent multiple requests
+                    friendRequestsButton.setEnabled(false); // Disable the button
+                    Toast.makeText(UserPostsActivity.this, "Friend request sent!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else {
+            displayNameTextView.setText(displayName + "'s Posts");
+        }
+
 
         postViewModel.getPostsLiveData().observe(this, postsResponse -> {
             if (postsResponse != null && postsResponse.getPosts() != null) {
@@ -88,6 +99,17 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
         Intent editIntent = new Intent(UserPostsActivity.this, EditPostActivity.class);
         editIntent.putExtra("postId", post.getPostId()); // Pass the post's ID
         startActivity(editIntent);
+    }
+
+    private HashSet<String> getFriendList() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        return (HashSet<String>) sharedPreferences.getStringSet("friendList", new HashSet<String>());
+        // Retrieve the friends list from SharedPreferences.
+    }
+
+    private boolean isFriend() {
+        HashSet<String> friendsList = getFriendList();
+        return friendsList.contains(userId);
     }
 
     @Override

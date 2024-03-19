@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -35,6 +36,8 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
     private PhotoSelectorHelper photoSelectorHelper;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
 
 
@@ -87,16 +90,25 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
             startActivity(intent);
         });
 
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Call your method to fetch or refresh data
+                postViewModel.fetchPostsFromServer(FeedActivity.this);
+                fetchAndDisplayPosts();
+            }
+        });
+
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+
         Button viewFriendRequestsButton = findViewById(R.id.FriendRequestsButton);
         viewFriendRequestsButton.setOnClickListener(v -> {
             Intent intent = new Intent(FeedActivity.this, FriendRequestsActivity.class);
-            startActivity(intent);
-        });
-
-        Button myProfileButton = findViewById(R.id.myProfileButton);
-        myProfileButton.setOnClickListener(v -> {
-            Intent intent = new Intent(FeedActivity.this, UserPostsActivity.class);
-            intent.putExtra("VIEWED_USER_ID", getCurrentUserId());
             startActivity(intent);
         });
 
@@ -145,6 +157,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
             } else {
                 postAdapter.setPosts(posts);
             }
+            swipeRefreshLayout.setRefreshing(false); // Stop the refreshing animation
         });
     }
 

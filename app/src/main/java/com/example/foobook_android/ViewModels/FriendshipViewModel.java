@@ -79,6 +79,10 @@ public class FriendshipViewModel extends AndroidViewModel {
         });
     }
 
+    public LiveData<FriendRequestResponse> getFriendRequestsLiveData() {
+        return friendRequests;
+    }
+
     public void declineFriendRequest(String userId, String friendId) {
         friendshipRepository.declineFriendRequest(userId, friendId, new Callback<Void>() {
             @Override

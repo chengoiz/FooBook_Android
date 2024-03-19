@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">FooBook</string>
+    <string name="view_profile">View Profile</string>
     <string name="login_userName">Username</string>
     <string name="login_login_btn">Login</string>
     <string name="password">Password</string>

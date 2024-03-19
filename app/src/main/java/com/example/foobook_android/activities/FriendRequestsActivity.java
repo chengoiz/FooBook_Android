@@ -74,6 +74,22 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
         });
     }
 
+    // Inside your Activity or Fragment where you want to show the friend requests
+//    private void setupFriendRequestsObserver() {
+//        friendshipViewModel.getFriendRequestsLiveData().observe(this, friendRequestResponse -> {
+//            if (friendRequestResponse != null && friendRequestResponse.getFriendRequests() != null) {
+//                // Update your UI here with the friend requests data
+//                adapter.setUsers(friendRequestResponse.getFriendRequests());
+//            } else {
+//                Toast.makeText(this, "Failed to fetch friend requests.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        // Trigger the data fetch
+//        friendshipViewModel.getFriendRequests(userId);
+//    }
+
+
     @Override
     public void onAcceptRequest(String userId, String friendId) {
         friendshipViewModel.acceptFriendRequest(userId, friendId);
