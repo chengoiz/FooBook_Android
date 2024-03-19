@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,7 +87,7 @@ public class EditPostActivity extends AppCompatActivity {
         selectedImage.setVisibility(View.VISIBLE);
         removePhoto.setVisibility(View.VISIBLE);
         isPhotoSelected = true;
-     //   currentPost.setIsPhotoPicked(Post.PHOTO_PICKED);
+        //   currentPost.setIsPhotoPicked(Post.PHOTO_PICKED);
     }
 
 
@@ -116,8 +117,8 @@ public class EditPostActivity extends AppCompatActivity {
                 removePhoto.setVisibility(View.VISIBLE); // Show the remove photo button if applicable
             }
         } else {
-            // If no photo was picked, ensure the ImageView is not visible
-            selectedImage.setVisibility(View.GONE);
+
+            selectedImage.setVisibility(View.GONE); // If no photo was picked, ensure the ImageView is not visible
             removePhoto.setVisibility(View.GONE); // Hide the remove photo button if no photo is set
 
         }
@@ -127,27 +128,36 @@ public class EditPostActivity extends AppCompatActivity {
         selectedImage.invalidate();
         selectedImage.setVisibility(View.GONE);
         isPhotoSelected = false;
-     //   currentPost.setIsPhotoPicked(Post.NO_PHOTO);
+        currentPost.setImageUrl("");
+        postImageUri = null;
+        //   currentPost.setIsPhotoPicked(Post.NO_PHOTO);
     }
 
     private void savePost() {
         String postText = postEditText.getText().toString();
-        boolean isPhotoChanged = isPhotoSelected && postImageUri != null;
-        String postImageUriString = isPhotoChanged ? postImageUri.toString() : currentPost.getImageUrl();
+        String postImageUriString = null;
 
-        if (!postText.isEmpty() || isPhotoChanged) {
-            currentPost.setContent(postText);
+        if (postImageUri != null) {
+            postImageUriString = postImageUri.toString();
             currentPost.setImageUrl(postImageUriString);
-          //  currentPost.setImageSetByUser(isPhotoSelected);
+        }
+        if (!postText.isEmpty() || postImageUriString != null ) {
+            currentPost.setContent(postText);
+
 
             // Update the post using ViewModel
-            postViewModel.update(currentPost);
+            postViewModel.updatePost(getCurrentUserId(), currentPost.getPostId(), currentPost, this);
 
             Toast.makeText(EditPostActivity.this, "Post updated successfully", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(EditPostActivity.this, "Post text cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPostActivity.this, "Post cannot be empty", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private String getCurrentUserId() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        return sharedPreferences.getString("userId", "");
     }
 
     @Override
