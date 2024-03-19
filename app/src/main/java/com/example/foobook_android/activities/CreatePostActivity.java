@@ -60,17 +60,11 @@ public class CreatePostActivity extends AppCompatActivity  {
 
     private String getCurrentUserId() {
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", ""); // Replace "userId" with the actual key you used to store the user's ID
+        return sharedPreferences.getString("userId", "");
     }
 
     private void setPostViewModel() {
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
-//        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-
-      //  String token = sharedPreferences.getString("token", "");
-      //  postViewModel.setToken(token);
-
-
         postViewModel.fetchDisplayName(this, getCurrentUserId());
         // Observe the username LiveData
         postViewModel.getDisplayNameLiveData().observe(this, username -> {
@@ -81,7 +75,6 @@ public class CreatePostActivity extends AppCompatActivity  {
         postViewModel.getProfilePicLiveData().observe(this, profilePic -> {
             if (profilePic != null && !profilePic.isEmpty()) {
                 this.fetchedProfilePic = profilePic;
-                // Here you might want to load the profile picture into an ImageView or similar
             }
         });
     }
@@ -122,6 +115,7 @@ public class CreatePostActivity extends AppCompatActivity  {
         postImageUri = photoSelectorHelper.saveBitmapToFile(this, bitmap, filename);
         selectedImage.setImageURI(null);
         selectedImage.setImageURI(postImageUri);
+        removePhoto.setVisibility(View.VISIBLE);
         selectedImage.setVisibility(View.VISIBLE);
         isPhotoSelected = true;
     }
@@ -130,7 +124,6 @@ public class CreatePostActivity extends AppCompatActivity  {
     private void savePost() {
 
         String postAuthor = fetchedDisplayName;
-//        String authorProfileImage = getResources().getResourceName(R.drawable.defaultpic);
         String authorProfileImage = fetchedProfilePic;
 
         String postText = postEditText.getText().toString();
@@ -140,13 +133,7 @@ public class CreatePostActivity extends AppCompatActivity  {
 
         if (!postText.isEmpty() || isPhotoSelected) {
             Post newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage, postImageUriString);
-//            newPost.getCreator().setId(userId);
-            newPost.setImageSetByUser(isPhotoSelected);
-            newPost.setIsPhotoPicked(Post.PHOTO_PICKED);
-
             postViewModel.createPostForUser(userId, newPost, this);
-//            postViewModel.insert(newPost);
-
 
             Toast.makeText(CreatePostActivity.this, "Post created successfully!", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK);

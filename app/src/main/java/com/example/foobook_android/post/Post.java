@@ -34,7 +34,7 @@ public class Post implements Serializable {
     @ColumnInfo(name = "text")
     private String text;
 
-    @Ignore /** Ignoring this field for Room database **/
+    @Ignore
     private List<Comment> comments = new ArrayList<>();
 
     @ColumnInfo(name = "likesCount")

@@ -84,8 +84,9 @@ public class EditPostActivity extends AppCompatActivity {
         postImageUri = photoSelectorHelper.saveBitmapToFile(this, bitmap, filename);
         Glide.with(this).load(postImageUri).into(selectedImage);
         selectedImage.setVisibility(View.VISIBLE);
+        removePhoto.setVisibility(View.VISIBLE);
         isPhotoSelected = true;
-        currentPost.setIsPhotoPicked(Post.PHOTO_PICKED);
+     //   currentPost.setIsPhotoPicked(Post.PHOTO_PICKED);
     }
 
 
@@ -107,21 +108,18 @@ public class EditPostActivity extends AppCompatActivity {
             // Set the post content
             postEditText.setText(currentPost.getText());
 
-            // Check if a photo was picked for the post
-            if (currentPost.getIsPhotoPicked() == Post.PHOTO_PICKED) {
-                // If there's an image URI available
-                if (currentPost.getImageUrl() != null && !currentPost.getImageUrl().isEmpty()) {
-                    Uri imageUri = Uri.parse(currentPost.getImageUrl());
-                    // Use Glide to set the image
-                    Glide.with(this).load(imageUri).into(selectedImage);
-                    selectedImage.setVisibility(View.VISIBLE); // Make the ImageView visible
-                    removePhoto.setVisibility(View.VISIBLE); // Show the remove photo button if applicable
-                }
-            } else {
-                // If no photo was picked, ensure the ImageView is not visible
-                selectedImage.setVisibility(View.GONE);
-                removePhoto.setVisibility(View.GONE); // Hide the remove photo button if no photo is set
+            // If there's an image URI available
+            if (currentPost.getImageUrl() != null && !currentPost.getImageUrl().isEmpty()) {
+                Uri imageUri = Uri.parse(currentPost.getImageUrl());
+                Glide.with(this).load(imageUri).into(selectedImage);
+                selectedImage.setVisibility(View.VISIBLE); // Make the ImageView visible
+                removePhoto.setVisibility(View.VISIBLE); // Show the remove photo button if applicable
             }
+        } else {
+            // If no photo was picked, ensure the ImageView is not visible
+            selectedImage.setVisibility(View.GONE);
+            removePhoto.setVisibility(View.GONE); // Hide the remove photo button if no photo is set
+
         }
     }
 
@@ -129,7 +127,7 @@ public class EditPostActivity extends AppCompatActivity {
         selectedImage.invalidate();
         selectedImage.setVisibility(View.GONE);
         isPhotoSelected = false;
-        currentPost.setIsPhotoPicked(Post.NO_PHOTO);
+     //   currentPost.setIsPhotoPicked(Post.NO_PHOTO);
     }
 
     private void savePost() {
@@ -140,7 +138,7 @@ public class EditPostActivity extends AppCompatActivity {
         if (!postText.isEmpty() || isPhotoChanged) {
             currentPost.setContent(postText);
             currentPost.setImageUrl(postImageUriString);
-            currentPost.setImageSetByUser(isPhotoSelected);
+          //  currentPost.setImageSetByUser(isPhotoSelected);
 
             // Update the post using ViewModel
             postViewModel.update(currentPost);
