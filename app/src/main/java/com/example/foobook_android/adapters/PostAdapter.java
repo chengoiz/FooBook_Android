@@ -28,6 +28,7 @@ import com.example.foobook_android.activities.CommentActivity;
 import com.example.foobook_android.activities.UserPostsActivity;
 import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.models.FriendshipRequest;
+import com.example.foobook_android.post.Creator;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.RetrofitClient;
@@ -139,30 +140,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         // Dynamically add menu items based on whether users are friends
         int position = holder.getAdapterPosition();
         if (position != RecyclerView.NO_POSITION) {
-            Post post = posts.get(position);
-            if (post.getIsFriend()) {
-                // If they are friends, show "View Posts"
-                popup.getMenu().add(0, R.id.view_posts, 0, "View Posts");
-            } else {
-                // If they are not friends, show "Add Friend"
-                popup.getMenu().add(0, R.id.add_friend, 0, "Add Friend");
-            }
+            popup.getMenu().add(0, R.id.view_profile, 0, "View Profile");
         }
         popup.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.add_friend) {
-                if (posts.get(position).getIsFriend()) {
-                    Toast.makeText(context, "You and the user are already friends.", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Call your method to send friend request
-                    String receiverUserId = posts.get(position).getCreator().getId();
-                    sendFriendRequest(receiverUserId);
-                }
-                return true;
-            } else if (id == R.id.view_posts) {
+            if (id == R.id.view_profile) {
                 // Navigate to the user's mini profile to view their posts
-                navigateToUserPosts(posts.get(position).getCreator().getId());
-                return true;
+                navigateToUserPosts(posts.get(position).getCreator().getId(),
+                        posts.get(position).getCreator().getDisplayName(),
+                        posts.get(position).getCreator().getProfilePic());
             }
             return false;
         });
@@ -170,9 +156,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
 
-    private void navigateToUserPosts(String userId) {
+    private void navigateToUserPosts(String userId, String displayName, String ProfilePic) {
         Intent intent = new Intent(context, UserPostsActivity.class);
         intent.putExtra("VIEWED_USER_ID", userId);
+        intent.putExtra("VIEWED_USER_DISPLAY_NAME", displayName);
+        intent.putExtra("VIEWED_USER_PROFILE_PIC", ProfilePic);
         context.startActivity(intent);
     }
 
@@ -188,7 +176,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         // Retrieve the auth token from SharedPreferences.
     }
 
-    private void sendFriendRequest(String receiverUserId) {
+    public void sendFriendRequest(String receiverUserId) {
         String currentUserId = getCurrentUserId();
         String authToken = getAuthToken();
 

@@ -5,6 +5,6 @@
         android:id="@+id/add_friend"
         android:title="Add Friend"/>
     <item
-        android:id="@+id/view_posts"
-        android:title="View Posts"/>
+        android:id="@+id/view_profile"
+        android:title="View Profile"/>
 </menu>
