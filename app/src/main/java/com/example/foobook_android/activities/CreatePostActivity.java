@@ -107,6 +107,7 @@ public class CreatePostActivity extends AppCompatActivity  {
         selectedImage.invalidate();
         selectedImage.setVisibility(View.GONE);
         isPhotoSelected = false;
+        currentPost.setImageUrl(null);
         currentPost.setIsPhotoPicked(Post.NO_PHOTO);
     }
 
@@ -142,8 +143,6 @@ public class CreatePostActivity extends AppCompatActivity  {
             Toast.makeText(CreatePostActivity.this, "Post text cannot be empty", Toast.LENGTH_SHORT).show();
         }
     }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

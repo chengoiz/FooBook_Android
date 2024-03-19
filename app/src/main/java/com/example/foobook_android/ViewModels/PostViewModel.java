@@ -3,6 +3,7 @@ package com.example.foobook_android.ViewModels;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.foobook_android.Api.PostsResponse;
 import com.example.foobook_android.Repositories.UserRepository;
+import com.example.foobook_android.activities.EditPostActivity;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.Repositories.PostRepository;
 import com.example.foobook_android.utility.UserDetails;
@@ -67,9 +69,6 @@ public class PostViewModel extends AndroidViewModel {
         repository.deleteByPostId(postId);
     }
 
-    public void update(Post post) {
-        repository.update(post);
-    }
 
     public void fetchPostsByUserId(String userId, String authToken) {
         repository.getPostsByUserId(userId, authToken, new Callback<PostsResponse>() {
@@ -134,17 +133,42 @@ public class PostViewModel extends AndroidViewModel {
                     }
                 } else {
                     // Handle request failure (e.g., validation error)
-                    Log.e("PostViewModel", "Failed to create post");
+                    Log.e("PostViewModel", "Failed to update post");
                 }
             }
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
                 // Handle failure to make the request (e.g., no internet connection)
-                Log.e("PostViewModel", "Error creating post", t);
+                Log.e("PostViewModel", "Error updating post", t);
             }
         });
     }
+
+    public void updatePost(String userId, String postId, Post updatedPost, Context context) {
+        repository.updatePostForUser(userId, postId, updatedPost, context, new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (response.isSuccessful()) {
+                    Log.d("PostViewModel", "Post updated successfully");
+                    Post updatedPost = response.body();
+
+                    if (updatedPost != null) {
+                        repository.update(updatedPost);
+                    }
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 
     public void deletePostByUser(String userId, String postId, Context context) {
         repository.deletePostByUser(userId, postId, context);

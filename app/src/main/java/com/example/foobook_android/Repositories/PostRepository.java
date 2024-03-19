@@ -54,7 +54,6 @@ public class PostRepository {
         new Thread(() -> postDao.deleteById(post.getPostId())).start();
     }
     public void update(Post post) {
-        // Run database operation in a background thread
         new Thread(() -> postDao.update(post)).start();
     }
     // Method to delete a post by its ID
@@ -87,6 +86,24 @@ public class PostRepository {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
         webServiceApi.createPostForUser(userId, post,"Bearer " + token).enqueue(callback);
+    }
+    public void updatePostForUser(String userId, String postId, Post post, Context context, Callback<Post> callback) {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+
+        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
+        webServiceApi.updatePostForUser(userId, postId, post,"Bearer " + token).enqueue(callback);
     }
 
     public void deletePostByUser(String userId, String postId, Context context) {
