@@ -91,13 +91,9 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         });
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Call your method to fetch or refresh data
-                postViewModel.fetchPostsFromServer(FeedActivity.this);
-                fetchAndDisplayPosts();
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            postViewModel.fetchPostsFromServer(FeedActivity.this);
+            fetchAndDisplayPosts();
         });
 
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -239,6 +235,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     @Override
     protected void onResume() {
         super.onResume();
+        postViewModel.fetchPostsFromServer(this);
         fetchAndDisplayPosts(); // Fetches and displays the latest posts from the database
         updateUI();
     }

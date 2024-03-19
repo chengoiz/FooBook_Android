@@ -122,13 +122,15 @@ public class PostViewModel extends AndroidViewModel {
             public void onResponse(Call<Post> call, Response<Post> response) {
                 if (response.isSuccessful()) {
                     Log.d("PostViewModel", "Post created successfully");
-
-                    // Get the Post object from the response
                     Post newPost = response.body();
 
                     if (newPost != null) {
-                        // Save the post in the local database
+                        if (newPost.getImageUrl() != null) {
+                            newPost.setIsPhotoPicked(Post.PHOTO_PICKED);
+                        }
                         repository.insert(newPost);
+
+
                     }
                 } else {
                     // Handle request failure (e.g., validation error)
