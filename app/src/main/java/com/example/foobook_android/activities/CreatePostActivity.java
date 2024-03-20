@@ -188,7 +188,6 @@ public class CreatePostActivity extends AppCompatActivity  {
         }
     }
 
-
     // Handles the result from activities started with startActivityForResult.
     // This method is called after returning from the photo selector helper.
     @Override

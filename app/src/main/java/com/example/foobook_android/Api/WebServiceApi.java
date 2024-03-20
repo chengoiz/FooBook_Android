@@ -51,6 +51,10 @@ public interface WebServiceApi {
     @DELETE("api/users/{userId}/posts/{postId}")
     Call<ApiResponse> deletePostForUser(@Path("userId") String userId, @Path("postId") String postId, @Header("Authorization") String authToken);
 
+    // Edit post
+    @PATCH("api/users/{userId}/posts/{postId}")
+    Call<Post> updatePostForUser(@Path("userId") String userId, @Path("postId") String postId, @Body Post post, @Header("Authorization") String authToken);
+
     @GET("api/posts")
     Call<FeedResponse> fetchFeedPosts(@Header("Authorization") String authToken);
 
