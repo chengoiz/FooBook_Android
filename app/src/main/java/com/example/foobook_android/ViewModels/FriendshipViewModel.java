@@ -69,6 +69,7 @@ public class FriendshipViewModel extends AndroidViewModel {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+
                     // Now fetch the updated friend list
                     acceptRequestResult.postValue(response.isSuccessful());
                     getFriendList(userId);
