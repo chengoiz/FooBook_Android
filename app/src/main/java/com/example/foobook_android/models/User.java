@@ -15,9 +15,9 @@ public class User {
     // Getters and Setters
     public String getId() { return _id; }
     public void setId(String id) { this._id = id; }
-    public String getDisplayname() { return displayname; }
-    public void setDisplayname(String displayname) { this.displayname = displayname; }
+    public String getDisplayName() { return displayname; }
+    public void setDisplayName(String displayname) { this.displayname = displayname; }
 
-    public String getProfilepic() { return profilepic; }
-    public void setProfilepic(String profilepic) { this.profilepic = profilepic; }
+    public String getProfilePic() { return profilepic; }
+    public void setProfilePic(String profilepic) { this.profilepic = profilepic; }
 }

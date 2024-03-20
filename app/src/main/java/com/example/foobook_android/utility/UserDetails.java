@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class UserDetails {
-    @SerializedName("displayname") // This tells Gson which JSON key to map to this field
+    // This tells Gson which JSON key to map to this field
+    @SerializedName("displayname")
     private String displayname;
     @SerializedName("profilepic")
     private String profilepic;

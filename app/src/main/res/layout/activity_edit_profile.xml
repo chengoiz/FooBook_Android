@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@android:color/white"
+    android:elevation="4dp">
+
+
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/pageTitle"
+        android:text="@string/app_name" />
+
+    <TextView
+        android:id="@+id/tvEditProfileTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit User Profile"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:layout_below="@id/textView4"
+        android:textSize="35dp"
+        android:padding="8dp" />
+
+    <EditText
+        android:id="@+id/etDisplayName"
+        android:layout_width="match_parent"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvEditProfileTitle"
+        android:hint="Display Name"
+        android:inputType="textPersonName"
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/tvProfilePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etDisplayName"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:text="Profile Picture"
+        android:padding="8dp" />
+
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etDisplayName"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp">
+
+        <Button
+            android:id="@+id/btnChooseFile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:text="Choose File"
+            android:padding="8dp" />
+
+        <Button
+            android:id="@+id/btnTakePicture"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:text="Take Picture"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvNoFileChosen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonContainer"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:text="No file chosen"
+        android:padding="8dp"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/selectedImage"
+        android:layout_width="362dp"
+        android:layout_height="349dp"
+        android:layout_below="@id/tvEditProfileTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginBottom="20dp"
+        android:scaleType="centerCrop"
+        android:visibility="visible" />
+
+
+    <LinearLayout
+        android:id="@+id/actionButtonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvNoFileChosen"
+        android:layout_marginTop="-1dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="320dp"
+            android:padding="8dp"
+            android:text="Close"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSaveChanges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="320dp"
+            android:padding="8dp"
+            android:text="Save Changes"
+            android:textStyle="bold" />
+    </LinearLayout>
+</RelativeLayout>

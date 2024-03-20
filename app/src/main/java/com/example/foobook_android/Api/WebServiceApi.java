@@ -61,4 +61,6 @@ public interface WebServiceApi {
     @GET("api/users/{userId}/posts")
     Call<PostsResponse> getPostsByUserId(@Path("userId") String userId, @Header("Authorization") String authToken);
 
+    @PATCH("api/users/{id}")
+    Call<UserUpdateResponse> editUserDetails(@Path("id") String userId, @Body UserUpdateRequest request, @Header("Authorization") String authToken);
 }

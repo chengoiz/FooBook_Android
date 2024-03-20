@@ -53,8 +53,8 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = users.get(position);
-        holder.displayNameTextView.setText(user.getDisplayname());
-        loadImage(holder.profilePicImageView, user.getProfilepic(), context);
+        holder.displayNameTextView.setText(user.getDisplayName());
+        loadImage(holder.profilePicImageView, user.getProfilePic(), context);
     }
 
 

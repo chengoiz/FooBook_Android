@@ -157,13 +157,26 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         PopupMenu feedMenu = new PopupMenu(this, view);
         feedMenu.inflate(R.menu.feed_menu);
         feedMenu.setOnMenuItemClickListener(item -> {
-            Intent OUT = new Intent(this, LogInActivity.class);
-            Toast.makeText(FeedActivity.this, "ged-out successfully", Toast.LENGTH_SHORT).show();
-            startActivity(OUT);
-            return true;
+            int itemId = item.getItemId();
+            if (itemId == R.id.Logout) {
+                // Handle logout action
+                Intent logoutIntent = new Intent(this, LogInActivity.class);
+                Toast.makeText(FeedActivity.this, "Logged-out successfully", Toast.LENGTH_SHORT).show();
+                startActivity(logoutIntent);
+                finish(); // Close the current activity
+                return true;
+            } else if (itemId == R.id.EditProfile) {
+                // Handle edit profile action
+                Intent editProfileIntent = new Intent(this, EditProfileActivity.class);
+                startActivity(editProfileIntent);
+                return true;
+            }
+            return false;
         });
         feedMenu.show();
     }
+
+
 
 
     public void onAdd() {

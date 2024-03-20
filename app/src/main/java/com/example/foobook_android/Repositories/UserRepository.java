@@ -5,10 +5,11 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-
+import com.example.foobook_android.Api.UserUpdateRequest;
+import com.example.foobook_android.Api.UserUpdateResponse;
 import com.example.foobook_android.Api.WebServiceApi;
+import com.example.foobook_android.models.User;
 import com.example.foobook_android.utility.UserDetails;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,7 +46,32 @@ public class UserRepository {
         return sharedPreferences.getString("userId", "");
     }
 
-    public void fetchUserDetails(String Id, UserDetailsCallback callback) {
+    public void updateUserDetails(String userId, String displayName, String profilePicUri, UserDetailsCallback callback) {
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest(displayName, profilePicUri);
+
+        webServiceApi.editUserDetails(userId, userUpdateRequest, "Bearer " + getAuthToken()).enqueue(new Callback<UserUpdateResponse>() {
+            @Override
+            public void onResponse(Call<UserUpdateResponse> call, Response<UserUpdateResponse> response) {
+                if (response.isSuccessful()) {
+                    User user = response.body().getUser();
+                    UserDetails userDetails = new UserDetails(user.getDisplayName(), user.getProfilePic(), null);
+                    callback.onSuccess(userDetails);
+                } else {
+                    callback.onError(new RuntimeException("Error: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserUpdateResponse> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
+
+
+
+
+        public void fetchUserDetails(String Id, UserDetailsCallback callback) {
 
         if (Id == null || getAuthToken() == null) {
             Log.e("UserRepository", "User ID or Token is not available.");
