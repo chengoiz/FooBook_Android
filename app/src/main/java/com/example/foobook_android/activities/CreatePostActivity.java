@@ -2,7 +2,6 @@ package com.example.foobook_android.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.example.foobook_android.databinding.ActivityCreatePostBinding;
 import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
@@ -24,7 +22,6 @@ import com.example.foobook_android.post.PostManager;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.TimestampUtil;
 import com.example.foobook_android.adapters.PostAdapter;
-
 
 public class CreatePostActivity extends AppCompatActivity  {
     private ActivityCreatePostBinding binding;

@@ -49,8 +49,8 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull FriendListAdapter.ViewHolder holder, int position) {
         User user = myFriends.get(position);
-        holder.displayNameTextView.setText(user.getDisplayname());
-        loadImage(holder.profilePicImageView, user.getProfilepic(), context);
+        holder.displayNameTextView.setText(user.getDisplayName());
+        loadImage(holder.profilePicImageView, user.getProfilePic(), context);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     User friend = myFriends.get(position);
-                    String friendDisplayName = friend.getDisplayname();
+                    String friendDisplayName = friend.getDisplayName();
                     String friendId = friend.getId();
                     listener.onFriendItemClick(friendId, friendDisplayName);
                 }

@@ -11,6 +11,10 @@
         android:textAlignment="center"
         android:layout_centerHorizontal="true"
         />
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/pageTitle"
+        android:text="@string/app_name" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendsOfFriendRecycleView"

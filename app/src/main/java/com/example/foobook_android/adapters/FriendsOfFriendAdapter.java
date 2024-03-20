@@ -43,8 +43,8 @@ public class FriendsOfFriendAdapter extends RecyclerView.Adapter<FriendsOfFriend
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User friend = friendsOfFriends.get(position);
-        holder.friendOfFriendText.setText(friend.getDisplayname());
-        loadImage(holder.friendOfFriendProfilePic, friend.getProfilepic(), context);
+        holder.friendOfFriendText.setText(friend.getDisplayName());
+        loadImage(holder.friendOfFriendProfilePic, friend.getProfilePic(), context);
     }
 
     @Override

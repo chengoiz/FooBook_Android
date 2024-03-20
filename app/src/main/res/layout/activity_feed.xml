@@ -75,19 +75,20 @@
         android:layout_marginTop="8dp">
 
         <Button
-            android:id="@+id/FriendListButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="115dp"
-            android:layout_toEndOf="@id/FriendRequestsButton"
-            android:text="@string/friend_list" />
-
-        <Button
             android:id="@+id/FriendRequestsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="40dp"
             android:text="@string/friend_requests" />
+
+        <Button
+            android:id="@+id/FriendListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_toEndOf="@id/FriendRequestsButton"
+            android:text="@string/friend_list" />
+
 
 
     </RelativeLayout>

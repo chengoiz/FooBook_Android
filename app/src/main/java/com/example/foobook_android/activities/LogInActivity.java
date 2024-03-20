@@ -53,7 +53,6 @@ public class LogInActivity extends AppCompatActivity {
 
         loginViewModel.getloginResponseLiveData().observe(this, loginResponse -> {
             if (SUCCESS.equals(loginResponse.getResult())) {
-                // Assuming userDetails are now fetched within the ViewModel, you might not need further action here.
             } else if (FAILURE.equals(loginResponse.getResult())) {
                 Toast.makeText(getApplicationContext(), loginResponse.getReason(), Toast.LENGTH_LONG).show();
             }

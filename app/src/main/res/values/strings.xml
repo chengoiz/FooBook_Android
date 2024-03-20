@@ -44,5 +44,6 @@
     <string name="delete">Delete</string>
     <string name="friends">Friends</string>
     <string name="friend_list">Friend List</string>
+    <string name="edit_profile">Edit Profile</string>
 
 </resources>
