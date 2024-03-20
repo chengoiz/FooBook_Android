@@ -47,6 +47,12 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         setContentView(R.layout.activity_feed);
         recyclerView = findViewById(R.id.feedRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        initialize();
+        // Setup buttons and other UI components
+        setupButtons();
+    }
+
+    private void initialize() {
         postAdapter = new PostAdapter(this, new ArrayList<>(), this);
         recyclerView.setAdapter(postAdapter);
 
@@ -56,10 +62,6 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         postViewModel.getLatestPosts().observe(this, posts -> {
             postAdapter.setPosts(posts);
         });
-
-
-        // Setup buttons and other UI components
-        setupButtons();
     }
 
     @Override
@@ -136,14 +138,6 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         }
     }
 
-    private String getAuthToken() {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("token", "");
-        // Retrieve the auth token from SharedPreferences.
-    }
-
-
-
     private void fetchAndDisplayPosts() {
         // Observe the LiveData of posts from PostViewModel
         postViewModel.getLatestPosts().observe(this, posts -> {
@@ -163,9 +157,9 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         PopupMenu feedMenu = new PopupMenu(this, view);
         feedMenu.inflate(R.menu.feed_menu);
         feedMenu.setOnMenuItemClickListener(item -> {
-            Intent LOGOUT = new Intent(this, LogInActivity.class);
-            Toast.makeText(FeedActivity.this, "Logged-out successfully", Toast.LENGTH_SHORT).show();
-            startActivity(LOGOUT);
+            Intent OUT = new Intent(this, LogInActivity.class);
+            Toast.makeText(FeedActivity.this, "ged-out successfully", Toast.LENGTH_SHORT).show();
+            startActivity(OUT);
             return true;
         });
         feedMenu.show();
@@ -219,7 +213,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
 
     private String getCurrentUserId() {
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", ""); // Replace "userId" with the actual key you used to store the user's ID
+        return sharedPreferences.getString("userId", "");
     }
 
 

@@ -2,6 +2,7 @@ package com.example.foobook_android.Repositories;
 
 import static android.content.Context.MODE_PRIVATE;
 
+
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,12 +33,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PostRepository {
     private final PostDao postDao;
+    private Retrofit retrofit;
+    private final WebServiceApi webServiceApi;
     private final LiveData<List<Post>> latestPosts;
 
     public PostRepository(Application application) {
         PostDB db = PostDB.getInstance(application);
         postDao = db.postDao();
         latestPosts = postDao.getLatestPosts();
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/").
+                addConverterFactory(GsonConverterFactory.create()).
+                build(); // change the baseUrl later
+        webServiceApi = retrofit.create(WebServiceApi.class);
     }
 
     public LiveData<List<Post>> getLatestPosts() {
@@ -75,7 +83,6 @@ public class PostRepository {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -109,13 +116,6 @@ public class PostRepository {
     public void deletePostByUser(String userId, String postId, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         String authToken = sharedPreferences.getString("token", "");
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
-
         webServiceApi.deletePostForUser(userId, postId, "Bearer " + authToken).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -184,5 +184,4 @@ public class PostRepository {
     public LiveData<Post> getPostById(String postId) {
         return postDao.getPostById(postId);
     }
-    //Todo: We need to add methods for insert, delete, etc, similar to PostDao.
 }

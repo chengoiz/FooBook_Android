@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.foobook_android.R;
+import com.example.foobook_android.ViewModels.FriendshipViewModel;
 import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.adapters.PostAdapter;
 import com.example.foobook_android.post.Post;
@@ -27,6 +28,7 @@ import java.util.HashSet;
 public class UserPostsActivity extends AppCompatActivity implements PostAdapter.PostItemListener {
 
     private PostViewModel postViewModel;
+    private FriendshipViewModel friendshipViewModel;
     private RecyclerView postsRecyclerView;
     private PostAdapter postAdapter;
     private TextView displayNameTextView;
@@ -49,6 +51,8 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
         postAdapter = new PostAdapter(this, new ArrayList<>(), this);
 
         postsRecyclerView.setAdapter(postAdapter);
+        friendshipViewModel = new ViewModelProvider(this).get(FriendshipViewModel.class);
+
 
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         userId = getIntent().getStringExtra("VIEWED_USER_ID");
@@ -71,10 +75,14 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
             friendRequestsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    postAdapter.sendFriendRequest(userId);
-                    // Optionally, provide feedback or disable the button to prevent multiple requests
-                    friendRequestsButton.setEnabled(false); // Disable the button
-                    Toast.makeText(UserPostsActivity.this, "Friend request sent!", Toast.LENGTH_SHORT).show();
+                    // Utilize the FriendshipViewModel to send the friend request
+                    friendshipViewModel.sendFriendRequest(getCurrentUserId(), userId);
+
+                    // Observe the LiveData from the ViewModel for response
+                    friendshipViewModel.getFriendRequestResponse().observe(UserPostsActivity.this, response -> {
+                        Toast.makeText(UserPostsActivity.this, response, Toast.LENGTH_SHORT).show();
+                        friendRequestsButton.setEnabled(false); // Optionally disable the button after request
+                    });
                 }
             });
         }

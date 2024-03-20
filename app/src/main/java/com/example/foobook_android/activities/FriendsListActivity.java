@@ -29,8 +29,6 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
         initialize();
-        fetchFriendList(userId);
-        observeViewModel();
     }
 
     private void observeViewModel() {
@@ -45,7 +43,7 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
 
     private void initialize() {
         userRepository = new UserRepository(this);
-        userId = userRepository.getIdFromSharedPreferences();
+        userId = userRepository.getUserId();
 
         friendListRecyclerView = findViewById(R.id.friendListRecycleView);
         friendListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -53,6 +51,9 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
         friendListRecyclerView.setAdapter(adapter);
 
         friendshipViewModel = new ViewModelProvider(this).get(FriendshipViewModel.class);
+
+        fetchFriendList(userId);
+        observeViewModel();
     }
     private void fetchFriendList(String userId) {
         friendshipViewModel.getFriendList(userId).observe(this, friendListResponse -> {

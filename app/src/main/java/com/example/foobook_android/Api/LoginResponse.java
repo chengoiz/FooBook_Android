@@ -4,7 +4,7 @@ public class LoginResponse {
     private String result;
     private String token;
     private String userId;
-    private String reason; // Optional, only present if login fails
+    private String reason;
 
     public LoginResponse(String result, String token, String userId, String reason) {
         this.result = result;

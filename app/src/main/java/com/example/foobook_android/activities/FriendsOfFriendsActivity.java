@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 public class FriendsOfFriendsActivity extends AppCompatActivity {
     private FriendshipViewModel friendshipViewModel;
-
     private RecyclerView friendOfFriendListRecyclerView;
     private FriendsOfFriendAdapter adapter;
     private String friendId;
@@ -31,8 +30,6 @@ public class FriendsOfFriendsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_of_friends);
         initialize();
-        fetchFriendsOfFriend(friendId);
-
     }
 
     private void initialize() {
@@ -50,6 +47,8 @@ public class FriendsOfFriendsActivity extends AppCompatActivity {
         adapter = new FriendsOfFriendAdapter(this, new ArrayList<>(), friendId);
         friendOfFriendListRecyclerView.setAdapter(adapter);
         friendshipViewModel = new ViewModelProvider(this).get(FriendshipViewModel.class);
+
+        fetchFriendsOfFriend(friendId);
     }
 
 

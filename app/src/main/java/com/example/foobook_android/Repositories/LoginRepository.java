@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.foobook_android.Api.LoginResponse;
 import com.example.foobook_android.Api.LoginRequest;
 import com.example.foobook_android.Api.WebServiceApi;
+import com.example.foobook_android.utility.UserDetails;
 
 import org.json.JSONObject;
 
@@ -23,7 +24,7 @@ public class LoginRepository {
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/").
                 addConverterFactory(GsonConverterFactory.create()).
-                build(); // change the baseUrl later
+                build();
         webServiceApi = retrofit.create(WebServiceApi.class);
     }
 
@@ -60,5 +61,25 @@ public class LoginRepository {
         });
 
         return loginResponseMutableLiveData;
+    }
+
+    public LiveData<UserDetails> fetchUserDetails(String userId, String token) {
+        final MutableLiveData<UserDetails> userDetailsLiveData = new MutableLiveData<>();
+        webServiceApi.getUserDetails(userId, "Bearer " + token).enqueue(new Callback<UserDetails>() {
+            @Override
+            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                if (response.isSuccessful()) {
+                    userDetailsLiveData.postValue(response.body());
+                } else {
+                    userDetailsLiveData.postValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDetails> call, Throwable t) {
+                userDetailsLiveData.postValue(null);
+            }
+        });
+        return userDetailsLiveData;
     }
 }

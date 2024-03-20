@@ -87,7 +87,6 @@ public class EditPostActivity extends AppCompatActivity {
         selectedImage.setVisibility(View.VISIBLE);
         removePhoto.setVisibility(View.VISIBLE);
         isPhotoSelected = true;
-        //   currentPost.setIsPhotoPicked(Post.PHOTO_PICKED);
     }
 
 
@@ -109,7 +108,7 @@ public class EditPostActivity extends AppCompatActivity {
             // Set the post content
             postEditText.setText(currentPost.getText());
 
-            // If there's an image URI available
+            // Check if there's an image URI available
             if (currentPost.getImageUrl() != null && !currentPost.getImageUrl().isEmpty()) {
                 Uri imageUri = Uri.parse(currentPost.getImageUrl());
                 Glide.with(this).load(imageUri).into(selectedImage);
@@ -130,7 +129,6 @@ public class EditPostActivity extends AppCompatActivity {
         isPhotoSelected = false;
         currentPost.setImageUrl("");
         postImageUri = null;
-        //   currentPost.setIsPhotoPicked(Post.NO_PHOTO);
     }
 
     private void savePost() {
@@ -143,7 +141,6 @@ public class EditPostActivity extends AppCompatActivity {
         }
         if (!postText.isEmpty() || postImageUriString != null ) {
             currentPost.setContent(postText);
-
 
             // Update the post using ViewModel
             postViewModel.updatePost(getCurrentUserId(), currentPost.getPostId(), currentPost, this);

@@ -4,7 +4,6 @@ public class User {
     private String _id; // Unique identifier
     private String displayname;
     private String profilepic;
-    // You can also add friendsList and friendRequests if you plan to fetch those
 
     // Constructor
     public User(String _id, String displayname, String profilepic) {
@@ -21,6 +20,4 @@ public class User {
 
     public String getProfilepic() { return profilepic; }
     public void setProfilepic(String profilepic) { this.profilepic = profilepic; }
-
-    // Additional methods for friendsList and friendRequests can be added as needed
 }
