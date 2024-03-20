@@ -26,6 +26,8 @@ public class FriendshipViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> acceptRequestResult = new MutableLiveData<>();
     private MutableLiveData<Boolean> declineRequestResult = new MutableLiveData<>();
     private MutableLiveData<Boolean> deleteFriend = new MutableLiveData<>();
+    private MutableLiveData<String> friendRequestResponse = new MutableLiveData<>();
+
 
     public LiveData<Boolean> getAcceptRequestResult() {
         return acceptRequestResult;
@@ -41,8 +43,10 @@ public class FriendshipViewModel extends AndroidViewModel {
         friendshipRepository = new FriendshipRepository(application.getApplicationContext());
     }
 
-    public LiveData<FriendRequestResponse> getFriendRequests(String userId) {
-        friendshipRepository.getFriendRequests(userId, new Callback<FriendRequestResponse>() {
+
+
+    public LiveData<FriendRequestResponse> getFriendRequests(String userId, String authToken) {
+        friendshipRepository.getFriendRequests(userId, authToken, new Callback<FriendRequestResponse>() {
             @Override
             public void onResponse(Call<FriendRequestResponse> call, Response<FriendRequestResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -66,7 +70,8 @@ public class FriendshipViewModel extends AndroidViewModel {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     // Now fetch the updated friend list
-                    getFriendList(userId); // Assuming you have a method like this already
+                    acceptRequestResult.postValue(response.isSuccessful());
+                    getFriendList(userId);
                 } else {
                     Log.e("FriendRequestAccept", "Failed to accept friend request.");
                 }
@@ -74,6 +79,7 @@ public class FriendshipViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                acceptRequestResult.postValue(null);
                 Log.e("FriendRequestAccept", "Error on accepting friend request: " + t.getMessage());
             }
         });
@@ -81,6 +87,28 @@ public class FriendshipViewModel extends AndroidViewModel {
 
     public LiveData<FriendRequestResponse> getFriendRequestsLiveData() {
         return friendRequests;
+    }
+
+    public LiveData<String> getFriendRequestResponse() {
+        return friendRequestResponse;
+    }
+
+    public void sendFriendRequest(String currentUserId, String receiverUserId) {
+        friendshipRepository.sendFriendRequest(currentUserId, receiverUserId, new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    friendRequestResponse.postValue("Friend request sent successfully!");
+                } else {
+                    friendRequestResponse.postValue("Failed to send friend request. HTTP status code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                friendRequestResponse.postValue("Error: " + t.getMessage());
+            }
+        });
     }
 
     public void declineFriendRequest(String userId, String friendId) {

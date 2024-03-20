@@ -1,15 +1,7 @@
 package com.example.foobook_android.Api;
 
-
-
-import android.util.Log;
-
-import com.example.foobook_android.models.User;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.utility.UserDetails;
-
-import java.util.List;
-
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

@@ -1,51 +1,31 @@
 package com.example.foobook_android.adapters;
 
-
 import static android.content.Context.MODE_PRIVATE;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.activities.CommentActivity;
 import com.example.foobook_android.activities.UserPostsActivity;
 import com.example.foobook_android.comment.CommentsDataHolder;
-import com.example.foobook_android.models.FriendshipRequest;
-import com.example.foobook_android.post.Creator;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
-import com.example.foobook_android.utility.RetrofitClient;
-import com.google.gson.Gson;
-
 import java.util.List;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
-    private static final int PHOTO_PICKED = 1;
-    private static final int NO_PHOTO = 0;
-
     private final Context context;
     private List<Post> posts;
     private final LayoutInflater inflater;
@@ -58,7 +38,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         this.posts = posts;
         this.listener = listener;
         this.inflater = LayoutInflater.from(context);
-        this.friendIds = friendIds;
     }
 
     @NonNull
@@ -68,24 +47,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         return new PostViewHolder(itemView);
 
     }
-
-//    public class ViewHolder extends RecyclerView.ViewHolder {
-//        // Other views
-//        ImageView profileImageView;
-//
-//        public ViewHolder(View itemView) {
-//            super(itemView);
-//            profileImageView = itemView.findViewById(R.id.profileImageView); // Assuming the ID is profileImageView
-//
-//            profileImageView.setOnClickListener(v -> {
-//                int position = getAdapterPosition();
-//                if (position != RecyclerView.NO_POSITION) {
-//                    Post post = posts.get(position);
-//                    sendFriendRequest(post.getCreatedBy()); // Assuming Post has a method getCreatedBy() returning the User ID
-//                }
-//            });
-//        }
-//    }
 
 
     @Override
@@ -102,7 +63,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             setImageFromDrawableName(holder.profileImageView, post.getProfileImage());
         }
 
-        // Set post image or hide if not applicable
         // Set post image or hide if not applicable
         if (post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
             holder.postImageView.setVisibility(View.VISIBLE);
@@ -163,50 +123,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         intent.putExtra("VIEWED_USER_PROFILE_PIC", ProfilePic);
         context.startActivity(intent);
     }
-
-
-    private String getCurrentUserId() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", "");
-    }
-
-    private String getAuthToken() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("token", "");
-        // Retrieve the auth token from SharedPreferences.
-    }
-
-    public void sendFriendRequest(String receiverUserId) {
-        String currentUserId = getCurrentUserId();
-        String authToken = getAuthToken();
-
-        // Assuming you have a FriendshipRequest model and Gson setup
-        FriendshipRequest friendshipRequest = new FriendshipRequest(currentUserId, receiverUserId);
-        Gson gson = new Gson();
-        String json = gson.toJson(friendshipRequest);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-
-        // Adjust the Retrofit call to match the expected parameters
-        RetrofitClient.getClient("http://10.0.2.2:8080/", authToken).create(WebServiceApi.class)
-                .sendFriendRequest(receiverUserId, requestBody, authToken) // Now matching the expected signature
-                .enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(context, "Friend request sent!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.e("FriendRequestError", "Failed to send friend request. HTTP status code: " + response.code() + " Message: " + response.message());
-                            Toast.makeText(context, "Failed to send friend request.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
 
 
     private void updateLikesAndComments(PostViewHolder holder, Post post, int position) {
@@ -283,9 +199,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                         return true;
                     } else if (item.getItemId() == R.id.menuDeletePost) {
                         listener.onDelete(postToEdit.getPostId());
-//                        posts.remove(position);
-//                        notifyItemRemoved(position);
-//                        notifyItemRangeChanged(position, getItemCount());
+
                         postMenu.show();
                         return true;
                     }
@@ -301,8 +215,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         postMenu.show();
     }
 
-
-
     public void removePostById(String postId) {
         int position = -1;
         for (int i = 0; i < posts.size(); i++) {
@@ -316,13 +228,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, posts.size());
         }
-    }
-
-    public Post getPostAt(int position) {
-        if (position >= 0 && position < posts.size()) {
-            return posts.get(position);
-        }
-        return null; // Or throw an exception based on how you want to handle this scenario
     }
 
     public interface PostItemListener {

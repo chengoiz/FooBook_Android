@@ -68,6 +68,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
         postViewModel.setToken(token);
+        Log.e("TOKEN FROM COMMENT ACTIVITY: ", token);
         postViewModel.fetchDisplayName(this, getCurrentUserId());
         // Observe the display name LiveData
         postViewModel.getDisplayNameLiveData().observe(this, displayName -> {
@@ -75,22 +76,13 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
                 this.fetchedDisplayName = displayName;
             }
         });
-        postViewModel.getDisplayNameLiveData().observe(this, displayName -> {
-            TextView displayNameTextView = findViewById(R.id.commentItemUsername);
-            if (displayName != null) {
-                displayNameTextView.setText(displayName);
-            } else {
-                displayNameTextView.setText("Unknown User");
-            }
-        });
         postViewModel.getProfilePicLiveData().observe(this, profilePic -> {
             if (profilePic != null && !profilePic.isEmpty()) {
                 this.fetchedProfilePic = profilePic;
-
-
             }
         });
     }
+
     private void setupCommentRecyclerView() {
         postPosition = getIntent().getIntExtra("postPosition", -1);
         if (postPosition == -1) {

@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class PasswordValidator {
 
     public static boolean validatePassword(String password) {
-        // checks if contains at least 1 letter and 1 number
+        // Checks if contains at least 1 letter and 1 number
         String regex = "(?=.*[a-zA-Z])(?=.*\\d)";
 
         Pattern pattern = Pattern.compile(regex);

@@ -1,5 +1,6 @@
 package com.example.foobook_android.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -31,8 +32,6 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendship_request);
         initialize();
-        fetchFriendRequests(userId);
-        observeViewModel();
     }
 
     private void observeViewModel() {
@@ -55,7 +54,7 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
 
     private void initialize() {
         userRepository = new UserRepository(this);
-        userId = userRepository.getIdFromSharedPreferences();
+        userId = userRepository.getUserId();
 
         friendRequestsRecyclerView = findViewById(R.id.friendRequestsRecyclerView);
         friendRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -63,9 +62,13 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
         friendRequestsRecyclerView.setAdapter(adapter);
 
         friendshipViewModel = new ViewModelProvider(this).get(FriendshipViewModel.class);
+
+        fetchFriendRequests(userId, "Bearer " + getAuthToken());
+        observeViewModel();
     }
-    private void fetchFriendRequests(String userId) {
-        friendshipViewModel.getFriendRequests(userId).observe(this, friendRequestResponse -> {
+
+    private void fetchFriendRequests(String userId, String authToken) {
+        friendshipViewModel.getFriendRequests(userId, authToken).observe(this, friendRequestResponse -> {
             if (friendRequestResponse != null && friendRequestResponse.getFriendRequests() != null) {
                 adapter.setUsers(friendRequestResponse.getFriendRequests());
             } else {
@@ -74,21 +77,11 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
         });
     }
 
-    // Inside your Activity or Fragment where you want to show the friend requests
-//    private void setupFriendRequestsObserver() {
-//        friendshipViewModel.getFriendRequestsLiveData().observe(this, friendRequestResponse -> {
-//            if (friendRequestResponse != null && friendRequestResponse.getFriendRequests() != null) {
-//                // Update your UI here with the friend requests data
-//                adapter.setUsers(friendRequestResponse.getFriendRequests());
-//            } else {
-//                Toast.makeText(this, "Failed to fetch friend requests.", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        // Trigger the data fetch
-//        friendshipViewModel.getFriendRequests(userId);
-//    }
-
+    private String getAuthToken() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        return sharedPreferences.getString("token", "");
+        // Retrieve the auth token from SharedPreferences.
+    }
 
     @Override
     public void onAcceptRequest(String userId, String friendId) {

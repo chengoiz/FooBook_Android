@@ -38,11 +38,4 @@ public interface PostDao {
     @Query("SELECT * FROM Post WHERE postId = :postId")
     LiveData<Post> getPostById(String postId);
 
-
-    //TODO: Add methods to fetch posts as per requirements ------- need to create isFriend
-//    @Query("SELECT * FROM post WHERE isFriend = 1 ORDER BY timestamp DESC LIMIT 20")
-//    List<Post> getLatestFriendPosts();
-//
-//    @Query("SELECT * FROM post WHERE isFriend = 0 ORDER BY timestamp DESC LIMIT 5")
-//    List<Post> getLatestNonFriendPosts();
 }

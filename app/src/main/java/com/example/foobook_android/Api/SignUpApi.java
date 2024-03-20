@@ -19,7 +19,7 @@ public class SignUpApi {
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/").
                 addConverterFactory(GsonConverterFactory.create()).
-                build(); // change the baseUrl later
+                build();
         webServiceApi = retrofit.create(WebServiceApi.class);
     }
 
@@ -43,13 +43,10 @@ public class SignUpApi {
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
                 userResponseData.setValue(new UserResponse(t.getMessage()));
             }
-
-
         });
         return userResponseData;
     }

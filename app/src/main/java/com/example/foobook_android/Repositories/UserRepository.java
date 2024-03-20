@@ -7,24 +7,26 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.foobook_android.Api.WebServiceApi;
-import com.example.foobook_android.utility.RetrofitClient;
 import com.example.foobook_android.utility.UserDetails;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserRepository {
-    private WebServiceApi webServiceApi;
-    private String token;
-    private String userId;
-    private Context context; // Add this
+    WebServiceApi webServiceApi;
+    private Retrofit retrofit;
+    private Context context;
 
     public UserRepository(Context context) {
         this.context = context.getApplicationContext();
-        token = getTokenFromSharedPreferences();
-        userId = getIdFromSharedPreferences();
-        this.webServiceApi = RetrofitClient.getClient("http://10.0.2.2:8080/", token).create(WebServiceApi.class);
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/").
+                addConverterFactory(GsonConverterFactory.create()).
+                build();
+        webServiceApi = retrofit.create(WebServiceApi.class);
     }
 
     public interface UserDetailsCallback {
@@ -33,25 +35,25 @@ public class UserRepository {
         void onError(Throwable throwable);
     }
 
-    private String getTokenFromSharedPreferences() {
+    private String getAuthToken() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         return sharedPreferences.getString("token", "");
     }
 
-    public String getIdFromSharedPreferences() {
+    public String getUserId() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         return sharedPreferences.getString("userId", "");
     }
 
     public void fetchUserDetails(String Id, UserDetailsCallback callback) {
 
-        if (Id == null || token == null) {
+        if (Id == null || getAuthToken() == null) {
             Log.e("UserRepository", "User ID or Token is not available.");
             callback.onError(new IllegalStateException("User ID or Token is not available."));
             return;
         }
 
-        Call<UserDetails> call = webServiceApi.getUserDetails(Id, "Bearer " + getTokenFromSharedPreferences());
+        Call<UserDetails> call = webServiceApi.getUserDetails(Id, "Bearer " + getAuthToken());
         call.enqueue(new Callback<UserDetails>() {
             @Override
             public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {

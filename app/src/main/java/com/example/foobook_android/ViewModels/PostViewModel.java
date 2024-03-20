@@ -27,7 +27,6 @@ public class PostViewModel extends AndroidViewModel {
     private MutableLiveData<String> displayNameLiveData = new MutableLiveData<>();
     private MutableLiveData<String> profilePicLiveData = new MutableLiveData<>();
     private MutableLiveData<PostsResponse> postsLiveData = new MutableLiveData<>();
-
     private String token;
 
 
