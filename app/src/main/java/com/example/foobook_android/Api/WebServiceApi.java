@@ -63,4 +63,6 @@ public interface WebServiceApi {
 
     @PATCH("api/users/{id}")
     Call<UserUpdateResponse> editUserDetails(@Path("id") String userId, @Body UserUpdateRequest request, @Header("Authorization") String authToken);
+    @DELETE("api/users/{id}")
+    Call<Void> deleteUser(@Header("Authorization") String authToken);
 }

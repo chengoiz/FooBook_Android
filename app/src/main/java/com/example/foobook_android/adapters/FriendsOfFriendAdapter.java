@@ -19,12 +19,17 @@ import com.example.foobook_android.models.User;
 
 import java.util.List;
 
+/**
+ * FriendsOfFriendAdapter is responsible for displaying a list of friends of a specific friend
+ * in a RecyclerView. It shows basic information about each friend, such as their name and profile picture.
+ */
 public class FriendsOfFriendAdapter extends RecyclerView.Adapter<FriendsOfFriendAdapter.ViewHolder> {
     private Context context;
-    private List<User> friendsOfFriends;
-    private final LayoutInflater inflater;
-    private String currentFriendId;
+    private List<User> friendsOfFriends; // List of friends of a specific friend
+    private final LayoutInflater inflater; // LayoutInflater to inflate the view for each item
+    private String currentFriendId; // The ID of the friend whose friends are being displayed
 
+    // Constructor initializing the adapter with necessary context, data, and friend ID
     public FriendsOfFriendAdapter(Context context, List<User> friendsOfFriends, String currentUserId) {
         this.context = context;
         this.friendsOfFriends = friendsOfFriends;
@@ -32,37 +37,43 @@ public class FriendsOfFriendAdapter extends RecyclerView.Adapter<FriendsOfFriend
         this.currentFriendId = currentUserId;
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout for each friend of friend item
         View view = inflater.inflate(R.layout.item_friend_of_friend, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Bind data for each friend of friend to the ViewHolder
         User friend = friendsOfFriends.get(position);
         holder.friendOfFriendText.setText(friend.getDisplayName());
+        // Load the friend's profile picture into the ImageView
         loadImage(holder.friendOfFriendProfilePic, friend.getProfilePic(), context);
     }
 
     @Override
     public int getItemCount() {
+        // Return the total number of friends of friends
         return friendsOfFriends.size();
     }
+
+    // ViewHolder class for managing the layout of each friend of friend item
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView friendOfFriendText;
-
-        ImageView friendOfFriendProfilePic;
-
+        TextView friendOfFriendText; // TextView for displaying the friend's name
+        ImageView friendOfFriendProfilePic; // ImageView for displaying the friend's profile picture
 
         public ViewHolder(View itemView) {
             super(itemView);
+            // Initialize UI components
             friendOfFriendText = itemView.findViewById(R.id.friendOfFriendText);
             friendOfFriendProfilePic = itemView.findViewById(R.id.friendOfFriendProfilePic);
         }
     }
+
+    // Updates the list of friends of friends and refreshes the RecyclerView
     public void setMyFriends(List<User> myFriends) {
         this.friendsOfFriends = myFriends;
         notifyDataSetChanged();

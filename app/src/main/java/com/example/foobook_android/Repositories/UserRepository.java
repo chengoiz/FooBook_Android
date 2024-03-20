@@ -36,6 +36,11 @@ public class UserRepository {
         void onError(Throwable throwable);
     }
 
+    public interface DeleteUserCallback {
+        void onSuccess();
+        void onError(String message);
+    }
+
     private String getAuthToken() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         return sharedPreferences.getString("token", "");
@@ -68,7 +73,23 @@ public class UserRepository {
         });
     }
 
+    public void deleteUser(DeleteUserCallback callback) {
+        webServiceApi.deleteUser("Bearer " + getAuthToken()).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess();
+                } else {
+                    callback.onError("Failed to delete user: " + response.message());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
 
 
         public void fetchUserDetails(String Id, UserDetailsCallback callback) {

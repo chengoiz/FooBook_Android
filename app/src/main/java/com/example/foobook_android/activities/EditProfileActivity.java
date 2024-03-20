@@ -1,6 +1,5 @@
 package com.example.foobook_android.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -31,7 +30,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private Uri profilePictureUri;
     private boolean isPhotoSelected = false;
     private UserViewModel userViewModel;
-
 
 
     @Override
@@ -97,10 +95,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
         // Now call the updateUserDetails method from UserViewModel
         userViewModel.updateUserDetails(displayName, profilePicUri);
-        navigateToFeedWithSuccessMessage();
+        navigateToFeedActivity();
     }
 
-    private void navigateToFeedWithSuccessMessage() {
+    private void navigateToFeedActivity() {
         Intent intent = new Intent(this, FeedActivity.class);
         // Clear the task stack and start fresh.
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
