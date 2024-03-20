@@ -1,5 +1,6 @@
 package com.example.foobook_android.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -7,10 +8,10 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -19,17 +20,19 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.foobook_android.ViewModels.PostViewModel;
+import com.example.foobook_android.ViewModels.UserViewModel;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
 import com.example.foobook_android.R;
 import com.example.foobook_android.adapters.PostAdapter;
-
 import java.util.ArrayList;
 
-
+/**
+ * The activity for displaying the main feed of posts. It allows users to view posts, refresh them,
+ * navigate to other activities like creating a post or viewing the friends list, and toggle night mode.
+ */
 public class FeedActivity extends AppCompatActivity implements PostAdapter.PostItemListener {
     private PostViewModel postViewModel;
     private static final int CAMERA_PERMISSION_CODE = 101;
@@ -37,6 +40,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     private PostAdapter postAdapter;
     private PhotoSelectorHelper photoSelectorHelper;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private UserViewModel userViewModel;
 
 
 
@@ -48,40 +52,70 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         recyclerView = findViewById(R.id.feedRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         initialize();
-        // Setup buttons and other UI components
+        // Setup UI components and their interactions
         setupButtons();
     }
 
+    /**
+     * Initializes the view model, adapter, and starts data fetch operations.
+     */
     private void initialize() {
         postAdapter = new PostAdapter(this, new ArrayList<>(), this);
         recyclerView.setAdapter(postAdapter);
 
-        // Initialize PostViewModel
+        // Initialize the ViewModels for posts and user management
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         postViewModel.fetchPostsFromServer(this);
+
+        // Observe changes in the posts and user deletion status
         postViewModel.getLatestPosts().observe(this, posts -> {
             postAdapter.setPosts(posts);
         });
+        userViewModel.getIsUserDeleted().observe(this, isDeleted -> {
+            if (isDeleted) {
+                Toast.makeText(FeedActivity.this, "User deleted successfully", Toast.LENGTH_SHORT).show();
+                navigateToLoginActivity();
+                finish();
+            }
+        });
+        userViewModel.getDeleteUserError().observe(this, error -> {
+            Toast.makeText(FeedActivity.this, error, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    /**
+     * Navigates the user to the login activity and clears the activity stack.
+     */
+    private void navigateToLoginActivity() {
+        Intent intent = new Intent(this, LogInActivity.class);
+        // Clear the task stack and start fresh.
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Handle the dark mode change here if necessary, without recreating the activity
+        // Handle any configuration changes, such as theme changes, without recreating the activity
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        // Save necessary state data
+        // Save any necessary state data here
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        // Restore state data
+        // Restore any necessary state data here
     }
 
+    /**
+     * Sets up button click listeners and the swipe refresh layout.
+     */
     private void setupButtons() {
         ImageButton addPostBtn = findViewById(R.id.addPost);
         addPostBtn.setOnClickListener(v -> onAdd());
@@ -114,11 +148,12 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         feedMenuBtn.setOnClickListener(this::showFeedMenu);
 
         SwitchCompat nightModeSwitch = findViewById(R.id.nightMode);
-        // Set the switch to reflect the current night mode state
+        // Check the current night mode state and update the switch accordingly
         int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         nightModeSwitch.setChecked(nightModeFlags == Configuration.UI_MODE_NIGHT_YES);
         nightModeSwitch.setOnClickListener(this::nightMode);
     }
+
 
 
     private void nightMode(View v) {
@@ -138,6 +173,9 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         }
     }
 
+    /**
+     * Refreshes the feed by fetching the latest posts and displaying them.
+     */
     private void fetchAndDisplayPosts() {
         // Observe the LiveData of posts from PostViewModel
         postViewModel.getLatestPosts().observe(this, posts -> {
@@ -151,8 +189,11 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         });
     }
 
-
-
+    /**
+     * Displays a menu for the feed with options like logout and edit profile.
+     *
+     * @param view The view that triggers the menu.
+     */
     private void showFeedMenu(View view) {
         PopupMenu feedMenu = new PopupMenu(this, view);
         feedMenu.inflate(R.menu.feed_menu);
@@ -168,28 +209,62 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
             } else if (itemId == R.id.EditProfile) {
                 // Handle edit profile action
                 Intent editProfileIntent = new Intent(this, EditProfileActivity.class);
+                // Navigate to the edit profile activity
                 startActivity(editProfileIntent);
                 return true;
+            }
+            else if (itemId == R.id.DeleteUser) {
+                // Show confirmation dialog for account deletion
+                showDeleteConfirmationDialog();
             }
             return false;
         });
         feedMenu.show();
     }
 
+    /**
+     * Displays a confirmation dialog for account deletion.
+     */
+    private void showDeleteConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Account")
+                .setMessage("Are you sure you want to delete your account?")
+                // Set the positive Yes button and its logic
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        userViewModel.deleteUserAccount();
+                    }
+                })
+                // Set the negative No button and do nothing when it's clicked
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 
-
-
+    /**
+     * Starts the activity to add a new post.
+     */
     public void onAdd() {
         Intent createPostIntent = new Intent(this, CreatePostActivity.class);
         startActivity(createPostIntent);
     }
 
+    /**
+     * Starts the activity to edit a selected post.
+     *
+     * @param post The post to edit.
+     */
     public void onEdit(Post post) {
         Intent editIntent = new Intent(FeedActivity.this, EditPostActivity.class);
-        editIntent.putExtra("postId", post.getPostId()); // Pass the post's ID
+        editIntent.putExtra("postId", post.getPostId()); // Pass the post ID to the edit activity
         startActivity(editIntent);
     }
 
+    /**
+     * Deletes a post by its ID.
+     *
+     * @param postId The ID of the post to delete.
+     */
     public void onDelete(String postId) {
         if (postId == null) {
             Toast.makeText(this, "Error deleting post.", Toast.LENGTH_SHORT).show();
@@ -206,7 +281,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        postAdapter.notifyDataSetChanged();
+        postAdapter.notifyDataSetChanged(); // Refresh the adapter's data
     }
 
 
@@ -224,6 +299,11 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         }
     }
 
+    /**
+     * Retrieves the current user ID from shared preferences.
+     *
+     * @return The current user ID.
+     */
     private String getCurrentUserId() {
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
         return sharedPreferences.getString("userId", "");

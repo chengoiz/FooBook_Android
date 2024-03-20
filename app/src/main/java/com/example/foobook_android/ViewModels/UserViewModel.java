@@ -2,6 +2,7 @@ package com.example.foobook_android.ViewModels;
 
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.utility.UserDetails;
@@ -11,6 +12,9 @@ public class UserViewModel extends AndroidViewModel {
     private UserRepository userRepository;
     private MutableLiveData<UserDetails> userDetailsLiveData;
     private MutableLiveData<String> errorLiveData;
+    private MutableLiveData<String> deleteUserError = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isUserDeleted = new MutableLiveData<>();
+
 
     public UserViewModel(Application application) {
         super(application);
@@ -27,8 +31,30 @@ public class UserViewModel extends AndroidViewModel {
         return errorLiveData;
     }
 
+    public void deleteUserAccount() {
+        userRepository.deleteUser(new UserRepository.DeleteUserCallback() {
+            @Override
+            public void onSuccess() {
+                isUserDeleted.postValue(true);
+            }
+
+            @Override
+            public void onError(String message) {
+                deleteUserError.postValue(message);
+            }
+        });
+    }
+
+    public LiveData<Boolean> getIsUserDeleted() {
+        return isUserDeleted;
+    }
+
+    public LiveData<String> getDeleteUserError() {
+        return deleteUserError;
+    }
+
     public void updateUserDetails(String displayName, String profilePicUri) {
-        // The userId should be retrieved from the repository or ViewModel's stored data.
+        // The userId is retrieved from the repository's stored data.
         String userId = userRepository.getUserId();
 
         userRepository.updateUserDetails(userId, displayName, profilePicUri, new UserRepository.UserDetailsCallback() {
@@ -45,5 +71,4 @@ public class UserViewModel extends AndroidViewModel {
             }
         });
     }
-
 }

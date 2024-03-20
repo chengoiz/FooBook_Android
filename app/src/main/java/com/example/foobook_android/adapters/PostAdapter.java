@@ -25,14 +25,20 @@ import com.example.foobook_android.R;
 import java.util.List;
 
 
+/**
+ * PostAdapter is responsible for displaying a list of posts in a RecyclerView,
+ * including details such as the post's creator name, timestamp, content, and images.
+ * It also provides interaction capabilities like liking, commenting, sharing, and editing posts
+ * through designated buttons and menus.
+ */
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private final Context context;
-    private List<Post> posts;
-    private final LayoutInflater inflater;
-    private final PostItemListener listener;
-    private List<String> friendIds;
+    private List<Post> posts; // List of posts to be displayed
+    private final LayoutInflater inflater; // LayoutInflater to inflate the view for each post item
+    private final PostItemListener listener; // Listener for post item interactions
 
 
+    // Constructor initializing the adapter with necessary context, data, and listener
     public PostAdapter(Context context, List<Post> posts, PostItemListener listener) {
         this.context = context;
         this.posts = posts;
@@ -43,6 +49,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout for each post item
         View itemView = inflater.inflate(R.layout.post_item, parent, false);
         return new PostViewHolder(itemView);
 
@@ -52,18 +59,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Post post = posts.get(position);
+        // Setting text views for user name, timestamp, and post content
         holder.userNameTextView.setText(post.getCreator().getDisplayName());
         holder.timeStampTextView.setText(post.getTimestamp());
         holder.postContentTextView.setText(post.getText());
 
-        // Set profile image
+        // Setting the profile picture of the post creator
         if (post.getCreator().getProfilePic() != null && !post.getCreator().getProfilePic().isEmpty()) {
             loadImage(holder.profileImageView, post.getCreator().getProfilePic());
         } else {
+            // Set a default or specified drawable if no profile picture is available
             setImageFromDrawableName(holder.profileImageView, post.getProfileImage());
         }
 
-        // Set post image or hide if not applicable
+        // Handling the display of the post image if available
         if (post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
             holder.postImageView.setVisibility(View.VISIBLE);
             loadImage(holder.postImageView, post.getImageUrl());
@@ -71,25 +80,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             holder.postImageView.setVisibility(View.GONE);
         }
 
+        // Update likes and comments counters
         updateLikesAndComments(holder, post, position);
         holder.profileImageView.setOnClickListener(view -> showProfilePictureMenu(view, holder));
 
 
-        // Like button click handling
+        // Set onClickListeners for like, comment, edit, and share buttons
         holder.feedBtnLike.setOnClickListener(v -> updateLikes(holder, post));
-
-        // Comment button click handling
         holder.feedCommentBtn.setOnClickListener(v -> startCommentActivity(position));
-
-        // Menu button handling
         holder.editPostMenu.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 showPostMenu(v, listener, adapterPosition);
             }
         });
-
-        // Share button click
         holder.shareButton.setOnClickListener(this::showShareMenu);
     }
 
@@ -124,7 +128,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         context.startActivity(intent);
     }
 
-
+    // Method to update likes and comments display for a post
     private void updateLikesAndComments(PostViewHolder holder, Post post, int position) {
         holder.likesCountTextView.setText(context.getString(R.string.likes_count,
                                         post.getLikesCount()));
@@ -133,38 +137,42 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                                         commentCount));
     }
 
+    // Method to handle like button click, toggles the like status and updates the display
     private void updateLikes(PostViewHolder holder, Post post) {
         boolean isLiked = post.toggleLike();
         holder.likesCountTextView.setText(context.getString(R.string.likes_count,
                 post.getLikesCount()));
         if (isLiked) {
-            holder.feedBtnLike.setImageResource(R.drawable.btn_like_blue);
+            holder.feedBtnLike.setImageResource(R.drawable.btn_like_blue); // Highlight the like button
         } else {
-            holder.feedBtnLike.setImageResource(R.drawable.btn_like);
+            holder.feedBtnLike.setImageResource(R.drawable.btn_like); // Revert to default like button
         }
     }
 
+    // Starts an activity for commenting on a post
     private void startCommentActivity(int position) {
         Intent intent = new Intent(context, CommentActivity.class);
-        intent.putExtra("postPosition", position);
+        intent.putExtra("postPosition", position); // Pass the position of the post being commented on
         context.startActivity(intent);
     }
 
+    // Method to load images from a URL into an ImageView using a library like Glide or Picasso
     public void loadImage(ImageView imageView, String imageUrl) {
         Glide.with(context)
                 .load(imageUrl)
-                .placeholder(R.drawable.defaultpic)
-                .error(R.drawable.saved)
+                .placeholder(R.drawable.defaultpic) // Default placeholder if the image is being loaded
+                .error(R.drawable.saved) // Error drawable if the image fails to load
                 .into(imageView);
     }
 
+    // Method to set an image from drawable resources by its name
     public void setImageFromDrawableName(ImageView imageView, String drawableName) {
         if (drawableName != null && !drawableName.isEmpty()) {
             Resources resources = context.getResources();
             int resourceId = resources.getIdentifier(drawableName, "drawable", context.getPackageName());
             imageView.setImageResource(resourceId != 0 ? resourceId : R.drawable.defaultpic);
         } else {
-            imageView.setImageResource(R.drawable.defaultpic); // Default image if drawableName is null
+            imageView.setImageResource(R.drawable.defaultpic); // Default image if drawable name is not provided
         }
     }
 
@@ -176,18 +184,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     private void showShareMenu(View view) {
         PopupMenu shareMenu = new PopupMenu(view.getContext(), view);
         shareMenu.inflate(R.menu.share_button_menu);
-        shareMenu.setOnMenuItemClickListener(item -> false);
+        shareMenu.setOnMenuItemClickListener(item -> false); // Handling of share actions is not implemented here
         shareMenu.show();
     }
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return posts.size(); // Return the total number of posts
     }
 
+    // Displays a share menu for a post
     private void showPostMenu(View view, PostItemListener listener, int position) {
         PopupMenu postMenu = new PopupMenu(view.getContext(), view);
-        postMenu.inflate(R.menu.post_menu);
+        postMenu.inflate(R.menu.post_menu); // Assume a menu resource exists for post options
         postMenu.setOnMenuItemClickListener(item -> {
             if (!posts.isEmpty()) {
                 Post postToEdit = posts.get(position);
@@ -215,6 +224,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         postMenu.show();
     }
 
+    // Removes a post from the adapter based on its ID and notifies the RecyclerView
     public void removePostById(String postId) {
         int position = -1;
         for (int i = 0; i < posts.size(); i++) {
@@ -230,13 +240,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
     }
 
+    // Interface for post item interaction listeners
     public interface PostItemListener {
         void onEdit(Post post);
 
         void onDelete(String postId);
     }
 
+    // ViewHolder class to manage the layout of each post item
     static class PostViewHolder extends RecyclerView.ViewHolder {
+        // Declare UI components for the post
         TextView userNameTextView, timeStampTextView, postContentTextView, likesCountTextView,
                 commentsCountTextView;
         ImageView profileImageView, postImageView;
@@ -244,6 +257,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         PostViewHolder(View itemView) {
             super(itemView);
+            // Initialize UI components
             userNameTextView = itemView.findViewById(R.id.userNameTextView);
             timeStampTextView = itemView.findViewById(R.id.timeStampTextView);
             postContentTextView = itemView.findViewById(R.id.postContentTextView);
