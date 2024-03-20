@@ -15,36 +15,28 @@
         android:paddingHorizontal="10dp">
 
         <TextView
-            android:id="@+id/textView4"
-            android:text="@string/app_name"
-            style="@style/pageTitle" />
+            android:id="@+id/createAPost"
+            style="@style/pageTitle"
+            android:text="Create Post"
+            android:textSize="45dp"
+            android:paddingStart="90dp"
+            android:paddingTop="15dp"
+            android:layout_centerHorizontal="true"
+            />
+
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/foobook_logo" />
 
 
         <View
             android:layout_width="150dp"
             android:layout_height="0dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="11dp"
-            android:layout_toStartOf="@+id/messageView"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btn_search">
-
-        </ImageButton>
-
-        <ImageButton
-            android:id="@+id/messageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="1dp"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/btn_messenger"
-            android:layout_alignParentEnd="true">
-
-
-        </ImageButton>
 
     </RelativeLayout>
 
@@ -81,6 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:paddingStart="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/postTextInputLayout"
             app:layout_constraintEnd_toStartOf="@+id/btnCamera"
             app:layout_constraintTop_toTopOf="@+id/postTextInputLayout"
@@ -113,13 +106,14 @@
 
     <Button
         android:id="@+id/postButton"
-        android:layout_width="wrap_content"
+        android:layout_width="101dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/newPostLayout"
         android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="292dp"
         android:layout_marginBottom="16dp"
         android:text="@string/feedBtnPost" />
 

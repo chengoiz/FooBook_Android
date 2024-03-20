@@ -4,17 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
-
 import com.example.foobook_android.R;
 import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.ViewModels.FriendshipViewModel;
 import com.example.foobook_android.adapters.FriendListAdapter;
-
-
 import java.util.ArrayList;
 
 public class FriendsListActivity extends AppCompatActivity implements FriendListAdapter.FriendListListener{

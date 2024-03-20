@@ -100,7 +100,13 @@ public class FriendshipViewModel extends AndroidViewModel {
                 if (response.isSuccessful()) {
                     friendRequestResponse.postValue("Friend request sent successfully!");
                 } else {
-                    friendRequestResponse.postValue("Failed to send friend request. HTTP status code: " + response.code());
+                    if (response.code() == 400) {
+                        friendRequestResponse.postValue("You already have a pending friend request from this user. Check your friend requests to accept it.");
+                    }
+                    else {
+                        friendRequestResponse.postValue("Friend request already sent or you are already friends.");
+
+                    }
                 }
             }
 

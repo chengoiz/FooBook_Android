@@ -9,12 +9,19 @@
         android:id="@+id/friendListTitle"
         style="@style/pageTitle"
         android:text="@string/friend_list"
+        android:paddingTop="20dp"
+        android:paddingStart="50dp"
+        android:textSize="50dp"
         android:layout_centerHorizontal="true"
         />
-    <TextView
-        android:id="@+id/textView4"
-        style="@style/pageTitle"
-        android:text="@string/app_name" />
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/foobook_logo" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendListRecycleView"
