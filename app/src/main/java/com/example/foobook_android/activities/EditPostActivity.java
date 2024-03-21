@@ -182,7 +182,7 @@ public class EditPostActivity extends AppCompatActivity {
             currentPost.setImageUrl(postImageUriString);
 
             // Update the post using ViewModel
-            postViewModel.update(currentPost);
+            postViewModel.updatePost(getCurrentUserId(), currentPost.getPostId(), currentPost, this);
 
             Toast.makeText(EditPostActivity.this, "Post updated successfully", Toast.LENGTH_SHORT).show();
             finish(); // Close the activity
