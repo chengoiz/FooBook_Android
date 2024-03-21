@@ -122,6 +122,7 @@ public class LogInActivity extends AppCompatActivity {
 
     // Navigates to FeedActivity
     private void navigateToFeedActivity() {
+        finish();
         startActivity(new Intent(this, FeedActivity.class));
     }
 

@@ -1,4 +1,8 @@
 # FooBook_Android: Part 3 - Database Integration and Enhanced Features
+<p align="center">
+  <img src="https://github.com/RoeiMesi/FooBook_Android/assets/23407020/3d17bb9e-deb7-4f75-a8d4-13802d6e0e38" alt="foobook_logo">
+</p>
+
 Welcome to Part 3 of the FooBook_Android project. This phase brings critical updates to the app, integrating MongoDB for backend storage and Room for local database management. We've also incorporated JWT for secure authentication, enhanced UI components, and introduced a complete friend system, alongside other robust features.
 
 ## Getting Started
@@ -20,9 +24,9 @@ Update the Android SDK to the latest available version.
 4. **Sync Gradle: Use the 'Sync Now' feature in Android Studio to sync your project with the updated dependencies.**
 
 ### Configuration
-- **MongoDB:*- Configure your MongoDB Atlas with the necessary collections and link it to the app with the correct URI.
-- **Room Database:*- Set up Room entities, DAOs, and database instances to mirror the MongoDB structure for local storage.
-- **JWT Authentication:*- Ensure your server-side authentication system is ready to issue JWT tokens for secure communication.
+- **MongoDB:**- Configure your MongoDB Atlas with the necessary collections and link it to the app with the correct URI.
+- **Room Database:**- Set up Room entities, DAOs, and database instances to mirror the MongoDB structure for local storage.
+- **JWT Authentication:**- Ensure your server-side authentication system is ready to issue JWT tokens for secure communication.
 
 ## New Features and Improvements
 

@@ -75,6 +75,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         userViewModel.getIsUserDeleted().observe(this, isDeleted -> {
             if (isDeleted) {
                 Toast.makeText(FeedActivity.this, "User deleted successfully", Toast.LENGTH_SHORT).show();
+                finish();
                 navigateToLoginActivity();
                 finish();
             }
@@ -91,6 +92,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         Intent intent = new Intent(this, LogInActivity.class);
         // Clear the task stack and start fresh.
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        finish();
         startActivity(intent);
 
     }
@@ -203,6 +205,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
                 // Handle logout action
                 Intent logoutIntent = new Intent(this, LogInActivity.class);
                 Toast.makeText(FeedActivity.this, "Logged-out successfully", Toast.LENGTH_SHORT).show();
+                finish();
                 startActivity(logoutIntent);
                 finish(); // Close the current activity
                 return true;
