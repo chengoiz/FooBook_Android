@@ -20,9 +20,9 @@ Update the Android SDK to the latest available version.
 4. **Sync Gradle: Use the 'Sync Now' feature in Android Studio to sync your project with the updated dependencies.**
 
 ### Configuration
-- **MongoDB:*- Configure your MongoDB Atlas with the necessary collections and link it to the app with the correct URI.
-- **Room Database:*- Set up Room entities, DAOs, and database instances to mirror the MongoDB structure for local storage.
-- **JWT Authentication:*- Ensure your server-side authentication system is ready to issue JWT tokens for secure communication.
+- **MongoDB:**- Configure your MongoDB Atlas with the necessary collections and link it to the app with the correct URI.
+- **Room Database:**- Set up Room entities, DAOs, and database instances to mirror the MongoDB structure for local storage.
+- **JWT Authentication:**- Ensure your server-side authentication system is ready to issue JWT tokens for secure communication.
 
 ## New Features and Improvements
 
