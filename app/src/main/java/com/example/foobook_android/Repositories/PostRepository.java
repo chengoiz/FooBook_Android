@@ -15,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import com.example.foobook_android.Api.ApiResponse;
 import com.example.foobook_android.Api.FeedResponse;
 import com.example.foobook_android.Api.PostsResponse;
+import com.example.foobook_android.Api.ToggleLikeResponse;
 import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.daos.PostDao;
 import com.example.foobook_android.database.PostDB;
@@ -36,6 +37,7 @@ public class PostRepository {
     private Retrofit retrofit;
     private final WebServiceApi webServiceApi;
     private final LiveData<List<Post>> latestPosts;
+    private Context context;
 
     public PostRepository(Application application) {
         PostDB db = PostDB.getInstance(application);
@@ -46,6 +48,7 @@ public class PostRepository {
                 addConverterFactory(GsonConverterFactory.create()).
                 build(); // change the baseUrl later
         webServiceApi = retrofit.create(WebServiceApi.class);
+        this.context = application;
     }
 
     public LiveData<List<Post>> getLatestPosts() {
@@ -133,6 +136,14 @@ public class PostRepository {
                 Log.e("PostRepository", "Error deleting post", t);
             }
         });
+    }
+
+    public void toggleLike(String postId, final Callback<ToggleLikeResponse> callback) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
+        String authToken = sharedPreferences.getString("token", "");
+
+        Call<ToggleLikeResponse> call = webServiceApi.toggleLike(postId, "Bearer " + authToken);
+        call.enqueue(callback);
     }
 
     public void fetchAndProcessPosts(Context context) {

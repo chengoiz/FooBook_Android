@@ -109,7 +109,7 @@ public class EditPostActivity extends AppCompatActivity {
      * Initializes helper classes used within the activity.
      */
     private void initializeHelpers() {
-        postAdapter = new PostAdapter(this, PostManager.getPosts(), null);
+        postAdapter = new PostAdapter(this, PostManager.getPosts(), null, postViewModel);
         photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE,
                 GALLERY_REQUEST_CODE, this::setImage);
     }

@@ -1,75 +1,64 @@
-# FooBook_Android
-## Part 2 of the Final Project in the Advanced Systems Programming Course
+# FooBook_Android: Part 3 - Database Integration and Enhanced Features
+Welcome to Part 3 of the FooBook_Android project. This phase brings critical updates to the app, integrating MongoDB for backend storage and Room for local database management. We've also incorporated JWT for secure authentication, enhanced UI components, and introduced a complete friend system, alongside other robust features.
 
-### Getting Started
-Follow these instructions to get a copy of the project up and running on your local machine for development.
+## Getting Started
+To get started with these new features, please follow the instructions below.
 
-### Installing
-A step-by-step series to get a development environment running:
+### Prerequisites
+Ensure that you have the latest version of Android Studio.
+Verify that your MongoDB Atlas cluster is active and accessible.
+Update the Android SDK to the latest available version.
 
-1. **Clone the repo or download the ZIP file**
-    - Git clone `https://github.com/RoeiMesi/FooBook_Android`
-    - Open Android Studio and press "Get from VCS" and paste the URL.
-    - Or download and extract the ZIP file from the GitHub repository page and open this folder from Android Studio.
+### Installation
+1. **Clone the Repository:**
+   **git clone https://github.com/RoeiMesi/FooBook_Android**
+   
+2. **Open Project: Launch Android Studio and open the cloned project.**
 
-2. **Android SDK**
-    - Your Android Studio SDK needs to be configured to:
-        - Minimal API Level: 29.
-        - Optimal API Level: 34.
+3. **Add Dependencies: Update your build.gradle with MongoDB, Room, Retrofit, and other required libraries.**
 
-3. **Sync project with gradle files and add configuration**
-   - After cloning, at the top right of your IDE, press the "Sync Project with Gradle Files".
-   - At the top of your screen click on "Add configuration" -> Add new -> Android App
-   - -> Pick a name for the app, and in the 'Module' category, choose: FooBook_Android.app.main
+4. **Sync Gradle: Use the 'Sync Now' feature in Android Studio to sync your project with the updated dependencies.**
 
-4. **Make sure you have an emulator or device set up.**
+### Configuration
+- **MongoDB:*- Configure your MongoDB Atlas with the necessary collections and link it to the app with the correct URI.
+- **Room Database:*- Set up Room entities, DAOs, and database instances to mirror the MongoDB structure for local storage.
+- **JWT Authentication:*- Ensure your server-side authentication system is ready to issue JWT tokens for secure communication.
 
-5. **Build and run the application.**
+## New Features and Improvements
 
-### Login
-To login, use our hardcoded credentials:
-- Username: Tomer
-- Password: a5k8b123
+### User Authentication and Security
+- Integrated JWT-based authentication for secure login and registration.
+- Ensured all backend endpoints require valid JWT for access.
 
-### Registration
-- All the fields are required for the registration.
-- Your password must be of size 8 characters and include at least one letter and one number.
-- Note: For this part of the project registration is not saved and you can login only with the hardcoded details, valid registration will transport you back to the login page.
+### Friend System
+- Implemented a comprehensive friend system allowing users to send, view, and manage friend requests.
+- Integrated friend features into user profiles with functionality to view and manage friends and friend lists.
 
-### Feed
-- **Adding a Post**: To add a post, click the "PLUS" button at the top of the screen. This will transport you to a new page where you can manage all your input. Blank posts are permitted.
-- **Editing/Deleting a Post**: To edit or delete a post, click the edit button located in the upper right corner of the post.
-- **Editing functionalities**: Editing will transport you to a new page where you can change the text if wanted, change the photo if wanted, or remove the current photo of the post. If no photo exists, there will be no button to remove it.
-- **Commenting on a Post**: To comment on a post, you need to click on the comment button, this will transport you to a new page where you will see all the comments.
-- **Adding a Comment**: To add a comment, type your text into the input box and press the send icon.
-- **Editing a Comment**: To edit a comment, click the edit button, make your changes, and then click save icon.
-- **Deleting a Comment**: To delete a comment, click the delete button.
-- **Liking a Post**: To like a post, simply click the like button.
-- **Logging Out**: To logout, click the logout button located on the lower right side of the page.
-- **Dark Mode**: To switch to dark mode, press the dark mode button on the top of the screen.
+### UI and UX Enhancements
+- Refined UI components for improved navigation and aesthetics, including a dark mode setting.
+- Implemented photo selection in post creation and profile editing for a more personalized user experience.
+- Applied consistent theming and data binding for smoother UI updates.
 
-# Project Development Approach
+### Database Management
+- Implemented MongoDB for storing posts and user data.
+- Integrated Room for local data persistence and offline functionality.
+- Established mechanisms for syncing local and remote databases.
 
-## Starting Out
+### Error Handling and Data Compliance
+- Improved error handling for a smoother user experience.
+- Ensured data handling complies with privacy standards.
 
-- Initial inspiration came from examining the Facebook app to determine the design elements and views we wanted to incorporate.
-- With a vision for our basic structure, we began crafting the activity layouts using XML within Android Studio.
-- We drew each page on a piece of paper to give us a sense of direction as for the design part.
+## Development and Testing
+### Development Approach
+- Mapped out the user journey and data flow to ensure a seamless experience.
+- Followed a modular development approach for independent feature testing and integration.
+- Adopted MVVM architecture for maintainable and testable code.
 
-## Adding Functionality
+### Testing
+- Performed thorough unit and integration tests on individual features.
+- Conducted end-to-end testing to ensure feature compatibility and data integrity.
+- Tested the app on various devices and Android versions to ensure consistent performance.
 
-- With our main layouts established, we turned our attention to incorporating various functionalities across the app.
-- To maintain organization and adhere to the principle of separation of concerns, we introduced new classes responsible for distinct functionalities such as managing posts and comments, implementing validators, and more.
-- Efforts were also placed on enhancing user interactions, adding navigational flows between different app pages, managing permissions, among other enhancements.
-
-## Updating the Design
-
-- After embedding the core functionalities, we revisited our design, implementing adjustments to refine the app's aesthetics and user experience.
-
-## Testing and Fixing
-
-- The app underwent rigorous testing on a variety of devices and Android versions to identify and rectify any issues, ensuring compatibility and a smooth user experience across different platforms.
-
-## Wrap-up
-
-- Our development journey began with a simple conceptual sketch to capture the envisioned look and feel of the app. Following this, we laid out the foundational design, progressively building upon it with essential functionalities. Subsequent phases focused on design refinement, extensive testing on multiple devices, and necessary adjustments to deliver an app that performs seamlessly across a wide range of devices, embodying our initial vision and objectives.
+### Wrap-Up
+The latest update to FooBook_Android represents a significant leap forward in functionality and user experience. We invite you to test these new features, provide feedback, and contribute to further improvements.
+For more detailed information on each update, refer to the individual Jira tasks linked within this document.

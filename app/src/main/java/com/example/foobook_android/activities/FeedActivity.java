@@ -60,7 +60,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
      * Initializes the view model, adapter, and starts data fetch operations.
      */
     private void initialize() {
-        postAdapter = new PostAdapter(this, new ArrayList<>(), this);
+        postAdapter = new PostAdapter(this, new ArrayList<>(), this, postViewModel);
         recyclerView.setAdapter(postAdapter);
 
         // Initialize the ViewModels for posts and user management
@@ -180,7 +180,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         // Observe the LiveData of posts from PostViewModel
         postViewModel.getLatestPosts().observe(this, posts -> {
             if (postAdapter == null) {
-                postAdapter = new PostAdapter(FeedActivity.this, posts, FeedActivity.this);
+                postAdapter = new PostAdapter(FeedActivity.this, posts, FeedActivity.this, postViewModel);
                 recyclerView.setAdapter(postAdapter);
             } else {
                 postAdapter.setPosts(posts);
@@ -312,7 +312,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
 
     private void updateUI() {
         if (postAdapter == null) {
-            postAdapter = new PostAdapter(this, PostManager.getPosts(), this);
+            postAdapter = new PostAdapter(this, PostManager.getPosts(), this, postViewModel);
             recyclerView.setAdapter(postAdapter);
         } else {
             postAdapter.notifyDataSetChanged();
