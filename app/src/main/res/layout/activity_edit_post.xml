@@ -112,14 +112,14 @@
       android:layout_marginTop="6dp"
       android:layout_marginEnd="292dp"
       android:layout_marginBottom="16dp"
-      android:text="@string/feedBtnPost" />
+      android:text="@string/feedSavePost" />
 
   <Button
       android:id="@+id/removePhoto"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_below="@id/newPostLayout"
-      android:layout_marginStart="16dp"
+      android:layout_marginStart="125dp"
       android:layout_marginTop="5dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"

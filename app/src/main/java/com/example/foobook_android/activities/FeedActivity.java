@@ -1,6 +1,6 @@
 package com.example.foobook_android.activities;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -60,7 +60,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
      * Initializes the view model, adapter, and starts data fetch operations.
      */
     private void initialize() {
-        postAdapter = new PostAdapter(this, new ArrayList<>(), this, postViewModel);
+        postAdapter = new PostAdapter(this, new ArrayList<>(), this);
         recyclerView.setAdapter(postAdapter);
 
         // Initialize the ViewModels for posts and user management
@@ -69,9 +69,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         postViewModel.fetchPostsFromServer(this);
 
         // Observe changes in the posts and user deletion status
-        postViewModel.getLatestPosts().observe(this, posts -> {
-            postAdapter.setPosts(posts);
-        });
+        postViewModel.getLatestPosts().observe(this, posts -> postAdapter.setPosts(posts));
         userViewModel.getIsUserDeleted().observe(this, isDeleted -> {
             if (isDeleted) {
                 Toast.makeText(FeedActivity.this, "User deleted successfully", Toast.LENGTH_SHORT).show();
@@ -80,9 +78,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
                 finish();
             }
         });
-        userViewModel.getDeleteUserError().observe(this, error -> {
-            Toast.makeText(FeedActivity.this, error, Toast.LENGTH_SHORT).show();
-        });
+        userViewModel.getDeleteUserError().observe(this, error -> Toast.makeText(FeedActivity.this, error, Toast.LENGTH_SHORT).show());
     }
 
     /**
@@ -98,19 +94,19 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Handle any configuration changes, such as theme changes, without recreating the activity
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save any necessary state data here
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         // Restore any necessary state data here
     }
@@ -182,7 +178,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         // Observe the LiveData of posts from PostViewModel
         postViewModel.getLatestPosts().observe(this, posts -> {
             if (postAdapter == null) {
-                postAdapter = new PostAdapter(FeedActivity.this, posts, FeedActivity.this, postViewModel);
+                postAdapter = new PostAdapter(FeedActivity.this, posts, FeedActivity.this);
                 recyclerView.setAdapter(postAdapter);
             } else {
                 postAdapter.setPosts(posts);
@@ -233,11 +229,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
                 .setTitle("Delete Account")
                 .setMessage("Are you sure you want to delete your account?")
                 // Set the positive Yes button and its logic
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        userViewModel.deleteUserAccount();
-                    }
-                })
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> userViewModel.deleteUserAccount())
                 // Set the negative No button and do nothing when it's clicked
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -282,6 +274,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         postAdapter.notifyDataSetChanged(); // Refresh the adapter's data
@@ -313,9 +306,10 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private void updateUI() {
         if (postAdapter == null) {
-            postAdapter = new PostAdapter(this, PostManager.getPosts(), this, postViewModel);
+            postAdapter = new PostAdapter(this, PostManager.getPosts(), this);
             recyclerView.setAdapter(postAdapter);
         } else {
             postAdapter.notifyDataSetChanged();

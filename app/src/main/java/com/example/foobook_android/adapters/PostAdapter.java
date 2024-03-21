@@ -1,10 +1,8 @@
 package com.example.foobook_android.adapters;
 
-import static android.content.Context.MODE_PRIVATE;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.activities.CommentActivity;
 import com.example.foobook_android.activities.UserPostsActivity;
 import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
-
-import java.lang.reflect.Method;
 import java.util.List;
 
 
@@ -39,16 +34,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     private List<Post> posts; // List of posts to be displayed
     private final LayoutInflater inflater; // LayoutInflater to inflate the view for each post item
     private final PostItemListener listener; // Listener for post item interactions
-    private PostViewModel postViewModel;
 
 
     // Constructor initializing the adapter with necessary context, data, and listener
-    public PostAdapter(Context context, List<Post> posts, PostItemListener listener, PostViewModel postViewModel) {
+    public PostAdapter(Context context, List<Post> posts, PostItemListener listener) {
         this.context = context;
         this.posts = posts;
         this.listener = listener;
         this.inflater = LayoutInflater.from(context);
-        this.postViewModel = postViewModel;
     }
 
     @NonNull
@@ -185,13 +178,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void setImageFromDrawableName(ImageView imageView, String drawableName) {
         if (drawableName != null && !drawableName.isEmpty()) {
             Resources resources = context.getResources();
-            int resourceId = resources.getIdentifier(drawableName, "drawable", context.getPackageName());
+            @SuppressLint("DiscouragedApi") int resourceId = resources.getIdentifier(drawableName, "drawable", context.getPackageName());
             imageView.setImageResource(resourceId != 0 ? resourceId : R.drawable.defaultpic);
         } else {
             imageView.setImageResource(R.drawable.defaultpic); // Default image if drawable name is not provided
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setPosts(List<Post> posts) {
         this.posts = posts;
         notifyDataSetChanged();

@@ -1,5 +1,6 @@
 package com.example.foobook_android.Repositories;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -17,11 +18,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginRepository {
-    private Retrofit retrofit;
     WebServiceApi webServiceApi;
 
     public LoginRepository() {
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/").
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
@@ -34,7 +34,7 @@ public class LoginRepository {
 
         call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
                     // Handle successful response
                     loginResponseMutableLiveData.setValue(response.body());
@@ -55,7 +55,7 @@ public class LoginRepository {
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
                 loginResponseMutableLiveData.setValue(new LoginResponse("Failure", null, null, t.getMessage()));
             }
         });
@@ -67,7 +67,7 @@ public class LoginRepository {
         final MutableLiveData<UserDetails> userDetailsLiveData = new MutableLiveData<>();
         webServiceApi.getUserDetails(userId, "Bearer " + token).enqueue(new Callback<UserDetails>() {
             @Override
-            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+            public void onResponse(@NonNull Call<UserDetails> call, @NonNull Response<UserDetails> response) {
                 if (response.isSuccessful()) {
                     userDetailsLiveData.postValue(response.body());
                 } else {
@@ -76,7 +76,7 @@ public class LoginRepository {
             }
 
             @Override
-            public void onFailure(Call<UserDetails> call, Throwable t) {
+            public void onFailure(@NonNull Call<UserDetails> call, @NonNull Throwable t) {
                 userDetailsLiveData.postValue(null);
             }
         });

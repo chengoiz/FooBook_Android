@@ -46,5 +46,6 @@
     <string name="friend_list">Friend List</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="delete_user">Delete User</string>
+    <string name="feedSavePost">Save</string>
 
 </resources>

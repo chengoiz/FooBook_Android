@@ -7,9 +7,13 @@ import java.util.List;
 
 public class PostsResponse {
     @SerializedName("message")
-    private String message;
+    private final String message;
     @SerializedName("posts")
     private List<Post> posts;
+
+    public PostsResponse(String message) {
+        this.message = message;
+    }
 
     public List<Post> getPosts() {
         return posts;
@@ -17,6 +21,10 @@ public class PostsResponse {
 
     public String getMessage() {
         return message;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     // Constructor, getters, and setters

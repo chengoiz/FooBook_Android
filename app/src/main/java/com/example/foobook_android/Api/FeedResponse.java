@@ -7,25 +7,23 @@ import java.util.List;
 
 public class FeedResponse {
     @SerializedName("friendsPosts")
-    private List<Post> friendsPosts;
+    private final List<Post> friendsPosts;
 
     @SerializedName("nonFriendsPosts")
-    private List<Post> nonFriendsPosts;
+    private final List<Post> nonFriendsPosts;
+
+    public FeedResponse(List<Post> friendsPosts, List<Post> nonFriendsPosts) {
+        this.friendsPosts = friendsPosts;
+        this.nonFriendsPosts = nonFriendsPosts;
+    }
 
     // Getters and Setters
     public List<Post> getFriendsPosts() {
         return friendsPosts;
     }
 
-    public void setFriendsPosts(List<Post> friendsPosts) {
-        this.friendsPosts = friendsPosts;
-    }
-
     public List<Post> getNonFriendsPosts() {
         return nonFriendsPosts;
     }
 
-    public void setNonFriendsPosts(List<Post> nonFriendsPosts) {
-        this.nonFriendsPosts = nonFriendsPosts;
-    }
 }

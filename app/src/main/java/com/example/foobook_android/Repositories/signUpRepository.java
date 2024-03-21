@@ -7,7 +7,7 @@ import com.example.foobook_android.Api.SignUpRequest;
 import com.example.foobook_android.Api.UserResponse;
 
 public class signUpRepository {
-    private SignUpApi userApi;
+    private final SignUpApi userApi;
 
     public signUpRepository() {
         userApi = new SignUpApi();

@@ -3,7 +3,7 @@ package com.example.foobook_android.models;
 public class User {
     private String _id; // Unique identifier
     private String displayname;
-    private String profilepic;
+    private final String profilepic;
 
     // Constructor
     public User(String _id, String displayname, String profilepic) {
@@ -17,7 +17,5 @@ public class User {
     public void setId(String id) { this._id = id; }
     public String getDisplayName() { return displayname; }
     public void setDisplayName(String displayname) { this.displayname = displayname; }
-
     public String getProfilePic() { return profilepic; }
-    public void setProfilePic(String profilepic) { this.profilepic = profilepic; }
 }

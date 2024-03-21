@@ -1,5 +1,6 @@
 package com.example.foobook_android.Api;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,11 +13,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SignUpApi {
-    private Retrofit retrofit;
     WebServiceApi webServiceApi;
 
     public SignUpApi() {
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/").
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
@@ -29,7 +29,7 @@ public class SignUpApi {
 
         call.enqueue(new Callback<UserResponse>() {
             @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+            public void onResponse(@NonNull Call<UserResponse> call, @NonNull Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     userResponseData.postValue(response.body());
                 } else {
@@ -44,12 +44,10 @@ public class SignUpApi {
                 }
             }
             @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
                 userResponseData.setValue(new UserResponse(t.getMessage()));
             }
         });
         return userResponseData;
     }
-
-
 }

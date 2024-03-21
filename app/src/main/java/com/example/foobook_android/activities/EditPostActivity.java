@@ -14,15 +14,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.example.foobook_android.database.PostDB;
 import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
-import com.example.foobook_android.post.PostManager;
 import com.example.foobook_android.R;
-import com.example.foobook_android.adapters.PostAdapter;
 
 
 /**
@@ -34,8 +30,6 @@ public class EditPostActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
 
-    // Local database instance
-    private PostDB db;
     // ViewModel for observing and updating post data
     private PostViewModel postViewModel;
     // UI components
@@ -49,11 +43,6 @@ public class EditPostActivity extends AppCompatActivity {
     private boolean isPhotoSelected = false;
     // The post being edited
     private Post currentPost;
-    // Unused field, consider removing if not needed in future development
-    private int postPosition = -1;
-
-    // Adapter for displaying posts, might not be necessary in this context
-    private PostAdapter postAdapter;
     // Helper class for selecting photos from gallery or camera
     private PhotoSelectorHelper photoSelectorHelper;
 
@@ -63,7 +52,7 @@ public class EditPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_post);
 
         // Initialize local database instance
-        db = PostDB.getInstance(this);
+        // Local database instance
         Log.i("EditPostActivity", "onCreate");
 
         // Initialize UI components
@@ -108,7 +97,6 @@ public class EditPostActivity extends AppCompatActivity {
      * Initializes helper classes used within the activity.
      */
     private void initializeHelpers() {
-        postAdapter = new PostAdapter(this, PostManager.getPosts(), null, postViewModel);
         photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE,
                 GALLERY_REQUEST_CODE, this::setImage);
     }

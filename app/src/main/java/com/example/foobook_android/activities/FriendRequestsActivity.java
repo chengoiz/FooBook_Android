@@ -22,14 +22,8 @@ import java.util.ArrayList;
 public class FriendRequestsActivity extends AppCompatActivity implements FriendRequestAdapter.FriendRequestListener{
     // ViewModel to manage UI-related data in a lifecycle-conscious way
     private FriendshipViewModel friendshipViewModel;
-    // RecyclerView for displaying friend requests
-    private RecyclerView friendRequestsRecyclerView;
     // Adapter for the RecyclerView to manage friend request items
     private FriendRequestAdapter adapter;
-    // Repository for user-related data and operations
-    private UserRepository userRepository;
-    // ID of the current user, used in friend request operations
-    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +60,14 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
 
     // Initializes components and data for the activity
     private void initialize() {
-        userRepository = new UserRepository(this);
-        userId = userRepository.getUserId(); // Retrieves the current user's ID
+        // Repository for user-related data and operations
+        UserRepository userRepository = new UserRepository(this);
+        // ID of the current user, used in friend request operations
+        String userId = userRepository.getUserId(); // Retrieves the current user's ID
 
         // Setup for the RecyclerView displaying friend requests
-        friendRequestsRecyclerView = findViewById(R.id.friendRequestsRecyclerView);
+        // RecyclerView for displaying friend requests
+        RecyclerView friendRequestsRecyclerView = findViewById(R.id.friendRequestsRecyclerView);
         friendRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new FriendRequestAdapter(this, new ArrayList<>(), this, userId);
         friendRequestsRecyclerView.setAdapter(adapter);

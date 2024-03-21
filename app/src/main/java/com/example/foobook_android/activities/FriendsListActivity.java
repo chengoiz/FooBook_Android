@@ -17,14 +17,8 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
     // ViewModel for handling operations related to friendships
     private FriendshipViewModel friendshipViewModel;
 
-    // RecyclerView for displaying the list of friends
-    private RecyclerView friendListRecyclerView;
     // Adapter for managing the data in RecyclerView
     private FriendListAdapter adapter;
-    // Repository for handling user-related data operations
-    private UserRepository userRepository;
-    // The current user's ID
-    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +46,15 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
     // Initializes UI components and sets up data bindings
     private void initialize() {
         // Initializes the UserRepository
-        userRepository = new UserRepository(this);
+        // Repository for handling user-related data operations
+        UserRepository userRepository = new UserRepository(this);
         // Retrieves the current user's ID
-        userId = userRepository.getUserId();
+        // The current user's ID
+        String userId = userRepository.getUserId();
 
         // Sets up the RecyclerView for displaying friends
-        friendListRecyclerView = findViewById(R.id.friendListRecycleView);
+        // RecyclerView for displaying the list of friends
+        RecyclerView friendListRecyclerView = findViewById(R.id.friendListRecycleView);
         friendListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Initializes the adapter for the RecyclerView with an empty list
         adapter = new FriendListAdapter(this, new ArrayList<>(), this, userId);

@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class FriendListResponse {
+    public FriendListResponse(List<User> friendList) {
+        this.friendList = friendList;
+    }
+
     public List<User> getFriends() {
         return friendList;
     }
 
-    public void setFriendList(List<User> friendList) {
-        this.friendList = friendList;
-    }
-
     @SerializedName("friendList")
-    private List<User> friendList;
+    private final List<User> friendList;
 
 }

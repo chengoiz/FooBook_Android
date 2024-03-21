@@ -13,7 +13,6 @@ public class SignUpRequest implements Serializable {
     private String displayname;
     private String profilePic;
 
-
     @PrimaryKey(autoGenerate = true)
     private int id;
     public SignUpRequest(String username, String password, String displayname, String profilePic) {
