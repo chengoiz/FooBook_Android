@@ -18,15 +18,10 @@ import com.example.foobook_android.databinding.ActivityCreatePostBinding;
 import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
-import com.example.foobook_android.post.PostManager;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.TimestampUtil;
-import com.example.foobook_android.adapters.PostAdapter;
 
 public class CreatePostActivity extends AppCompatActivity  {
-    // Binding for activity layout.
-    private ActivityCreatePostBinding binding;
-
     // ViewModel for handling post operations.
     private PostViewModel postViewModel;
 
@@ -45,13 +40,6 @@ public class CreatePostActivity extends AppCompatActivity  {
 
     // Flag to indicate whether a photo has been selected.
     private boolean isPhotoSelected = false;
-
-    // Adapter for displaying posts (unused here but initialized for potential use).
-    private PostAdapter postAdapter;
-
-    // Current post being created (unused but potentially useful for extension).
-    private Post currentPost;
-
     // Helper for selecting photos from camera or gallery.
     private PhotoSelectorHelper photoSelectorHelper;
 
@@ -64,7 +52,7 @@ public class CreatePostActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
+        ActivityCreatePostBinding binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Log.i("CreatePostActivity", "onCreate");
 
@@ -131,10 +119,6 @@ public class CreatePostActivity extends AppCompatActivity  {
     // Initializes helper objects used within the activity.
     // This includes setting up the adapter for posts and the helper for photo selection.
     private void initializeHelpers() {
-        // Initializes the PostAdapter. Even though it's not used directly in this activity,
-        // it's prepared for potential use, such as displaying a list of posts or a preview.
-        postAdapter = new PostAdapter(this, PostManager.getPosts(), null, postViewModel);
-
         // Initializes the PhotoSelectorHelper with activity context and request codes for camera and gallery.
         // The setImage method reference is passed as a callback to set the image in the UI after selection.
         photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
@@ -147,7 +131,6 @@ public class CreatePostActivity extends AppCompatActivity  {
         selectedImage.invalidate(); // Refresh the ImageView
         selectedImage.setVisibility(View.GONE); // Hide the ImageView
         isPhotoSelected = false; // Update photo selection status
-        currentPost.setIsPhotoPicked(Post.NO_PHOTO); // Indicate that no photo is selected for the current post
     }
 
     // Sets the selected image in the ImageView from a Bitmap and updates UI visibility.

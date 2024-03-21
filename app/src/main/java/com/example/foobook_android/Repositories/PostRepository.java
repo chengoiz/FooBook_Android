@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -23,6 +24,7 @@ import com.example.foobook_android.post.Post;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 
 import okhttp3.OkHttpClient;
@@ -34,16 +36,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PostRepository {
     private final PostDao postDao;
-    private Retrofit retrofit;
     private final WebServiceApi webServiceApi;
     private final LiveData<List<Post>> latestPosts;
-    private Context context;
+    private final Context context;
 
     public PostRepository(Application application) {
         PostDB db = PostDB.getInstance(application);
         postDao = db.postDao();
         latestPosts = postDao.getLatestPosts();
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/").
                 addConverterFactory(GsonConverterFactory.create()).
                 build(); // change the baseUrl later
@@ -121,18 +122,18 @@ public class PostRepository {
         String authToken = sharedPreferences.getString("token", "");
         webServiceApi.deletePostForUser(userId, postId, "Bearer " + authToken).enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
                     // Execute on a background thread
                     Executors.newSingleThreadExecutor().submit(() -> postDao.deleteById(postId));
-                    Log.i("PostRepository", "Post deleted successfully: " + response.body().getMessage());
+                    Log.i("PostRepository", "Post deleted successfully: " + Objects.requireNonNull(response.body()).getMessage());
                 } else {
                     Log.e("PostRepository", "Failed to delete post, server responded with: " + response.errorBody());
                 }
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
                 Log.e("PostRepository", "Error deleting post", t);
             }
         });
@@ -157,7 +158,7 @@ public class PostRepository {
         WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
         webServiceApi.fetchFeedPosts("Bearer " + authToken).enqueue(new Callback<FeedResponse>() {
             @Override
-            public void onResponse(Call<FeedResponse> call, Response<FeedResponse> response) {
+            public void onResponse(@NonNull Call<FeedResponse> call, @NonNull Response<FeedResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Post> allPosts = new ArrayList<>();
                     allPosts.addAll(response.body().getFriendsPosts());
@@ -174,7 +175,7 @@ public class PostRepository {
             }
 
             @Override
-            public void onFailure(Call<FeedResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<FeedResponse> call, @NonNull Throwable t) {
                 Log.e("PostRepository", "Error fetching feed posts.", t);
             }
         });

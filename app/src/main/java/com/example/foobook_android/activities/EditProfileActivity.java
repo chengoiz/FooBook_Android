@@ -28,7 +28,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
     private Uri profilePictureUri;
-    private boolean isPhotoSelected = false;
     private UserViewModel userViewModel;
 
 
@@ -61,27 +60,13 @@ public class EditProfileActivity extends AppCompatActivity {
         btnSaveChanges.setOnClickListener(v -> saveProfileChanges());
         btnClose.setOnClickListener(v -> finish());
     }
-
-    private void observeViewModel() {
-        userViewModel.getUserDetailsLiveData().observe(this, userDetails -> {
-            // Handle successful update
-            Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
-            finish();
-        });
-
-        userViewModel.getErrorLiveData().observe(this, error -> {
-            // Handle error
-            Toast.makeText(this, "Error updating profile: " + error, Toast.LENGTH_SHORT).show();
-        });
-    }
-
+    
     private void setImage(Bitmap bitmap) {
         String filename = "photo_" + System.currentTimeMillis() + ".png";
         this.profilePictureUri = photoSelectorHelper.saveBitmapToFile(this, bitmap, filename);
         ivProfilePicture.setImageURI(null);
         ivProfilePicture.setImageURI(profilePictureUri);
         tvNoFileChosen.setVisibility(View.INVISIBLE);
-        isPhotoSelected = true;
     }
 
     private void saveProfileChanges() {

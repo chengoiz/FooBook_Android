@@ -2,6 +2,7 @@ package com.example.foobook_android.adapters;
 
 import static com.example.foobook_android.utility.ImageUtility.loadImage;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +26,11 @@ import java.util.List;
  */
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
 
-    private Context context;
+    private final Context context;
     private List<User> myFriends; // List of friends to display
     private final LayoutInflater inflater; // LayoutInflater to inflate views
     private final FriendListAdapter.FriendListListener listener; // Listener for friend list interactions
-    private String currentUserId; // Current user's ID to support friend deletion and other actions
+    private final String currentUserId; // Current user's ID to support friend deletion and other actions
 
     // Interface defining listener methods for friend list interactions
     public interface FriendListListener {
@@ -115,6 +116,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     }
 
     // Update the list of friends and notify the adapter to refresh the display
+    @SuppressLint("NotifyDataSetChanged")
     public void setMyFriends(List<User> myFriends) {
         this.myFriends = myFriends;
         notifyDataSetChanged();

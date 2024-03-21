@@ -2,6 +2,7 @@ package com.example.foobook_android.adapters;
 
 import static com.example.foobook_android.utility.ImageUtility.loadImage;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +29,11 @@ import java.util.List;
  * these actions.
  */
 public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdapter.ViewHolder> {
-    private Context context;
+    private final Context context;
     private List<User> users; // List of users who have sent friend requests
     private final LayoutInflater inflater; // LayoutInflater to inflate the view for each friend request item
     private final FriendRequestListener listener; // Listener for handling accept and decline actions
-    private String currentUserId; // ID of the current user viewing the requests
+    private final String currentUserId; // ID of the current user viewing the requests
 
     // Interface for defining the callback methods for accept and decline actions
     public interface FriendRequestListener {
@@ -119,6 +120,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     }
 
     // Updates the list of friend requests and refreshes the RecyclerView
+    @SuppressLint("NotifyDataSetChanged")
     public void setUsers(List<User> users) {
         this.users = users;
         notifyDataSetChanged();

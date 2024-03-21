@@ -1,41 +1,29 @@
 package com.example.foobook_android.post;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import com.example.foobook_android.comment.Comment;
 import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Post implements Serializable {
     public static final int PHOTO_PICKED = 1;
     public static final int NO_PHOTO = 0;
-    public static final int JSON_FILE = 1;
-    public static final int NOT_JSON_FILE = 0;
 
     @NonNull
     @PrimaryKey
     @SerializedName("_id")
     private String postId;
     @ColumnInfo(name = "userName")
-    private String userName;
+    private final String userName;
 
     @ColumnInfo(name = "timestamp")
-    private String timestamp;
+    private final String timestamp;
 
     @ColumnInfo(name = "text")
     private String text;
-
-    @Ignore
-    private List<Comment> comments = new ArrayList<>();
 
     @ColumnInfo(name = "likesCount")
     @SerializedName("likeCount")
@@ -49,7 +37,7 @@ public class Post implements Serializable {
     private boolean canEdit;
 
     @ColumnInfo(name = "profileImage")
-    private String profileImage;
+    private final String profileImage;
 
     @ColumnInfo(name = "imageUrl")
     @SerializedName("imageUrl")
@@ -71,10 +59,6 @@ public class Post implements Serializable {
     private String createdAt;
     @ColumnInfo(name ="updatedBy")
     private String updatedAt;
-
-    @ColumnInfo(name = "isFriend")
-    private boolean isFriend;
-
 
 
     public Post(String userName, String timestamp, String text, String profileImage) {
@@ -107,7 +91,6 @@ public class Post implements Serializable {
     public int getLikesCount() {
         return likesCount;
     }
-
     public boolean isLikedByCurrentUser() {
         return isLikedByCurrentUser;
     }
@@ -117,32 +100,20 @@ public class Post implements Serializable {
     public int getIsPhotoPicked() {
         return isPhotoPicked;
     }
-
     public String getUserName() {
         return userName;
     }
-
     public String getTimestamp() {
         return timestamp;
     }
-
     public String getText() {
         return text;
     }
-
-
     public String getProfileImage() {
         return profileImage;
     }
-
     public String getImageUrl() {
         return imageUrl;
-    }
-    public Uri getPostImageUri(){
-        return Uri.parse(imageUrl);
-    }
-    public List<Comment> getComments() {
-        return comments;
     }
     public int getIsJsonFile() {
         return this.isJsonFile;
@@ -163,26 +134,8 @@ public class Post implements Serializable {
     public void setImageSetByUser(boolean isImageSetByUser) {
         this.isImageSetByUser = isImageSetByUser;
     }
-
-
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public void setContent(String text) {
         this.text = text;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
     public void setLikesCount(int likesCount) {
         this.likesCount = likesCount;
@@ -191,13 +144,6 @@ public class Post implements Serializable {
     public void setIsLikedByCurrentUser(boolean isLikedByCurrentUser) {
         this.isLikedByCurrentUser = isLikedByCurrentUser;
     }
-    public void setIsFriend(boolean isFriend) {
-        this.isFriend = true;
-    }
-    public boolean getIsFriend() {
-        return isFriend;
-    }
-
 
     public Creator getCreator() {
         return creator;

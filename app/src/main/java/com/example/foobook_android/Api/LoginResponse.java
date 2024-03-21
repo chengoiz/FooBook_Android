@@ -1,10 +1,10 @@
 package com.example.foobook_android.Api;
 
 public class LoginResponse {
-    private String result;
+    private final String result;
     private String token;
     private String userId;
-    private String reason;
+    private final String reason;
 
     public LoginResponse(String result, String token, String userId, String reason) {
         this.result = result;
@@ -15,10 +15,6 @@ public class LoginResponse {
 
     public String getResult() {
         return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
     }
 
     public String getToken() {
@@ -41,8 +37,5 @@ public class LoginResponse {
         return reason;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
 }
 

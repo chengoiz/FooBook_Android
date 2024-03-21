@@ -4,17 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.foobook_android.R;
-import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.ViewModels.FriendshipViewModel;
-import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.adapters.FriendsOfFriendAdapter;
-
 import java.util.ArrayList;
 
 /**
@@ -28,16 +23,12 @@ import java.util.ArrayList;
 public class FriendsOfFriendsActivity extends AppCompatActivity {
     // ViewModel for handling friendship data
     private FriendshipViewModel friendshipViewModel;
-    // RecyclerView for displaying the list of a friend's friends
-    private RecyclerView friendOfFriendListRecyclerView;
     // Adapter for the RecyclerView
     private FriendsOfFriendAdapter adapter;
     // The ID of the friend whose friends are being displayed
     private String friendId;
     // The display name of the friend, used for setting the activity's title
     private String friendDisplayName;
-    // TextView for the title of the activity
-    private TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +50,16 @@ public class FriendsOfFriendsActivity extends AppCompatActivity {
         }
 
         // Sets the activity's title to include the friend's name
-        title = findViewById(R.id.friendsOfFriendTitle);
+        // TextView for the title of the activity
+        TextView title = findViewById(R.id.friendsOfFriendTitle);
         String newTitle = friendDisplayName + "'s friends";
         title.setText(newTitle);
 
         // Sets up the RecyclerView with its adapter and layout manager
-        friendOfFriendListRecyclerView = findViewById(R.id.friendsOfFriendRecycleView);
+        // RecyclerView for displaying the list of a friend's friends
+        RecyclerView friendOfFriendListRecyclerView = findViewById(R.id.friendsOfFriendRecycleView);
         friendOfFriendListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new FriendsOfFriendAdapter(this, new ArrayList<>(), friendId);
+        adapter = new FriendsOfFriendAdapter(this, new ArrayList<>());
         friendOfFriendListRecyclerView.setAdapter(adapter);
 
         // Initializes the ViewModel for fetching the friend list

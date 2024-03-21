@@ -15,6 +15,7 @@ import com.example.foobook_android.utility.FieldValidation;
 import com.example.foobook_android.R;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * LogInActivity handles user authentication including login and sign-up functionalities.
@@ -70,7 +71,7 @@ public class LogInActivity extends AppCompatActivity {
         // Observes login response LiveData
         loginViewModel.getloginResponseLiveData().observe(this, loginResponse -> {
             if (SUCCESS.equals(loginResponse.getResult())) {
-                // Handle success case
+                Toast.makeText(getApplicationContext(), "You're in! Let's get started.", Toast.LENGTH_SHORT).show();
             } else if (FAILURE.equals(loginResponse.getResult())) {
                 // Display failure reason
                 Toast.makeText(getApplicationContext(), loginResponse.getReason(), Toast.LENGTH_LONG).show();
@@ -81,11 +82,10 @@ public class LogInActivity extends AppCompatActivity {
         loginViewModel.getUserDetailsLiveData().observe(this, userDetails -> {
             if (userDetails != null) {
                 // Save user details and navigate to FeedActivity
-                saveUserDetails(loginViewModel.getloginResponseLiveData().getValue().getUserId(),
-                        loginViewModel.getloginResponseLiveData().getValue().getToken(),
+                saveUserDetails(Objects.requireNonNull(loginViewModel.getloginResponseLiveData().getValue()).getUserId(),
+                        Objects.requireNonNull(loginViewModel.getloginResponseLiveData().getValue()).getToken(),
                         userDetails.getDisplayName(), userDetails.getFriendList().toArray(new String[0]),
                         userDetails.getProfilePic());
-                Toast.makeText(getApplicationContext(), "You're in! Let's get started.", Toast.LENGTH_SHORT).show();
                 navigateToFeedActivity();
             }
         });
@@ -117,13 +117,13 @@ public class LogInActivity extends AppCompatActivity {
         editor.putString("displayName", displayName);
         editor.putStringSet("friendList", new HashSet<>(Arrays.asList(friendList))); // Convert array to Set
         editor.putString("profilePicUrl", profilePicUrl);
-        editor.commit(); // Commit changes
+        editor.apply(); // Apply changes
     }
 
     // Navigates to FeedActivity
     private void navigateToFeedActivity() {
-        finish();
         startActivity(new Intent(this, FeedActivity.class));
+        finish();
     }
 
     // Lifecycle methods with log statements for debugging

@@ -139,7 +139,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     // Handles activity result for photo selection
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         photoSelectorHelper.handleActivityResult(requestCode, resultCode, data);
     }

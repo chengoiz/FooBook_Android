@@ -28,12 +28,12 @@ import java.util.List;
  */
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
-    private Context context;
-    private List<Comment> comments; // List of comments to display
+    private final Context context;
+    private final List<Comment> comments; // List of comments to display
     private final LayoutInflater mInflater; // LayoutInflater to inflate the view for each comment item
 
     // Listener for handling actions on each comment item
-    private CommentItemListener listener;
+    private final CommentItemListener listener;
 
     // Interface for defining the actions on comment items
     public interface CommentItemListener {
@@ -94,22 +94,22 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             commenterNameTextView.setText(comment.getCommenterName());
             commentText.setText(comment.getCommentText());
 
-            setupPopupMenu(comment, position); // Setup the popup menu for edit and delete actions
+            setupPopupMenu(position); // Setup the popup menu for edit and delete actions
             setupSaveButton(comment, position); // Setup the save button for saving edits
         }
 
         // Handles the setup and functionality of the PopupMenu
-        private void setupPopupMenu(Comment comment, int position) {
+        private void setupPopupMenu(int position) {
             commentMenu.setOnClickListener(v -> {
                 PopupMenu commentMenu = new PopupMenu(context, this.commentMenu);
                 commentMenu.getMenuInflater().inflate(R.menu.comment_menu, commentMenu.getMenu());
-                commentMenu.setOnMenuItemClickListener(item -> onMenuItemClick(item, comment, position));
+                commentMenu.setOnMenuItemClickListener(item -> onMenuItemClick(item, position));
                 commentMenu.show();
             });
         }
 
         // Handles menu item clicks for edit and delete actions
-        private boolean onMenuItemClick(MenuItem item, Comment comment, int position) {
+        private boolean onMenuItemClick(MenuItem item, int position) {
             if (item.getItemId() == R.id.menuEditComment) {
                 makeCommentEditable(); // Make the comment editable
                 return true;

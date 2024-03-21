@@ -8,26 +8,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.comment.Comment;
 import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.R;
 import com.example.foobook_android.adapters.CommentAdapter;
-
 import java.util.ArrayList;
 
 // Activity to display and manage comments on a post
 public class CommentActivity extends AppCompatActivity implements CommentAdapter.CommentItemListener {
     private ArrayList<Comment> commentsList; // List of comments for the current post
-    private PostViewModel postViewModel; // ViewModel for managing post data
     private RecyclerView commentsRecyclerView; // RecyclerView for displaying comments
     private CommentAdapter commentAdapter; // Adapter for comments RecyclerView
     private String fetchedDisplayName; // Display name of the current user
@@ -82,10 +77,10 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
 
     // Initializes the PostViewModel and fetches user details for the comment functionality
     private void setPostViewModel() {
-        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
+        // ViewModel for managing post data
+        PostViewModel postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
-        postViewModel.setToken(token);
         Log.e("TOKEN FROM COMMENT ACTIVITY: ", token);
         postViewModel.fetchDisplayName(this, getCurrentUserId());
 
@@ -126,7 +121,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         // Check if the comment text is not empty
         if (!commentText.isEmpty()) {
             // Create a new Comment object with the current user's display name, the comment text, and profile picture URL
-            Comment newComment = new Comment(fetchedDisplayName, commentText, fetchedProfilePic);
+            Comment newComment = new Comment(fetchedDisplayName, commentText);
             // Add the new comment to the global comment holder and the local list
             CommentsDataHolder.addComment(postPosition, newComment);
             commentsList.add(newComment);

@@ -4,15 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-
 import com.example.foobook_android.Repositories.LoginRepository;
 import com.example.foobook_android.Api.LoginRequest;
 import com.example.foobook_android.Api.LoginResponse;
 import com.example.foobook_android.utility.UserDetails;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class  LoginViewModel extends ViewModel {
     private final LoginRepository loginRepository;

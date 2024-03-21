@@ -4,6 +4,7 @@ package com.example.foobook_android.adapters;
 
 import static com.example.foobook_android.utility.ImageUtility.loadImage;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,17 +25,16 @@ import java.util.List;
  * in a RecyclerView. It shows basic information about each friend, such as their name and profile picture.
  */
 public class FriendsOfFriendAdapter extends RecyclerView.Adapter<FriendsOfFriendAdapter.ViewHolder> {
-    private Context context;
+    private final Context context;
     private List<User> friendsOfFriends; // List of friends of a specific friend
     private final LayoutInflater inflater; // LayoutInflater to inflate the view for each item
-    private String currentFriendId; // The ID of the friend whose friends are being displayed
 
     // Constructor initializing the adapter with necessary context, data, and friend ID
-    public FriendsOfFriendAdapter(Context context, List<User> friendsOfFriends, String currentUserId) {
+    public FriendsOfFriendAdapter(Context context, List<User> friendsOfFriends) {
         this.context = context;
         this.friendsOfFriends = friendsOfFriends;
         this.inflater = LayoutInflater.from(context);
-        this.currentFriendId = currentUserId;
+        // The ID of the friend whose friends are being displayed
     }
 
     @NonNull
@@ -61,7 +61,7 @@ public class FriendsOfFriendAdapter extends RecyclerView.Adapter<FriendsOfFriend
     }
 
     // ViewHolder class for managing the layout of each friend of friend item
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView friendOfFriendText; // TextView for displaying the friend's name
         ImageView friendOfFriendProfilePic; // ImageView for displaying the friend's profile picture
 
@@ -74,6 +74,7 @@ public class FriendsOfFriendAdapter extends RecyclerView.Adapter<FriendsOfFriend
     }
 
     // Updates the list of friends of friends and refreshes the RecyclerView
+    @SuppressLint("NotifyDataSetChanged")
     public void setMyFriends(List<User> myFriends) {
         this.friendsOfFriends = myFriends;
         notifyDataSetChanged();

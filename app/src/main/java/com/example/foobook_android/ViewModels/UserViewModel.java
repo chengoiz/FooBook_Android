@@ -9,11 +9,11 @@ import com.example.foobook_android.utility.UserDetails;
 
 public class UserViewModel extends AndroidViewModel {
 
-    private UserRepository userRepository;
-    private MutableLiveData<UserDetails> userDetailsLiveData;
-    private MutableLiveData<String> errorLiveData;
-    private MutableLiveData<String> deleteUserError = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isUserDeleted = new MutableLiveData<>();
+    private final UserRepository userRepository;
+    private final MutableLiveData<UserDetails> userDetailsLiveData;
+    private final MutableLiveData<String> errorLiveData;
+    private final MutableLiveData<String> deleteUserError = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isUserDeleted = new MutableLiveData<>();
 
 
     public UserViewModel(Application application) {

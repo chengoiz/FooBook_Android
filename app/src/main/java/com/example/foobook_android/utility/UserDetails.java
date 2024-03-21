@@ -9,9 +9,9 @@ public class UserDetails {
     @SerializedName("displayname")
     private String displayname;
     @SerializedName("profilepic")
-    private String profilepic;
+    private final String profilepic;
     @SerializedName("friendsList")
-    private List<String> friendsList;
+    private final List<String> friendsList;
 
     // Constructor, Getters, and Setters
     public UserDetails(String displayName, String profilePic, List<String> friendsList) {
@@ -36,14 +36,6 @@ public class UserDetails {
     // Setters
     public void setDisplayName(String displayName) {
         this.displayname = displayName;
-    }
-
-    public void setProfilePicUrl(String profilePicUrl) {
-        this.profilepic = profilePicUrl;
-    }
-
-    public void setFriendList(List<String> friendList) {
-        this.friendsList = friendList;
     }
 
 }

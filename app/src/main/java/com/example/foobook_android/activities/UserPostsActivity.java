@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,29 +36,27 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
 
     private PostViewModel postViewModel;
     private FriendshipViewModel friendshipViewModel;
-    private RecyclerView postsRecyclerView;
     private PostAdapter postAdapter;
-    private TextView displayNameTextView;
-    private ImageView profileImageView;
     String displayName;
     String profilePic;
     String userId;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_posts);
 
         // Initializing RecyclerView and setting its layout manager
-        postsRecyclerView = findViewById(R.id.feedRecyclerView);
+        RecyclerView postsRecyclerView = findViewById(R.id.feedRecyclerView);
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Initializing UI components for displaying user information
-        displayNameTextView = findViewById(R.id.userNameInProfile);
-        profileImageView = findViewById(R.id.profileImageInProfile);
+        TextView displayNameTextView = findViewById(R.id.userNameInProfile);
+        ImageView profileImageView = findViewById(R.id.profileImageInProfile);
 
         // Setting up the adapter for the RecyclerView
-        postAdapter = new PostAdapter(this, new ArrayList<>(), this, postViewModel);
+        postAdapter = new PostAdapter(this, new ArrayList<>(), this);
         postsRecyclerView.setAdapter(postAdapter);
 
         // Initializing ViewModels
@@ -110,7 +110,7 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
     private HashSet<String> getFriendList() {
         // Retrieving the current user's friends list from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return (HashSet<String>) sharedPreferences.getStringSet("friendList", new HashSet<String>());
+        return (HashSet<String>) sharedPreferences.getStringSet("friendList", new HashSet<>());
     }
 
     private boolean isFriend() {

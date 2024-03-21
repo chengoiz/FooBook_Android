@@ -5,11 +5,17 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.example.foobook_android.Api.UserUpdateRequest;
 import com.example.foobook_android.Api.UserUpdateResponse;
 import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.models.User;
 import com.example.foobook_android.utility.UserDetails;
+
+import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,12 +24,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserRepository {
     WebServiceApi webServiceApi;
-    private Retrofit retrofit;
-    private Context context;
+    private final Context context;
 
     public UserRepository(Context context) {
         this.context = context.getApplicationContext();
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/").
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
@@ -56,9 +61,9 @@ public class UserRepository {
 
         webServiceApi.editUserDetails(userId, userUpdateRequest, "Bearer " + getAuthToken()).enqueue(new Callback<UserUpdateResponse>() {
             @Override
-            public void onResponse(Call<UserUpdateResponse> call, Response<UserUpdateResponse> response) {
+            public void onResponse(@NonNull Call<UserUpdateResponse> call, @NonNull Response<UserUpdateResponse> response) {
                 if (response.isSuccessful()) {
-                    User user = response.body().getUser();
+                    User user = Objects.requireNonNull(response.body()).getUser();
                     UserDetails userDetails = new UserDetails(user.getDisplayName(), user.getProfilePic(), null);
                     callback.onSuccess(userDetails);
                 } else {
@@ -67,7 +72,7 @@ public class UserRepository {
             }
 
             @Override
-            public void onFailure(Call<UserUpdateResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<UserUpdateResponse> call, @NonNull Throwable t) {
                 callback.onError(t);
             }
         });
@@ -76,7 +81,7 @@ public class UserRepository {
     public void deleteUser(DeleteUserCallback callback) {
         webServiceApi.deleteUser("Bearer " + getAuthToken()).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
                     callback.onSuccess();
                 } else {
@@ -85,7 +90,7 @@ public class UserRepository {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 callback.onError("Network error: " + t.getMessage());
             }
         });
@@ -103,7 +108,7 @@ public class UserRepository {
         Call<UserDetails> call = webServiceApi.getUserDetails(Id, "Bearer " + getAuthToken());
         call.enqueue(new Callback<UserDetails>() {
             @Override
-            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+            public void onResponse(@NonNull Call<UserDetails> call, @NonNull Response<UserDetails> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body());
                 } else {
@@ -113,7 +118,7 @@ public class UserRepository {
             }
 
             @Override
-            public void onFailure(Call<UserDetails> call, Throwable t) {
+            public void onFailure(@NonNull Call<UserDetails> call, @NonNull Throwable t) {
                 Log.e("UserRepository", "Network error while fetching user details", t);
                 callback.onError(t);
             }

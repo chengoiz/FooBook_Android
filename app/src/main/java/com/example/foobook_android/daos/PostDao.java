@@ -17,8 +17,6 @@ import java.util.List;
 public interface PostDao {
     @Query("SELECT * FROM post ORDER BY timestamp DESC LIMIT 25")
     LiveData<List<Post>> getLatestPosts();
-    @Query("SELECT * FROM post")
-    List<Post> index();
     @Insert
     void insert(Post... posts);
 

@@ -27,15 +27,12 @@ import retrofit2.Response;
 public class PostViewModel extends AndroidViewModel {
     private final PostRepository repository;
     private final LiveData<List<Post>> latestPosts;
-    private MutableLiveData<String> displayNameLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> profilePicLiveData = new MutableLiveData<>();
-    private MutableLiveData<PostsResponse> postsLiveData = new MutableLiveData<>();
-    private MutableLiveData<ToggleLikeResponse> toggleLikeResponse = new MutableLiveData<>();
-    private String token;
+    private final MutableLiveData<String> displayNameLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> profilePicLiveData = new MutableLiveData<>();
+    private final MutableLiveData<PostsResponse> postsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<ToggleLikeResponse> toggleLikeResponse = new MutableLiveData<>();
     private Context context;
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>(); // For error messages
-
-
 
 
     public PostViewModel(@NonNull Application application) {
@@ -61,14 +58,11 @@ public class PostViewModel extends AndroidViewModel {
     public void fetchPostsFromServer(Context context) {
         repository.fetchAndProcessPosts(context);
     }
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public void toggleLike(String postId) {
         repository.toggleLike(postId, new Callback<ToggleLikeResponse>() {
             @Override
-            public void onResponse(Call<ToggleLikeResponse> call, Response<ToggleLikeResponse> response) {
+            public void onResponse(@NonNull Call<ToggleLikeResponse> call, @NonNull Response<ToggleLikeResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // Update LiveData upon successful toggle
                     toggleLikeResponse.setValue(response.body());
@@ -79,7 +73,7 @@ public class PostViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void onFailure(Call<ToggleLikeResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ToggleLikeResponse> call, @NonNull Throwable t) {
                 // Handle failure of the call, such as network errors, update error LiveData
                 errorLiveData.setValue("Network error occurred. Please check your connection and try again.");
             }
@@ -105,7 +99,7 @@ public class PostViewModel extends AndroidViewModel {
     public void fetchPostsByUserId(String userId, String authToken) {
         repository.getPostsByUserId(userId, authToken, new Callback<PostsResponse>() {
             @Override
-            public void onResponse(Call<PostsResponse> call, Response<PostsResponse> response) {
+            public void onResponse(@NonNull Call<PostsResponse> call, @NonNull Response<PostsResponse> response) {
                 if (response.isSuccessful()) {
                     postsLiveData.postValue(response.body());
                 } else {
@@ -115,7 +109,7 @@ public class PostViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void onFailure(Call<PostsResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PostsResponse> call, @NonNull Throwable t) {
                 // Handle call failure
                 postsLiveData.postValue(null);
             }
@@ -135,7 +129,6 @@ public class PostViewModel extends AndroidViewModel {
             public void onSuccess(UserDetails userDetails) {
                 displayNameLiveData.postValue(userDetails.getDisplayName());
                 profilePicLiveData.postValue(userDetails.getProfilePic());
-                String title = userDetails.getDisplayName();
             }
 
             @Override
@@ -150,7 +143,7 @@ public class PostViewModel extends AndroidViewModel {
     public void createPostForUser(String userId, Post post, Context context) {
         repository.createPostForUser(userId, post, context, new Callback<Post>() {
             @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
+            public void onResponse(@NonNull Call<Post> call, @NonNull Response<Post> response) {
                 if (response.isSuccessful()) {
                     Log.d("PostViewModel", "Post created successfully");
                     Post newPost = response.body();
@@ -170,7 +163,7 @@ public class PostViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void onFailure(Call<Post> call, Throwable t) {
+            public void onFailure(@NonNull Call<Post> call, @NonNull Throwable t) {
                 // Handle failure to make the request (e.g., no internet connection)
                 Log.e("PostViewModel", "Error updating post", t);
             }
