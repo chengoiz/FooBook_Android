@@ -133,7 +133,7 @@ public class CreatePostActivity extends AppCompatActivity  {
     private void initializeHelpers() {
         // Initializes the PostAdapter. Even though it's not used directly in this activity,
         // it's prepared for potential use, such as displaying a list of posts or a preview.
-        postAdapter = new PostAdapter(this, PostManager.getPosts(), null);
+        postAdapter = new PostAdapter(this, PostManager.getPosts(), null, postViewModel);
 
         // Initializes the PhotoSelectorHelper with activity context and request codes for camera and gallery.
         // The setImage method reference is passed as a callback to set the image in the UI after selection.

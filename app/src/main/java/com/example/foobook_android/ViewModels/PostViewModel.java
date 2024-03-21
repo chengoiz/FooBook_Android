@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.foobook_android.Api.PostsResponse;
+import com.example.foobook_android.Api.ToggleLikeResponse;
 import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.Repositories.PostRepository;
@@ -27,16 +28,28 @@ public class PostViewModel extends AndroidViewModel {
     private MutableLiveData<String> displayNameLiveData = new MutableLiveData<>();
     private MutableLiveData<String> profilePicLiveData = new MutableLiveData<>();
     private MutableLiveData<PostsResponse> postsLiveData = new MutableLiveData<>();
+    private MutableLiveData<ToggleLikeResponse> toggleLikeResponse = new MutableLiveData<>();
     private String token;
+    private Context context;
+    private MutableLiveData<String> errorLiveData = new MutableLiveData<>(); // For error messages
+
+
 
 
     public PostViewModel(@NonNull Application application) {
         super(application);
         repository = new PostRepository(application);
         latestPosts = repository.getLatestPosts();
+        this.context = application;
     }
     public LiveData<List<Post>> getLatestPosts() {
         return latestPosts;
+    }
+    public LiveData<String> getErrorLiveData() {
+        return errorLiveData;
+    }
+    public MutableLiveData<ToggleLikeResponse> getToggleLikeResponse() {
+        return toggleLikeResponse;
     }
 
     public LiveData<PostsResponse> getPostsLiveData() {
@@ -50,6 +63,26 @@ public class PostViewModel extends AndroidViewModel {
         this.token = token;
     }
 
+    public void toggleLike(String postId) {
+        repository.toggleLike(postId, new Callback<ToggleLikeResponse>() {
+            @Override
+            public void onResponse(Call<ToggleLikeResponse> call, Response<ToggleLikeResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Update LiveData upon successful toggle
+                    toggleLikeResponse.setValue(response.body());
+                } else {
+                    // Handle error scenario, update error LiveData
+                    errorLiveData.setValue("Failed to toggle like. Please try again.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ToggleLikeResponse> call, Throwable t) {
+                // Handle failure of the call, such as network errors, update error LiveData
+                errorLiveData.setValue("Network error occurred. Please check your connection and try again.");
+            }
+        });
+    }
 
     // Method for adding a new post
     public void insert(Post post) {

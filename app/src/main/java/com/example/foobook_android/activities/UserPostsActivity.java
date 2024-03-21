@@ -56,7 +56,7 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
         profileImageView = findViewById(R.id.profileImageInProfile);
 
         // Setting up the adapter for the RecyclerView
-        postAdapter = new PostAdapter(this, new ArrayList<>(), this);
+        postAdapter = new PostAdapter(this, new ArrayList<>(), this, postViewModel);
         postsRecyclerView.setAdapter(postAdapter);
 
         // Initializing ViewModels

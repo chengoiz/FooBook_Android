@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.comment.Comment;
@@ -43,8 +45,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         fetchUserDetails(); // Fetch current user details
         setupButtons(); // Set up the button listeners
         // Update the display name in the UI
-        TextView displayNameTextView = findViewById(R.id.commentItemUsername);
-        displayNameTextView.setText(fetchedDisplayName);
+        initializeViews();
     }
 
     // Sets up the send comment button and its click listener
@@ -60,6 +61,17 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
         fetchedDisplayName = sharedPreferences.getString("displayName", "Unknown User");
         fetchedProfilePic = sharedPreferences.getString("profilePicUrl", "default_profile_pic_url");
+    }
+
+    private void initializeViews() {
+        TextView displayNameTextView = findViewById(R.id.commentItemUsername);
+        displayNameTextView.setText(fetchedDisplayName);
+        ImageView profilePicImageView = findViewById(R.id.commentActivityItemImage);
+        if (!fetchedProfilePic.equals("default_profile_pic_url")) {
+            Glide.with(this)
+                    .load(fetchedProfilePic)
+                    .into(profilePicImageView);
+        }
     }
 
     // Retrieves the current user's ID from SharedPreferences
