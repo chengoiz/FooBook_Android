@@ -12,10 +12,14 @@
         android:orientation="horizontal"
         android:paddingHorizontal="1dp">
 
-        <TextView
-            android:id="@+id/textView4"
-            style="@style/pageTitle"
-            android:text="@string/app_name" />
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/foobook_logo" />
 
 
         <androidx.appcompat.widget.SwitchCompat

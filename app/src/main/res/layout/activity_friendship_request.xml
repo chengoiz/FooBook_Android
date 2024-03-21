@@ -5,10 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.FriendRequestsActivity">
+
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/foobook_logo" />
+
     <TextView
         android:id="@+id/FriendRequestActivityTitle"
         style="@style/pageTitle"
         android:text="@string/friend_requests"
+        android:paddingStart="70dp"
+        android:paddingTop="20dp"
+        android:textSize="40dp"
         android:layout_centerHorizontal="true"
         />
 

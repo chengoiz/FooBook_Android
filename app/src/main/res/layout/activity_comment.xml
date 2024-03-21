@@ -9,22 +9,28 @@
         android:id="@+id/commentActivityTitle"
         style="@style/pageTitle"
         android:text="@string/comments_title"
-        android:textSize="35dp"
+        android:textSize="55dp"
+        android:paddingStart="70dp"
+        android:paddingTop="15dp"
         android:layout_centerHorizontal="true"
         />
-    <TextView
-        android:id="@+id/textView4"
-        style="@style/pageTitle"
-        android:textSize="20dp"
-        android:text="@string/app_name" />
 
 
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/foobook_logo" />
 
     <LinearLayout
         android:id="@+id/addCommentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:paddingTop="20dp"
         android:orientation="horizontal"
         android:layout_below="@id/commentActivityTitle">
 

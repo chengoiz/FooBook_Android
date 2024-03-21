@@ -12,10 +12,14 @@
         android:orientation="horizontal"
         android:paddingHorizontal="1dp">
 
-        <TextView
-            android:id="@+id/textView4"
-            style="@style/pageTitle"
-            android:text="@string/app_name" />
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/foobook_logo" />
 
     </RelativeLayout>
 
@@ -49,6 +53,7 @@
                     android:layout_width="234dp"
                     android:layout_height="match_parent"
                     android:text="@string/user_name"
+                    android:layout_marginTop="5dp"
                     android:textSize="25sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -69,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/profileDetails"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:padding="8dp"
         tools:listitem="@layout/post_item"
         android:visibility="visible"/>

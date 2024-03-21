@@ -15,6 +15,7 @@
         android:layout_marginTop="15dp"
         android:fontFamily="@font/facebolt"
         android:text="@string/sign_up"
+        android:textStyle="bold"
         android:textColor="@color/colorAccent"
         android:textSize="70sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +38,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/registerUsername"
             android:layout_width="match_parent"
+            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:hint="@string/login_userName"
             android:inputType="text" />
@@ -58,6 +60,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/registerPassword"
             android:layout_width="match_parent"
+            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="textPassword" />
@@ -80,6 +83,7 @@
             android:id="@+id/registerPasswordVerification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:hint="@string/password_confirm"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -101,6 +105,7 @@
             android:id="@+id/registerDisplayName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:hint="@string/signUp_DisplayName"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -114,6 +119,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/signUp_choose_file"
         android:textColor="@android:color/black"
+        android:textStyle="bold"
         app:backgroundTint="@android:color/white"
         app:layout_constraintEnd_toStartOf="@+id/registerBtnTakePhoto"
         app:layout_constraintStart_toStartOf="parent"
@@ -126,6 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/signUp_TakePhoto"
+        android:textStyle="bold"
         android:textColor="@android:color/black"
         app:backgroundTint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -155,6 +162,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/btnSignup"
+        android:textStyle="bold"
         android:textColor="@android:color/black"
         app:backgroundTint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -169,6 +177,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/registerBtnBack"
+        android:textStyle="bold"
         android:textColor="@android:color/black"
         app:backgroundTint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
