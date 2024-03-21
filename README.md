@@ -1,4 +1,8 @@
 # FooBook_Android: Part 3 - Database Integration and Enhanced Features
+<p align="center">
+  <img src="https://github.com/RoeiMesi/FooBook_Android/assets/23407020/3d17bb9e-deb7-4f75-a8d4-13802d6e0e38" alt="foobook_logo">
+</p>
+
 Welcome to Part 3 of the FooBook_Android project. This phase brings critical updates to the app, integrating MongoDB for backend storage and Room for local database management. We've also incorporated JWT for secure authentication, enhanced UI components, and introduced a complete friend system, alongside other robust features.
 
 ## Getting Started
