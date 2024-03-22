@@ -98,7 +98,7 @@
       android:layout_marginHorizontal="10dp"
       android:layout_marginTop="24dp"
       android:layout_marginBottom="20dp"
-      android:scaleType="centerCrop"
+      android:scaleType="fitCenter"
       android:visibility="visible" />
 
   <Button

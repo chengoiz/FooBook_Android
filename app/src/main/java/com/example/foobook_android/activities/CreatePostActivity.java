@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,12 +15,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.example.foobook_android.databinding.ActivityCreatePostBinding;
 import com.example.foobook_android.ViewModels.PostViewModel;
+import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.TimestampUtil;
 
 public class CreatePostActivity extends AppCompatActivity  {
+    public static final int QUALITY = 80;
     // ViewModel for handling post operations.
     private PostViewModel postViewModel;
 
@@ -36,7 +37,7 @@ public class CreatePostActivity extends AppCompatActivity  {
     private ImageButton btnGallery, btnCamera;
 
     // Uri for the selected image.
-    private Uri postImageUri;
+    private String postImageBase64;
 
     // Flag to indicate whether a photo has been selected.
     private boolean isPhotoSelected = false;
@@ -134,12 +135,11 @@ public class CreatePostActivity extends AppCompatActivity  {
     }
 
     // Sets the selected image in the ImageView from a Bitmap and updates UI visibility.
+    // Converts the image to Base64 format to load to server.
     // This method is called after a photo is selected or captured.
     private void setImage(Bitmap bitmap) {
-        String filename = "photo_" + System.currentTimeMillis() + ".png"; // Generate a unique file name
-        postImageUri = photoSelectorHelper.saveBitmapToFile(this, bitmap, filename); // Save the bitmap as a file and get its Uri
-        selectedImage.setImageURI(null); // Clear any previous image
-        selectedImage.setImageURI(postImageUri); // Set the new image
+        postImageBase64 = ImageUtility.bitmapToBase64(ImageUtility.compressBitmap(bitmap, QUALITY));
+        selectedImage.setImageBitmap(bitmap);
         removePhoto.setVisibility(View.VISIBLE); // Show the remove photo button
         selectedImage.setVisibility(View.VISIBLE); // Make the ImageView visible
         isPhotoSelected = true; // Indicate that a photo has been selected
@@ -153,13 +153,13 @@ public class CreatePostActivity extends AppCompatActivity  {
         String authorProfileImage = fetchedProfilePic; // The profile picture URL of the post author
 
         String postText = postEditText.getText().toString(); // The text content of the post
-        String postImageUriString = isPhotoSelected ? postImageUri.toString() : ""; // The Uri of the selected image as a string, if any
+        String postImage = isPhotoSelected ? postImageBase64 : ""; // The Uri of the selected image as a string, if any
         String userId = getCurrentUserId(); // Fetch the current user's ID from shared preferences
 
         // Check if there is either text content or an image selected for the post
         if (!postText.isEmpty() || isPhotoSelected) {
             // Create a new Post object with the current details
-            Post newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage, postImageUriString);
+            Post newPost = new Post(postAuthor, TimestampUtil.getCurrentTimestamp(), postText, authorProfileImage, postImage);
             // Use the PostViewModel to save the new post for the user
             postViewModel.createPostForUser(userId, newPost, this);
 
