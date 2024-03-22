@@ -6,6 +6,7 @@ import static com.example.foobook_android.utility.ImageUtility.loadImage;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foobook_android.R;
 import com.example.foobook_android.models.User;
+import com.example.foobook_android.utility.ImageUtility;
 
 import java.util.List;
 
@@ -50,8 +52,13 @@ public class FriendsOfFriendAdapter extends RecyclerView.Adapter<FriendsOfFriend
         // Bind data for each friend of friend to the ViewHolder
         User friend = friendsOfFriends.get(position);
         holder.friendOfFriendText.setText(friend.getDisplayName());
-        // Load the friend's profile picture into the ImageView
-        loadImage(holder.friendOfFriendProfilePic, friend.getProfilePic(), context);
+        String profilePic = friend.getProfilePic();
+        if (ImageUtility.isBase64(profilePic)) {
+            Bitmap profilePicBitmap = ImageUtility.base64ToBitmap(profilePic);
+            holder.friendOfFriendProfilePic.setImageBitmap(profilePicBitmap);
+        } else if (ImageUtility.isImageUrl(profilePic)) {
+            loadImage(holder.friendOfFriendProfilePic, profilePic, context);
+        }
     }
 
     @Override

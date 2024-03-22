@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.example.foobook_android.activities.UserPostsActivity;
 import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
+import com.example.foobook_android.utility.ImageUtility;
+
 import java.util.List;
 
 
@@ -30,6 +33,8 @@ import java.util.List;
  * through designated buttons and menus.
  */
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
+    public static final int MAX_WIDTH = 1280;
+    public static final int MAX_HEIGHT = 960;
     private final Context context;
     private List<Post> posts; // List of posts to be displayed
     private final LayoutInflater inflater; // LayoutInflater to inflate the view for each post item
@@ -62,7 +67,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         // Setting the profile picture of the post creator
         if (post.getCreator().getProfilePic() != null && !post.getCreator().getProfilePic().isEmpty()) {
-            loadImage(holder.profileImageView, post.getCreator().getProfilePic());
+            String profilePic = post.getCreator().getProfilePic();
+            if (ImageUtility.isImageUrl(profilePic)) {
+                loadImage(holder.profileImageView, profilePic);
+            } else if (ImageUtility.isBase64(profilePic)) {
+                Bitmap profilePicBitmap = ImageUtility.base64ToBitmap(profilePic);
+                holder.profileImageView.setImageBitmap(profilePicBitmap);
+            }
         } else {
             // Set a default or specified drawable if no profile picture is available
             setImageFromDrawableName(holder.profileImageView, post.getProfileImage());
@@ -70,8 +81,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         // Handling the display of the post image if available
         if (post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
+            String postImage = post.getImageUrl();
             holder.postImageView.setVisibility(View.VISIBLE);
-            loadImage(holder.postImageView, post.getImageUrl());
+            if (ImageUtility.isImageUrl(postImage)) {
+                loadImage(holder.postImageView, postImage);
+            } else if (ImageUtility.isBase64(postImage)) {
+                Bitmap postImageBitmap = ImageUtility.base64ToBitmap(postImage);
+                Bitmap resizedImage = ImageUtility.resizeBitmap(postImageBitmap, MAX_WIDTH, MAX_HEIGHT);
+                holder.postImageView.setImageBitmap(resizedImage);
+            }
         } else {
             holder.postImageView.setVisibility(View.GONE);
         }
@@ -92,6 +110,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         });
         holder.shareButton.setOnClickListener(this::showShareMenu);
     }
+
 
     private void showProfilePictureMenu(View anchor, PostViewHolder holder) {
         PopupMenu popup = new PopupMenu(anchor.getContext(), anchor);

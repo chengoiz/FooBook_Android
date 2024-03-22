@@ -1,5 +1,9 @@
 package com.example.foobook_android.activities;
 
+import static com.example.foobook_android.activities.CreatePostActivity.QUALITY;
+import static com.example.foobook_android.adapters.PostAdapter.MAX_HEIGHT;
+import static com.example.foobook_android.adapters.PostAdapter.MAX_WIDTH;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.foobook_android.ViewModels.PostViewModel;
+import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
@@ -39,7 +44,8 @@ public class EditPostActivity extends AppCompatActivity {
     private Button postButton, removePhoto;
     private ImageButton btnGallery, btnCamera;
     // URI of the selected image for the post
-    private Uri postImageUri;
+    private Uri postImage;
+    private String postImageBase64;
     // Flag to track if a photo has been selected
     private boolean isPhotoSelected = false;
     // The post being edited
@@ -107,9 +113,8 @@ public class EditPostActivity extends AppCompatActivity {
      * @param bitmap The bitmap of the selected image.
      */
     private void setImage(Bitmap bitmap) {
-        String filename = "photo_" + System.currentTimeMillis() + ".png";
-        postImageUri = photoSelectorHelper.saveBitmapToFile(this, bitmap, filename);
-        Glide.with(this).load(postImageUri).into(selectedImage);
+        postImageBase64 = ImageUtility.bitmapToBase64(ImageUtility.compressBitmap(bitmap, QUALITY));
+        selectedImage.setImageBitmap(bitmap);
         selectedImage.setVisibility(View.VISIBLE);
         removePhoto.setVisibility(View.VISIBLE);
         isPhotoSelected = true;
@@ -142,8 +147,15 @@ public class EditPostActivity extends AppCompatActivity {
 
             // Check if there's an image URI available and load it
             if (currentPost.getImageUrl() != null && !currentPost.getImageUrl().isEmpty()) {
-                Uri imageUri = Uri.parse(currentPost.getImageUrl());
-                Glide.with(this).load(imageUri).into(selectedImage);
+                isPhotoSelected = true;
+                String postImage = currentPost.getImageUrl();
+                if (ImageUtility.isImageUrl(postImage)) {
+                    ImageUtility.loadImage(selectedImage, postImage, this);
+                } else if (ImageUtility.isBase64(postImage)) {
+                    Bitmap postImageBitmap = ImageUtility.base64ToBitmap(postImage);
+                    Bitmap resizedImage = ImageUtility.resizeBitmap(postImageBitmap, MAX_WIDTH, MAX_HEIGHT);
+                    selectedImage.setImageBitmap(resizedImage);
+                }
                 selectedImage.setVisibility(View.VISIBLE); // Make the ImageView visible
                 removePhoto.setVisibility(View.VISIBLE); // Show the remove photo button
             }
@@ -161,8 +173,7 @@ public class EditPostActivity extends AppCompatActivity {
         selectedImage.invalidate();
         selectedImage.setVisibility(View.GONE);
         isPhotoSelected = false;
-        currentPost.setImageUrl("");
-        postImageUri = null;
+        postImageBase64 = "";
     }
 
     /**
@@ -171,15 +182,14 @@ public class EditPostActivity extends AppCompatActivity {
      */
     private void savePost() {
         String postText = postEditText.getText().toString();
-        boolean isPhotoChanged = isPhotoSelected && postImageUri != null;
+       // boolean isPhotoChanged = isPhotoSelected && postImageBase64 != null;
 
-        // Use the new photo URI if a photo was selected, otherwise retain the original
-        String postImageUriString = isPhotoChanged ? postImageUri.toString() : currentPost.getImageUrl();
+
 
         // Proceed with update if there's new content or a new photo
-        if (!postText.isEmpty() || isPhotoChanged) {
+        if (!postText.isEmpty() || isPhotoSelected) {
             currentPost.setContent(postText);
-            currentPost.setImageUrl(postImageUriString);
+            currentPost.setImageUrl(postImageBase64);
 
             // Update the post using ViewModel
             postViewModel.updatePost(getCurrentUserId(), currentPost.getPostId(), currentPost, this);

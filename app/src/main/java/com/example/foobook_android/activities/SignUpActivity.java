@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.foobook_android.ViewModels.SignUpViewModel;
 import com.example.foobook_android.Api.SignUpRequest;
 import com.example.foobook_android.utility.FieldValidation;
+import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.UserInputValidator;
@@ -32,6 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 102;
     private static final int GALLERY_REQUEST_CODE = 103;
     public static final String USER_CREATED_SUCCESSFULLY = "User created successfully";
+    public static final int QUALITY = 80;
 
     // ViewModel for handling signup operations
     private SignUpViewModel signUpViewModel;
@@ -104,6 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
     // Attempts to sign up with the provided information
     private void attemptSignUp() {
         if (inputValidator.isInputValid()) {
+
             SignUpRequest signUpRequest = new SignUpRequest(
                     inputUserName.getText().toString(),
                     inputPassword.getText().toString(),
@@ -128,11 +131,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     // Sets the selected image in the ImageView and updates the validator
     private void setImage(Bitmap bitmap) {
-        String filename = "photo_" + System.currentTimeMillis() + ".png";
-        Uri imageUri = photoSelectorHelper.saveBitmapToFile(this, bitmap, filename);
-        profileImage = imageUri.toString();
-        selectedImage.setImageURI(null);
-        selectedImage.setImageURI(imageUri);
+        profileImage = ImageUtility.bitmapToBase64(ImageUtility.compressBitmap(bitmap, QUALITY));
+        selectedImage.setImageBitmap(bitmap);
         isPhotoSelected = true;
         inputValidator.setPhotoSelected(true);
     }
