@@ -131,7 +131,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     // Sets the selected image in the ImageView and updates the validator
     private void setImage(Bitmap bitmap) {
-        profileImage = ImageUtility.bitmapToBase64(ImageUtility.compressBitmap(bitmap, QUALITY));
+        profileImage = ImageUtility.bitmapToBase64(
+                                    ImageUtility.compressBitmap(
+                                    ImageUtility.resizeBitmap(
+                                            bitmap, 64, 64),
+                                            QUALITY));
+
         selectedImage.setImageBitmap(bitmap);
         isPhotoSelected = true;
         inputValidator.setPhotoSelected(true);

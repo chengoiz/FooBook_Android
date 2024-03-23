@@ -144,10 +144,10 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/registerImage"
-        android:layout_width="132dp"
-        android:layout_height="110dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="4dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:src="@drawable/defaultpic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

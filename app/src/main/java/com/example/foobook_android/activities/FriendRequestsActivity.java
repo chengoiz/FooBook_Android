@@ -44,6 +44,7 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
                 // Show failure message
                 Toast.makeText(this, "Failed to accept friend request.", Toast.LENGTH_SHORT).show();
             }
+
         });
 
         // Observes the result of declining a friend request
