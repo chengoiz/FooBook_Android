@@ -33,6 +33,15 @@ public class CommentsDataHolder {
         }
     }
 
+    public static void updateCommenterName(String newName, String newProfilePic) {
+        for (List<Comment> comments : commentsMap.values()) {
+            for (Comment comment : comments) {
+                    comment.setCommenterName(newName);
+                    comment.setCommenterProfilePic(newProfilePic);
+            }
+        }
+    }
+
     // Method to get comment count
     public static int getCommentCount(int postPosition) {
         List<Comment> comments = commentsMap.getOrDefault(postPosition, new ArrayList<>());

@@ -2,7 +2,7 @@ package com.example.foobook_android.comment;
 
 public class Comment {
     // Fields to store the commenter's name, their comment text, and profile image URL.
-    private final String commenterName;
+    private String commenterName;
     private String commentText;
     private String commenterProfilePic;
     /**
@@ -49,5 +49,12 @@ public class Comment {
      */
     public void setCommentText(String commentText) {
         this.commentText = commentText;
+    }
+
+    public void setCommenterName(String commenterName) {
+        this.commenterName = commenterName;
+    }
+    public void setCommenterProfilePic(String commenterProfilePic) {
+        this.commenterProfilePic = commenterProfilePic;
     }
 }
