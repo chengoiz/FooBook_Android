@@ -121,7 +121,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         // Check if the comment text is not empty
         if (!commentText.isEmpty()) {
             // Create a new Comment object with the current user's display name, the comment text, and profile picture URL
-            Comment newComment = new Comment(fetchedDisplayName, commentText);
+            Comment newComment = new Comment(fetchedDisplayName, fetchedProfilePic, commentText);
             // Add the new comment to the global comment holder and the local list
             CommentsDataHolder.addComment(postPosition, newComment);
             commentsList.add(newComment);

@@ -1,6 +1,7 @@
 package com.example.foobook_android.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.foobook_android.R;
 import com.example.foobook_android.ViewModels.UserViewModel;
+import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -29,6 +31,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST_CODE = 101;
     private Uri profilePictureUri;
     private UserViewModel userViewModel;
+    private String profilePictureBase64; // Add this as a class member to store the Base64 image
+
 
 
     @Override
@@ -60,10 +64,11 @@ public class EditProfileActivity extends AppCompatActivity {
         btnSaveChanges.setOnClickListener(v -> saveProfileChanges());
         btnClose.setOnClickListener(v -> finish());
     }
-    
+
     private void setImage(Bitmap bitmap) {
-        String filename = "photo_" + System.currentTimeMillis() + ".png";
-        this.profilePictureUri = photoSelectorHelper.saveBitmapToFile(this, bitmap, filename);
+        profilePictureBase64 = ImageUtility.bitmapToBase64(ImageUtility.compressBitmap(bitmap, 80));
+        ivProfilePicture.setImageBitmap(bitmap);
+        ivProfilePicture.setVisibility(View.VISIBLE);
         ivProfilePicture.setImageURI(null);
         ivProfilePicture.setImageURI(profilePictureUri);
         tvNoFileChosen.setVisibility(View.INVISIBLE);
@@ -79,8 +84,18 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         // Now call the updateUserDetails method from UserViewModel
-        userViewModel.updateUserDetails(displayName, profilePicUri);
+        userViewModel.updateUserDetails(displayName, profilePictureBase64);
+        updateSharedPreferences(displayName);
+
         navigateToFeedActivity();
+    }
+
+    private void updateSharedPreferences(String newDisplayName) {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("displayName", newDisplayName); // Update display name
+        editor.putString("profilePicUrl", profilePictureBase64); // Update profile pic name
+        editor.apply(); // Apply changes
     }
 
     private void navigateToFeedActivity() {
