@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.foobook_android.R;
 import com.example.foobook_android.ViewModels.UserViewModel;
+import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 
@@ -69,8 +70,6 @@ public class EditProfileActivity extends AppCompatActivity {
         profilePictureBase64 = ImageUtility.bitmapToBase64(ImageUtility.compressBitmap(bitmap, 80));
         ivProfilePicture.setImageBitmap(bitmap);
         ivProfilePicture.setVisibility(View.VISIBLE);
-        ivProfilePicture.setImageURI(null);
-        ivProfilePicture.setImageURI(profilePictureUri);
         tvNoFileChosen.setVisibility(View.INVISIBLE);
     }
 
@@ -85,16 +84,21 @@ public class EditProfileActivity extends AppCompatActivity {
 
         // Now call the updateUserDetails method from UserViewModel
         userViewModel.updateUserDetails(displayName, profilePictureBase64);
+        CommentsDataHolder.updateCommenterName(displayName,
+                profilePictureBase64 != null ? profilePictureBase64 : getProfilePicture());
         updateSharedPreferences(displayName);
 
         navigateToFeedActivity();
     }
 
+
     private void updateSharedPreferences(String newDisplayName) {
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("displayName", newDisplayName); // Update display name
-        editor.putString("profilePicUrl", profilePictureBase64); // Update profile pic name
+        if (profilePictureBase64 != null) {
+            editor.putString("profilePicUrl", profilePictureBase64);
+        }// Update profile pic name
         editor.apply(); // Apply changes
     }
 
@@ -108,6 +112,10 @@ public class EditProfileActivity extends AppCompatActivity {
         Toast.makeText(this, "User details updated successfully!", Toast.LENGTH_LONG).show();
     }
 
+    private String getProfilePicture() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        return sharedPreferences.getString("profilePicUrl", "");
+    }
     // Handle the result from PhotoSelectorHelper
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
