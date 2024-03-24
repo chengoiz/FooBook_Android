@@ -4,14 +4,17 @@ public class Comment {
     // Fields to store the commenter's name, their comment text, and profile image URL.
     private final String commenterName;
     private String commentText;
+    private String commenterProfilePic;
     /**
      * Constructor for creating a new Comment object.
      *
      * @param commenterName The name of the commenter.
      * @param commentText The text of the comment.
+     * @param commenterProfilePic The profile pic of the commenter.
      */
-    public Comment(String commenterName, String commentText) {
+    public Comment(String commenterName, String commenterProfilePic, String commentText) {
         this.commenterName = commenterName;
+        this.commenterProfilePic = commenterProfilePic;
         this.commentText = commentText;
     }
 
@@ -33,6 +36,10 @@ public class Comment {
      */
     public String getCommentText() {
         return commentText;
+    }
+
+    public String getCommenterProfilePic() {
+        return commenterProfilePic;
     }
 
     /**

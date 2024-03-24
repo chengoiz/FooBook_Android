@@ -1,6 +1,9 @@
 package com.example.foobook_android.adapters;
 
+import static com.example.foobook_android.utility.ImageUtility.loadImage;
+
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foobook_android.comment.Comment;
 import com.example.foobook_android.utility.FieldValidation;
 import com.example.foobook_android.R;
+import com.example.foobook_android.utility.ImageUtility;
 
 import java.util.List;
 
@@ -60,6 +64,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         // Bind data to the ViewHolder
         holder.bind(comments.get(position), position);
+        if (ImageUtility.isBase64(comments.get(position).getCommenterProfilePic())) {
+            Bitmap profilePicBitmap = ImageUtility.base64ToBitmap(comments.get(position).getCommenterProfilePic());
+            holder.commenterProfileImageView.setImageBitmap(profilePicBitmap);
+        } else if (ImageUtility.isImageUrl(comments.get(position).getCommenterProfilePic())) {
+            loadImage(holder.commenterProfileImageView, comments.get(position).getCommenterProfilePic(), context);
+        }
     }
 
     @Override
