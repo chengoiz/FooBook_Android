@@ -153,8 +153,7 @@ public class EditPostActivity extends AppCompatActivity {
                     ImageUtility.loadImage(selectedImage, postImage, this);
                 } else if (ImageUtility.isBase64(postImage)) {
                     Bitmap postImageBitmap = ImageUtility.base64ToBitmap(postImage);
-                    Bitmap resizedImage = ImageUtility.resizeBitmap(postImageBitmap, MAX_WIDTH, MAX_HEIGHT);
-                    selectedImage.setImageBitmap(resizedImage);
+                    selectedImage.setImageBitmap(postImageBitmap);
                 }
                 selectedImage.setVisibility(View.VISIBLE); // Make the ImageView visible
                 removePhoto.setVisibility(View.VISIBLE); // Show the remove photo button

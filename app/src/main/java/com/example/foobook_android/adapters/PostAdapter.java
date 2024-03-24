@@ -87,8 +87,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 loadImage(holder.postImageView, postImage);
             } else if (ImageUtility.isBase64(postImage)) {
                 Bitmap postImageBitmap = ImageUtility.base64ToBitmap(postImage);
-                Bitmap resizedImage = ImageUtility.resizeBitmap(postImageBitmap, MAX_WIDTH, MAX_HEIGHT);
-                holder.postImageView.setImageBitmap(resizedImage);
+                holder.postImageView.setImageBitmap(postImageBitmap);
             }
         } else {
             holder.postImageView.setVisibility(View.GONE);
