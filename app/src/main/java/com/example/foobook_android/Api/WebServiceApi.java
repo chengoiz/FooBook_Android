@@ -66,6 +66,6 @@ public interface WebServiceApi {
     @DELETE("api/users/{id}")
     Call<Void> deleteUser(@Header("Authorization") String authToken);
 
-    @PATCH("api/posts/{postId}/toggleLike")
-    Call<ToggleLikeResponse> toggleLike(@Path("postId") String postId, @Header("Authorization") String authToken);
+    @PATCH("api/users/{userId}/posts/{postId}/like")
+    Call<ToggleLikeResponse> toggleLike(@Path("userId") String userId, @Path("postId") String postId, @Header("Authorization") String authToken);
 }

@@ -39,6 +39,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     private List<Post> posts; // List of posts to be displayed
     private final LayoutInflater inflater; // LayoutInflater to inflate the view for each post item
     private final PostItemListener listener; // Listener for post item interactions
+    boolean isLiked;
 
 
     // Constructor initializing the adapter with necessary context, data, and listener
@@ -144,6 +145,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     // Method to update likes and comments display for a post
     private void updateLikesAndComments(PostViewHolder holder, Post post, int position) {
+        if (post.isLikedByCurrentUser()) {
+            holder.feedBtnLike.setImageResource(R.drawable.btn_like_blue); // Highlight the like button
+        } else {
+            holder.feedBtnLike.setImageResource(R.drawable.btn_like); // Revert to default like button
+        }
         holder.likesCountTextView.setText(context.getString(R.string.likes_count,
                                         post.getLikesCount()));
         int commentCount = CommentsDataHolder.getCommentCount(position);
@@ -152,8 +158,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
 //  Method to handle like button click, toggles the like status and updates the display
-    private void updateLikes(PostViewHolder holder, Post post) {
-        boolean isLiked = post.toggleLike();
+    public void updateLikes(PostViewHolder holder, Post post) {
+        listener.onLike(post.getPostId());
+        isLiked = post.toggleLike();
         holder.likesCountTextView.setText(context.getString(R.string.likes_count,
                 post.getLikesCount()));
         if (isLiked) {
@@ -162,19 +169,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             holder.feedBtnLike.setImageResource(R.drawable.btn_like); // Revert to default like button
         }
     }
-
-//    private void updateLikes(PostViewHolder holder, Post post) {
-//        String postid = post.getPostId();
-//        postViewModel.toggleLike(postid);
-//        boolean isLiked = post.toggleLike();
-//        holder.likesCountTextView.setText(context.getString(R.string.likes_count,
-//                post.getLikesCount()));
-//        if (isLiked) {
-//            holder.feedBtnLike.setImageResource(R.drawable.btn_like_blue); // Highlight the like button
-//        } else {
-//            holder.feedBtnLike.setImageResource(R.drawable.btn_like); // Revert to default like button
-//        }
-//    }
 
     // Starts an activity for commenting on a post
     private void startCommentActivity(int position) {
@@ -273,6 +267,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         void onEdit(Post post);
 
         void onDelete(String postId);
+
+        void onLike(String postId);
     }
 
     // ViewHolder class to manage the layout of each post item
@@ -297,6 +293,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             feedBtnLike = itemView.findViewById(R.id.feedBtnLike);
             editPostMenu = itemView.findViewById(R.id.editPostMenu);
             shareButton = itemView.findViewById(R.id.feedBtnShare);
+
+
         }
     }
 }

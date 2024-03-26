@@ -59,8 +59,8 @@ public class PostViewModel extends AndroidViewModel {
         repository.fetchAndProcessPosts(context);
     }
 
-    public void toggleLike(String postId) {
-        repository.toggleLike(postId, new Callback<ToggleLikeResponse>() {
+    public void toggleLike(String userId, String postId) {
+        repository.toggleLike(userId, postId, new Callback<ToggleLikeResponse>() {
             @Override
             public void onResponse(@NonNull Call<ToggleLikeResponse> call, @NonNull Response<ToggleLikeResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

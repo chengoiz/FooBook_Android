@@ -23,6 +23,7 @@ import com.example.foobook_android.utility.PhotoSelectorHelper;
 
 public class EditProfileActivity extends AppCompatActivity {
 
+    public static final int QUALITY = 80;
     private EditText etDisplayName;
     private Button btnChooseFile, btnTakePicture, btnSaveChanges, btnClose;
     private ImageView ivProfilePicture;
@@ -67,7 +68,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void setImage(Bitmap bitmap) {
-        profilePictureBase64 = ImageUtility.bitmapToBase64(ImageUtility.compressBitmap(bitmap, 80));
+        profilePictureBase64 = ImageUtility.bitmapToBase64(ImageUtility.compressBitmap(bitmap, QUALITY));
+        ivProfilePicture.setImageURI(profilePictureUri);
         ivProfilePicture.setImageBitmap(bitmap);
         ivProfilePicture.setVisibility(View.VISIBLE);
         tvNoFileChosen.setVisibility(View.INVISIBLE);
