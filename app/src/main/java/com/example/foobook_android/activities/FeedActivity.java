@@ -272,6 +272,13 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
             postAdapter.removePostById(postId);
         Toast.makeText(this, "Post deleted successfully.", Toast.LENGTH_SHORT).show();
     }
+    public void onLike(String postId) {
+        if (postId == null) {
+            Toast.makeText(this, "Error liking post.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        postViewModel.toggleLike(getCurrentUserId(), postId);
+    }
 
 
     @SuppressLint("NotifyDataSetChanged")

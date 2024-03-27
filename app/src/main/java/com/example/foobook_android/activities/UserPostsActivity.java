@@ -132,6 +132,15 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
         Toast.makeText(this, "Post deleted successfully.", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onLike(String postId) {
+        if (postId == null) {
+            Toast.makeText(this, "Error liking post.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        postViewModel.toggleLike(getCurrentUserId(), postId);
+    }
+
     private String getCurrentUserId() {
         // Retrieving the current user's ID from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);

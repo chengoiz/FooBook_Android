@@ -139,11 +139,15 @@ public class PostRepository {
         });
     }
 
-    public void toggleLike(String postId, final Callback<ToggleLikeResponse> callback) {
+    public void toggleLike(String userId, String postId, final Callback<ToggleLikeResponse> callback) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         String authToken = sharedPreferences.getString("token", "");
-
-        Call<ToggleLikeResponse> call = webServiceApi.toggleLike(postId, "Bearer " + authToken);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
+        Call<ToggleLikeResponse> call = webServiceApi.toggleLike(userId, postId, "Bearer " + authToken);
         call.enqueue(callback);
     }
 
