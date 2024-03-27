@@ -78,22 +78,30 @@
         android:layout_below="@id/title"
         android:layout_marginTop="8dp">
 
+        <!-- Friend List Button (Right) -->
+
+        <Button
+            android:id="@+id/MyProfileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:text="@string/my_profile" />
+
         <Button
             android:id="@+id/FriendRequestsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_centerHorizontal="true"
             android:text="@string/friend_requests" />
 
         <Button
             android:id="@+id/FriendListButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_toEndOf="@id/FriendRequestsButton"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
             android:text="@string/friend_list" />
-
-
 
     </RelativeLayout>
 

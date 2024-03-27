@@ -39,15 +39,23 @@ public class PostRepository {
     private final WebServiceApi webServiceApi;
     private final LiveData<List<Post>> latestPosts;
     private final Context context;
+    private Retrofit retrofit;
 
     public PostRepository(Application application) {
         PostDB db = PostDB.getInstance(application);
         postDao = db.postDao();
         latestPosts = postDao.getLatestPosts();
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/").
-                addConverterFactory(GsonConverterFactory.create()).
-                build(); // change the baseUrl later
+                .baseUrl("http://10.0.2.2:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
         webServiceApi = retrofit.create(WebServiceApi.class);
         this.context = application;
     }
@@ -82,36 +90,11 @@ public class PostRepository {
     }
 
     public void createPostForUser(String userId, Post post, Context context, Callback<Post> callback) {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient)
-                .build();
-
-        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
         webServiceApi.createPostForUser(userId, post,"Bearer " + token).enqueue(callback);
     }
     public void updatePostForUser(String userId, String postId, Post post, Context context, Callback<Post> callback) {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient)
-                .build();
-
-        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
         webServiceApi.updatePostForUser(userId, postId, post,"Bearer " + token).enqueue(callback);
@@ -142,11 +125,6 @@ public class PostRepository {
     public void toggleLike(String userId, String postId, final Callback<ToggleLikeResponse> callback) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         String authToken = sharedPreferences.getString("token", "");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
         Call<ToggleLikeResponse> call = webServiceApi.toggleLike(userId, postId, "Bearer " + authToken);
         call.enqueue(callback);
     }
@@ -154,12 +132,6 @@ public class PostRepository {
     public void fetchAndProcessPosts(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
         String authToken = sharedPreferences.getString("token", "");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
         webServiceApi.fetchFeedPosts("Bearer " + authToken).enqueue(new Callback<FeedResponse>() {
             @Override
             public void onResponse(@NonNull Call<FeedResponse> call, @NonNull Response<FeedResponse> response) {
@@ -187,12 +159,6 @@ public class PostRepository {
 
 
     public void getPostsByUserId(String userId, String authToken, Callback<PostsResponse> callback) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        WebServiceApi webServiceApi = retrofit.create(WebServiceApi.class);
         webServiceApi.getPostsByUserId(userId, authToken).enqueue(callback);
     }
 

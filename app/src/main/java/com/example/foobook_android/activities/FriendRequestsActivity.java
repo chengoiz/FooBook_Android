@@ -16,7 +16,8 @@ import com.example.foobook_android.adapters.FriendRequestAdapter;
 
 
 import java.util.ArrayList;
-
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class FriendRequestsActivity extends AppCompatActivity implements FriendRequestAdapter.FriendRequestListener{
@@ -103,6 +104,18 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
     @Override
     // Handles acceptance of a friend request
     public void onAcceptRequest(String userId, String friendId) {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Retrieve the current friend list
+        Set<String> friendList = sharedPreferences.getStringSet("friendList", new HashSet<>());
+
+        // Add the new friend ID to the list
+        friendList.add(friendId);
+
+        // Save the updated friend list back to SharedPreferences
+        editor.putStringSet("friendList", friendList);
+        editor.apply(); // Apply changes
         friendshipViewModel.acceptFriendRequest(userId, friendId);
     }
 

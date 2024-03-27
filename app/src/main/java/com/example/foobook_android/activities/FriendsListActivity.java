@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 import com.example.foobook_android.R;
@@ -12,6 +13,8 @@ import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.ViewModels.FriendshipViewModel;
 import com.example.foobook_android.adapters.FriendListAdapter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FriendsListActivity extends AppCompatActivity implements FriendListAdapter.FriendListListener{
     // ViewModel for handling operations related to friendships
@@ -88,6 +91,16 @@ public class FriendsListActivity extends AppCompatActivity implements FriendList
     public void onDeleteFriend(String userId, String friendId) {
         // Requests the ViewModel to delete a friend
         friendshipViewModel.declineFriendRequest(userId, friendId);
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> friendList = sharedPreferences.getStringSet("friendList", new HashSet<>());
+
+        // Add the new friend ID to the list
+        friendList.remove(friendId);
+
+        // Save the updated friend list back to SharedPreferences
+        editor.putStringSet("friendList", friendList);
+        editor.apply();
         // Displays a success message (Note: This message might be better placed inside observeViewModel to accurately reflect the operation result)
         Toast.makeText(this, "Successfully deleted from friends.", Toast.LENGTH_SHORT).show();
     }
