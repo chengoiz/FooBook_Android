@@ -26,7 +26,7 @@ public class Post implements Serializable {
     private String text;
 
     @ColumnInfo(name = "likesCount")
-    @SerializedName("likeCount")
+    @SerializedName("__v")
     private int likesCount;
 
     @ColumnInfo(name = "isLikedByCurrentUser")
