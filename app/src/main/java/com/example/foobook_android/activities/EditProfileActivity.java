@@ -42,8 +42,13 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        setUpFields();
+        setUpHelpers();
+        // Set up the button listeners
+        setListeners();
+    }
 
-
+    private void setUpFields() {
         etDisplayName = findViewById(R.id.etDisplayName);
         btnChooseFile = findViewById(R.id.btnChooseFile);
         btnTakePicture = findViewById(R.id.btnTakePicture);
@@ -51,13 +56,6 @@ public class EditProfileActivity extends AppCompatActivity {
         btnClose = findViewById(R.id.btnClose);
         ivProfilePicture = findViewById(R.id.selectedImage);
         tvNoFileChosen = findViewById(R.id.tvNoFileChosen);
-
-        // Initialize PhotoSelectorHelper with activity callbacks
-        photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
-
-
-        // Set up the button listeners
-        setListeners();
     }
 
     private void setListeners() {
@@ -73,6 +71,11 @@ public class EditProfileActivity extends AppCompatActivity {
         ivProfilePicture.setImageBitmap(bitmap);
         ivProfilePicture.setVisibility(View.VISIBLE);
         tvNoFileChosen.setVisibility(View.INVISIBLE);
+    }
+
+    private void setUpHelpers() {
+        // Initialize PhotoSelectorHelper with activity callbacks
+        photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
     }
 
     private void saveProfileChanges() {

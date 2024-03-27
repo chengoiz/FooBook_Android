@@ -135,7 +135,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
 
-    private void navigateToUserPosts(String userId, String displayName, String ProfilePic) {
+    public void navigateToUserPosts(String userId, String displayName, String ProfilePic) {
         Intent intent = new Intent(context, UserPostsActivity.class);
         intent.putExtra("VIEWED_USER_ID", userId);
         intent.putExtra("VIEWED_USER_DISPLAY_NAME", displayName);
@@ -145,7 +145,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     // Method to update likes and comments display for a post
     private void updateLikesAndComments(PostViewHolder holder, Post post, int position) {
-        if (post.isLikedByCurrentUser()) {
+        if (post.getUserLiked()) {
             holder.feedBtnLike.setImageResource(R.drawable.btn_like_blue); // Highlight the like button
         } else {
             holder.feedBtnLike.setImageResource(R.drawable.btn_like); // Revert to default like button

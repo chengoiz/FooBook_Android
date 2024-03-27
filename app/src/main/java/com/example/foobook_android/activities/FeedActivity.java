@@ -142,6 +142,15 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
             startActivity(intent);
         });
 
+        Button myProfileButton = findViewById(R.id.MyProfileButton);
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        String displayName = sharedPreferences.getString("displayName", "");
+        String profilePic = sharedPreferences.getString("profilePicUrl", "");
+        myProfileButton.setOnClickListener(v -> {
+            postAdapter.navigateToUserPosts(getCurrentUserId(), displayName, profilePic);
+        });
+
+
         ImageButton feedMenuBtn = findViewById(R.id.feedMenuBtn);
         feedMenuBtn.setOnClickListener(this::showFeedMenu);
 

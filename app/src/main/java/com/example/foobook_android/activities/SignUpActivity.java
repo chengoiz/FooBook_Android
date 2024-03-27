@@ -59,19 +59,8 @@ public class SignUpActivity extends AppCompatActivity {
         initializeViews();
         setupListeners();
         setupFieldValidation();
-        signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
-
-        // Observes the response from the SignUpViewModel
-        signUpViewModel.getUserResponseLiveData().observe(this, userResponse -> {
-            Toast.makeText(getApplicationContext(), userResponse.getMessage(), Toast.LENGTH_LONG).show();
-            if (USER_CREATED_SUCCESSFULLY.equals(userResponse.getMessage())) {
-                navigateToLogInActivity(); // Navigate to login if sign up is successful
-            }
-        });
-
-        // Initialize helper and validator
-        photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
-        inputValidator = new UserInputValidator(this, inputUserName, inputPassword, inputPasswordVer, inputDisplayName, isPhotoSelected);
+        setUpObservers();
+        setUpHelpers();
     }
 
     // Sets up validation for input fields
@@ -88,6 +77,24 @@ public class SignUpActivity extends AppCompatActivity {
         btnGallery.setOnClickListener(v -> photoSelectorHelper.openGallery());
         btnSignup.setOnClickListener(v -> attemptSignUp()); // Attempts sign up
         btnClose.setOnClickListener(v -> navigateBack()); // Navigates back to the login screen
+    }
+
+    private void setUpObservers() {
+        signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+
+        // Observes the response from the SignUpViewModel
+        signUpViewModel.getUserResponseLiveData().observe(this, userResponse -> {
+            Toast.makeText(getApplicationContext(), userResponse.getMessage(), Toast.LENGTH_LONG).show();
+            if (USER_CREATED_SUCCESSFULLY.equals(userResponse.getMessage())) {
+                navigateToLogInActivity(); // Navigate to login if sign up is successful
+            }
+        });
+    }
+
+    private void setUpHelpers() {
+        // Initialize helper and validator
+        photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
+        inputValidator = new UserInputValidator(this, inputUserName, inputPassword, inputPasswordVer, inputDisplayName, isPhotoSelected);
     }
 
     // Initializes UI components

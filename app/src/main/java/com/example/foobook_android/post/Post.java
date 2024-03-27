@@ -25,13 +25,13 @@ public class Post implements Serializable {
     @ColumnInfo(name = "text")
     private String text;
 
-    @ColumnInfo(name = "likesCount")
-    @SerializedName("__v")
+    @ColumnInfo(name = "likeCount")
+    @SerializedName("likeCount")
     private int likesCount;
 
-    @ColumnInfo(name = "isLikedByCurrentUser")
+    @ColumnInfo(name = "userLiked")
     @SerializedName("userLiked")
-    private boolean isLikedByCurrentUser;
+    private boolean userLiked;
 
     @SerializedName("canEdit")
     private boolean canEdit;
@@ -69,6 +69,7 @@ public class Post implements Serializable {
         this.isJsonFile = 0;
         this.isPhotoPicked = NO_PHOTO;
         this.creator = null;
+        this.userLiked = false;
     }
     public Post(String userName, String timestamp, String text,  String profileImage,
                 String postImageUri) {
@@ -82,17 +83,17 @@ public class Post implements Serializable {
     }
 
     public boolean toggleLike() {
-        isLikedByCurrentUser = !isLikedByCurrentUser;
-        likesCount += isLikedByCurrentUser ? 1 : -1;
-        return isLikedByCurrentUser;
+        userLiked = !userLiked;
+        likesCount += userLiked ? 1 : -1;
+        return userLiked;
     }
 
     // Getters
     public int getLikesCount() {
         return likesCount;
     }
-    public boolean isLikedByCurrentUser() {
-        return isLikedByCurrentUser;
+    public boolean getUserLiked() {
+        return userLiked;
     }
     public boolean isImageSetByUser() {
         return isImageSetByUser;
@@ -141,8 +142,8 @@ public class Post implements Serializable {
         this.likesCount = likesCount;
     }
 
-    public void setIsLikedByCurrentUser(boolean isLikedByCurrentUser) {
-        this.isLikedByCurrentUser = isLikedByCurrentUser;
+    public void setUserLiked(boolean userLiked) {
+        this.userLiked = userLiked;
     }
 
     public Creator getCreator() {
