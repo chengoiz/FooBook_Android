@@ -10,6 +10,9 @@ To get started with these new features, please follow the instructions below.
 
 ### Prerequisites
 Ensure that you have the latest version of Android Studio.
+
+To fully utilize the functionalities of FooBook_Android, it's essential to have the Foobook_Server
+operational,since this frontend application depends on its API endpoints for data access.
 Verify that your MongoDB Atlas cluster is active and accessible.
 Update the Android SDK to the latest available version.
 
@@ -19,50 +22,58 @@ Update the Android SDK to the latest available version.
    
 2. **Open Project: Launch Android Studio and open the cloned project.**
 
-3. **Add Dependencies: Update your build.gradle with MongoDB, Room, Retrofit, and other required libraries.**
+3**Sync Gradle: Use the 'Sync Now' feature in Android Studio to sync your project with the updated dependencies.**
 
-4. **Sync Gradle: Use the 'Sync Now' feature in Android Studio to sync your project with the updated dependencies.**
-
-### Configuration
-- **MongoDB:**- Configure your MongoDB Atlas with the necessary collections and link it to the app with the correct URI.
-- **Room Database:**- Set up Room entities, DAOs, and database instances to mirror the MongoDB structure for local storage.
-- **JWT Authentication:**- Ensure your server-side authentication system is ready to issue JWT tokens for secure communication.
 
 ## New Features and Improvements
 
 ### User Authentication and Security
-- Integrated JWT-based authentication for secure login and registration.
-- Ensured all backend endpoints require valid JWT for access.
+- Secure login and registration through JWT-based authentication.
+- Backend endpoints protection requiring valid JWTs.
 
 ### Friend System
-- Implemented a comprehensive friend system allowing users to send, view, and manage friend requests.
-- Integrated friend features into user profiles with functionality to view and manage friends and friend lists.
+- A comprehensive system for managing friend requests, viewing, and interacting with friends within user profiles.
 
 ### UI and UX Enhancements
-- Refined UI components for improved navigation and aesthetics, including a dark mode setting.
-- Implemented photo selection in post creation and profile editing for a more personalized user experience.
-- Applied consistent theming and data binding for smoother UI updates.
+- Improved UI components for easier navigation and a visually appealing experience, including a dark mode.
+- Enhanced personalization through photo selection in posts and profile settings.
+- Smooth UI updates with consistent theming and data binding.
 
 ### Database Management
-- Implemented MongoDB for storing posts and user data.
-- Integrated Room for local data persistence and offline functionality.
-- Established mechanisms for syncing local and remote databases.
+- MongoDB integration for efficient data handling and user information storage.
+- Room database for local data persistence, ensuring offline functionality.
+- Synchronization between local and remote databases to maintain data consistency.
 
 ### Error Handling and Data Compliance
-- Improved error handling for a smoother user experience.
-- Ensured data handling complies with privacy standards.
+- Advanced error handling mechanisms for a streamlined user experience.
+- Compliance with privacy standards in data management.
 
 ## Development and Testing
 ### Development Approach
-- Mapped out the user journey and data flow to ensure a seamless experience.
-- Followed a modular development approach for independent feature testing and integration.
-- Adopted MVVM architecture for maintainable and testable code.
+- Planned user journey and data flow for a seamless app experience.
+- Modular development strategy for easy feature testing and integration.
+- Adoption of MVVM architecture for code that's both maintainable and testable.
 
 ### Testing
-- Performed thorough unit and integration tests on individual features.
-- Conducted end-to-end testing to ensure feature compatibility and data integrity.
-- Tested the app on various devices and Android versions to ensure consistent performance.
+- Comprehensive unit and integration testing of features.
+- End-to-end testing for ensuring feature compatibility and data integrity.
+- Application testing across different devices and Android versions for consistent user experience.
 
 ### Wrap-Up
-The latest update to FooBook_Android represents a significant leap forward in functionality and user experience. We invite you to test these new features, provide feedback, and contribute to further improvements.
-For more detailed information on each update, refer to the individual Jira tasks linked within this document.
+The latest advancements in FooBook_Android mark a significant enhancement in functionality and user interface. We encourage you to explore these updates, share your feedback, and contribute to ongoing development.
+For in-depth details on each feature, refer to the linked Jira tasks within this document.
+
+## Photos
+<div align="center">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/7976fecf-f863-4611-ab4f-31cdafe62632" alt="Image 1">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/8e4ac62c-daa7-4b1e-b255-cb64270deeec" alt="Image 2">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/b3186cb0-e58d-4b1c-b4e8-09854ddfc95f" alt="Image 3">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/1b7ad99d-61c1-4976-82b3-c6e948824e79" alt="Image 4">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/4ddac3ce-d4ac-4a2f-8800-3602efb4b39f" alt="Image 5">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/53cbd007-57c0-4762-8871-4a5c5fc14ba9" alt="Image 6">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/b0c3f749-61af-40e6-911e-fe14caebdd8c" alt="Image 7">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/c62bc21d-ba18-4171-93ab-1579f0d6315f" alt="Image 8">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/6b59bb92-6a10-498e-a79d-4839fe87652d" alt="Image 9">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/0e448103-6319-413d-9611-48abdfc2e987" alt="Image 10">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/4e2f818b-6658-4dd7-981e-209ce5534638" alt="Image 11">
+</div>
