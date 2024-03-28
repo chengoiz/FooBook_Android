@@ -1,4 +1,6 @@
-# FooBook_Android: Part 3 - Database Integration and Enhanced Features
+<div align="center">
+  <h1>FooBook_Android: Part 3</h1>
+</div>
 <p align="center">
   <img src="https://github.com/RoeiMesi/FooBook_Android/assets/23407020/3d17bb9e-deb7-4f75-a8d4-13802d6e0e38" alt="foobook_logo">
 </p>
@@ -11,10 +13,8 @@ To get started with these new features, please follow the instructions below.
 ### Prerequisites
 Ensure that you have the latest version of Android Studio.
 
-To fully utilize the functionalities of FooBook_Android, it's essential to have the Foobook_Server
-operational,since this frontend application depends on its API endpoints for data access.
-Verify that your MongoDB Atlas cluster is active and accessible.
-Update the Android SDK to the latest available version.
+To fully utilize the functionalities of FooBook_Android, it's essential to have the [`Foobook_Server`](https://github.com/TomerBeren/FooBook_Server)
+operational, since this frontend application depends on its API endpoints for data access.
 
 ### Installation
 1. **Clone the Repository:**
@@ -22,7 +22,7 @@ Update the Android SDK to the latest available version.
    
 2. **Open Project: Launch Android Studio and open the cloned project.**
 
-3**Sync Gradle: Use the 'Sync Now' feature in Android Studio to sync your project with the updated dependencies.**
+3. **Sync Gradle: Use the 'Sync Now' feature in Android Studio to sync your project with the updated dependencies.**
 
 
 ## New Features and Improvements
@@ -47,6 +47,54 @@ Update the Android SDK to the latest available version.
 ### Error Handling and Data Compliance
 - Advanced error handling mechanisms for a streamlined user experience.
 - Compliance with privacy standards in data management.
+
+
+## How to use FooBook_Android Features
+
+This guide is designed to help you navigate and make full use of the FooBook_Android app's features. From creating and managing posts to handling friend requests, here's everything you need to know to enhance your user experience.
+
+### Creating and Managing Posts
+
+#### Creating a New Post
+1. **Initiate Post Creation:** Tap the "+" icon at the top of the main screen to open the post creation interface.
+2. **Adding Photos:**
+   - **Camera:** Tap the small camera icon to open your phone's camera. Capture a photo to add it to your post.
+   - **Gallery:** Tap the photo icon next to the camera icon to select a photo from your gallery.
+
+#### Editing and Deleting Posts
+- **Access Edit Options:** Click the pencil icon next to your post to see options for "Edit Post" and "Delete Post."
+   - **Edit Post:** Select this option to modify the content of your post. You can change the text or the photos attached.
+   - **Delete Post:** Choose this to remove your post permanently.
+
+#### Interacting with Posts
+- **Liking Posts:** You can like any post by tapping the like button, regardless of whether the poster is a friend.
+- **Commenting:** Feel free to comment on any post to engage with other users.
+
+### Profile Management
+
+#### Accessing and Editing Your Profile
+- **View Your Profile:** Select "My Profile" to see your posts and profile information.
+- **Edit Profile Options:** Tap the popup button at the bottom right and choose "Edit Profile." Here, you can:
+   - **Change Profile Picture:** Choose "Take Picture" to snap a new photo or "Choose File" to select one from your gallery. If updating your photo, re-enter your name if you do not wish to change it.
+   - **Update Name:** You have the option to update your name directly in this section.
+
+#### Logout and Account Deletion
+- **Logout:** Select "Logout" from the popup menu to sign out of your account.
+- **Delete User:** Choose "Delete User" to permanently remove your account and all related data.
+
+### Friend System
+
+#### Managing Friends and Friend Requests
+- **Viewing Friend List:** Tap "Friend List" to see your friends. Here, you can delete friends or view their friends.
+- **Handling Friend Requests:** Use the "Friend Requests" button to accept or decline incoming requests.
+
+#### Interacting with Other Users' Profiles
+- **Viewing Profiles:** Click on a user's profile picture from a post in your feed to view their profile.
+   - **If Not Friends:** You'll see an "Add Friend" option and won't be able to view their posts until the friend request is accepted.
+   - **If Friends:** You can view their posts displayed beneath their name.
+
+This comprehensive guide should make navigating and utilizing the FooBook_Android app's features straightforward. If there's anything else you'd like to know or need further clarification on, don't hesitate to ask!
+
 
 ## Development and Testing
 ### Development Approach
