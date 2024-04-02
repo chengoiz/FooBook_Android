@@ -3,7 +3,6 @@ package com.example.foobook_android.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +19,7 @@ import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.TimestampUtil;
+import com.example.foobook_android.utility.TokenManager;
 
 public class CreatePostActivity extends AppCompatActivity  {
     public static final int QUALITY = 80;
@@ -47,6 +47,7 @@ public class CreatePostActivity extends AppCompatActivity  {
     // User details fetched from SharedPreferences or ViewModel.
     private String fetchedDisplayName;
     private String fetchedProfilePic;
+    private TokenManager tokenManager; // Field to hold the TokenManager instance
 
 
     // Initializes the activity and sets up UI components and helpers.
@@ -56,7 +57,7 @@ public class CreatePostActivity extends AppCompatActivity  {
         ActivityCreatePostBinding binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Log.i("CreatePostActivity", "onCreate");
-
+        tokenManager = new TokenManager(this); // Initialize the TokenManager
         // Initial setup methods.
         initializeViews();
         setPostViewModel();
@@ -66,8 +67,7 @@ public class CreatePostActivity extends AppCompatActivity  {
 
     // Fetches the current user's ID from SharedPreferences.
     private String getCurrentUserId() {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", "");
+        return tokenManager.getUserId();
     }
 
 
@@ -120,8 +120,6 @@ public class CreatePostActivity extends AppCompatActivity  {
     // Initializes helper objects used within the activity.
     // This includes setting up the adapter for posts and the helper for photo selection.
     private void initializeHelpers() {
-        // Initializes the PhotoSelectorHelper with activity context and request codes for camera and gallery.
-        // The setImage method reference is passed as a callback to set the image in the UI after selection.
         photoSelectorHelper = new PhotoSelectorHelper(this, CAMERA_REQUEST_CODE, GALLERY_REQUEST_CODE, this::setImage);
     }
 

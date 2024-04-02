@@ -11,6 +11,9 @@ import com.example.foobook_android.daos.PostDao;
 import com.example.foobook_android.post.Converters;
 import com.example.foobook_android.post.Post;
 
+
+// Defines the Room database for the application. It includes the Post entity
+// and uses Converters for data types that Room doesn't support natively.
 @Database(entities = {Post.class}, version = 13)
 @TypeConverters({Converters.class})
 public abstract class PostDB extends RoomDatabase {
@@ -19,7 +22,7 @@ public abstract class PostDB extends RoomDatabase {
 
     public abstract PostDao postDao();
 
-    // Singleton pattern to get the instance of PostDB
+    // Implements the singleton pattern to ensure only one instance of the database is created.
     public static PostDB getInstance(final Context context) {
         if (INSTANCE == null) {
             synchronized (PostDB.class) {

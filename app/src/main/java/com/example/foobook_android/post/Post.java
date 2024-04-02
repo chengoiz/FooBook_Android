@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
+// Defines the Post entity for Room and includes information about a social media post.
 @Entity
 public class Post implements Serializable {
     public static final int PHOTO_PICKED = 1;
@@ -82,6 +83,7 @@ public class Post implements Serializable {
         this.isPhotoPicked = PHOTO_PICKED;
     }
 
+    // Toggles the like status of the post, updating the likes count accordingly.
     public boolean toggleLike() {
         userLiked = !userLiked;
         likesCount += userLiked ? 1 : -1;

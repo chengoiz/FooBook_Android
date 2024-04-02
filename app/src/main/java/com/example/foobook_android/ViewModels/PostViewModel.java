@@ -3,35 +3,32 @@ package com.example.foobook_android.ViewModels;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.foobook_android.Api.PostsResponse;
 import com.example.foobook_android.Api.ToggleLikeResponse;
 import com.example.foobook_android.Repositories.UserRepository;
-import com.example.foobook_android.activities.EditPostActivity;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.Repositories.PostRepository;
 import com.example.foobook_android.utility.UserDetails;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+// View model for managing post-related data.
 public class PostViewModel extends AndroidViewModel {
+    // Repository for handling post-related operations
     private final PostRepository repository;
+
+    // Mutable live data objects for observing data changes
     private final LiveData<List<Post>> latestPosts;
     private final MutableLiveData<String> displayNameLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> profilePicLiveData = new MutableLiveData<>();
     private final MutableLiveData<PostsResponse> postsLiveData = new MutableLiveData<>();
     private final MutableLiveData<ToggleLikeResponse> toggleLikeResponse = new MutableLiveData<>();
-    private Context context;
     private MutableLiveData<String> errorLiveData = new MutableLiveData<>(); // For error messages
 
 
@@ -39,26 +36,33 @@ public class PostViewModel extends AndroidViewModel {
         super(application);
         repository = new PostRepository(application);
         latestPosts = repository.getLatestPosts();
-        this.context = application;
     }
+    // Getter for observing latest posts
     public LiveData<List<Post>> getLatestPosts() {
         return latestPosts;
     }
+
+    // Getter for observing errors
     public LiveData<String> getErrorLiveData() {
         return errorLiveData;
     }
+
+    // Getter for observing toggle like response
     public MutableLiveData<ToggleLikeResponse> getToggleLikeResponse() {
         return toggleLikeResponse;
     }
 
+    // Getter for observing posts response
     public LiveData<PostsResponse> getPostsLiveData() {
         return postsLiveData;
     }
 
+    // Fetches posts from the server
     public void fetchPostsFromServer(Context context) {
         repository.fetchAndProcessPosts(context);
     }
 
+    // Toggles like for a post
     public void toggleLike(String userId, String postId) {
         repository.toggleLike(userId, postId, new Callback<ToggleLikeResponse>() {
             @Override
@@ -80,22 +84,22 @@ public class PostViewModel extends AndroidViewModel {
         });
     }
 
-    // Method for adding a new post
+    // Inserts a new post
     public void insert(Post post) {
         repository.insert(post);
     }
 
-    // Method for deleting a post
+    // Deletes a post
     public void delete(Post post) {
         repository.delete(post);
     }
 
-    // Method to delete a post by its ID
+    // Deletes a post by its ID
     public void deleteByPostId(String postId) {
         repository.deleteByPostId(postId);
     }
 
-
+    // Fetches posts by user ID
     public void fetchPostsByUserId(String userId, String authToken) {
         repository.getPostsByUserId(userId, authToken, new Callback<PostsResponse>() {
             @Override
@@ -116,12 +120,17 @@ public class PostViewModel extends AndroidViewModel {
         });
     }
 
+    // Getter for observing display name
     public LiveData<String> getDisplayNameLiveData() {
         return displayNameLiveData;
     }
+
+    // Getter for observing profile picture
     public LiveData<String> getProfilePicLiveData() {
         return profilePicLiveData;
     }
+
+    // Fetches display name and profile picture for a user
     public void fetchDisplayName(Context context, String sentUserId) {
         UserRepository userRepository = new UserRepository(context);
         userRepository.fetchUserDetails(sentUserId, new UserRepository.UserDetailsCallback() {
@@ -139,7 +148,7 @@ public class PostViewModel extends AndroidViewModel {
         });
     }
 
-
+    // Creates a post for a user
     public void createPostForUser(String userId, Post post, Context context) {
         repository.createPostForUser(userId, post, context, new Callback<Post>() {
             @Override
@@ -170,6 +179,7 @@ public class PostViewModel extends AndroidViewModel {
         });
     }
 
+    // Updates a post
     public void updatePost(String userId, String postId, Post updatedPost, Context context) {
         repository.updatePostForUser(userId, postId, updatedPost, context, new Callback<Post>() {
             @Override
@@ -194,11 +204,9 @@ public class PostViewModel extends AndroidViewModel {
 
     }
 
-
     public void deletePostByUser(String userId, String postId, Context context) {
         repository.deletePostByUser(userId, postId, context);
     }
-
 
     public LiveData<Post> getPostById(String postId) {
         return repository.getPostById(postId);

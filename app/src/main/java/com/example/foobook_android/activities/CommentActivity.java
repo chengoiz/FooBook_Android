@@ -1,6 +1,5 @@
 package com.example.foobook_android.activities;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -18,6 +17,7 @@ import com.example.foobook_android.comment.Comment;
 import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.R;
 import com.example.foobook_android.adapters.CommentAdapter;
+import com.example.foobook_android.utility.TokenManager;
 import java.util.ArrayList;
 
 // Activity to display and manage comments on a post
@@ -28,6 +28,8 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
     private String fetchedDisplayName; // Display name of the current user
     private String fetchedProfilePic; // Profile picture URL of the current user
     private int postPosition; // Position of the current post in the list
+    private TokenManager tokenManager; // Field to hold the TokenManager instance
+
 
 
     @Override
@@ -35,6 +37,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         Log.i("CommentActivity", "onCreate");
+        tokenManager = new TokenManager(this); // Initialize the TokenManager
         setPostViewModel(); // Set up the PostViewModel
         setupCommentRecyclerView(); // Set up the RecyclerView for comments
         fetchUserDetails(); // Fetch current user details
@@ -53,9 +56,8 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
 
     // Fetches user details from SharedPreferences
     private void fetchUserDetails() {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        fetchedDisplayName = sharedPreferences.getString("displayName", "Unknown User");
-        fetchedProfilePic = sharedPreferences.getString("profilePicUrl", "default_profile_pic_url");
+        fetchedDisplayName = tokenManager.getDisplayName();
+        fetchedProfilePic = tokenManager.getProfilePic();
     }
 
     private void initializeViews() {
@@ -71,17 +73,13 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
 
     // Retrieves the current user's ID from SharedPreferences
     private String getCurrentUserId() {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", "");
+        return tokenManager.getUserId();
     }
 
     // Initializes the PostViewModel and fetches user details for the comment functionality
     private void setPostViewModel() {
         // ViewModel for managing post data
         PostViewModel postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        String token = sharedPreferences.getString("token", "");
-        Log.e("TOKEN FROM COMMENT ACTIVITY: ", token);
         postViewModel.fetchDisplayName(this, getCurrentUserId());
 
         // Observe changes to display name and profile picture LiveData

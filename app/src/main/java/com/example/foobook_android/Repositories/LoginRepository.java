@@ -3,31 +3,27 @@ package com.example.foobook_android.Repositories;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.foobook_android.Api.LoginResponse;
 import com.example.foobook_android.Api.LoginRequest;
 import com.example.foobook_android.Api.WebServiceApi;
+import com.example.foobook_android.network.RetrofitClient;
 import com.example.foobook_android.utility.UserDetails;
-
 import org.json.JSONObject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
+// Handles authentication processes such as logging in and fetching user details.
 public class LoginRepository {
+    // Interface for making API calls.
     WebServiceApi webServiceApi;
 
+    // Initializes the repository and prepares the web service for use.
     public LoginRepository() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/").
-                addConverterFactory(GsonConverterFactory.create()).
-                build();
-        webServiceApi = retrofit.create(WebServiceApi.class);
+        webServiceApi = RetrofitClient.getClient().create(WebServiceApi.class);
     }
 
+    // Attempts to log in with the provided credentials and returns a LiveData object containing the response.
     public LiveData<LoginResponse> login(LoginRequest loginRequest) {
         final MutableLiveData<LoginResponse> loginResponseMutableLiveData = new MutableLiveData<>();
         Call<LoginResponse> call = webServiceApi.loginUser(loginRequest);
@@ -63,6 +59,7 @@ public class LoginRepository {
         return loginResponseMutableLiveData;
     }
 
+    // Fetches details for a logged-in user based on their userId and authorization token.
     public LiveData<UserDetails> fetchUserDetails(String userId, String token) {
         final MutableLiveData<UserDetails> userDetailsLiveData = new MutableLiveData<>();
         webServiceApi.getUserDetails(userId, "Bearer " + token).enqueue(new Callback<UserDetails>() {

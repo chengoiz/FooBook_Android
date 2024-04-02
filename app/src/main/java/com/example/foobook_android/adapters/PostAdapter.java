@@ -22,9 +22,7 @@ import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.ImageUtility;
-
 import java.util.List;
-
 
 /**
  * PostAdapter is responsible for displaying a list of posts in a RecyclerView,
@@ -33,8 +31,6 @@ import java.util.List;
  * through designated buttons and menus.
  */
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
-    public static final int MAX_WIDTH = 1280;
-    public static final int MAX_HEIGHT = 960;
     private final Context context;
     private List<Post> posts; // List of posts to be displayed
     private final LayoutInflater inflater; // LayoutInflater to inflate the view for each post item

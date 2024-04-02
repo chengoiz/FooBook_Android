@@ -1,16 +1,10 @@
 package com.example.foobook_android.activities;
 
 import static com.example.foobook_android.activities.CreatePostActivity.QUALITY;
-import static com.example.foobook_android.adapters.PostAdapter.MAX_HEIGHT;
-import static com.example.foobook_android.adapters.PostAdapter.MAX_WIDTH;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,13 +13,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.bumptech.glide.Glide;
 import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.R;
-
+import com.example.foobook_android.utility.TokenManager;
 
 /**
  * Activity to edit an existing post. It allows users to update the text content of the post
@@ -44,7 +37,6 @@ public class EditPostActivity extends AppCompatActivity {
     private Button postButton, removePhoto;
     private ImageButton btnGallery, btnCamera;
     // URI of the selected image for the post
-    private Uri postImage;
     private String postImageBase64;
     // Flag to track if a photo has been selected
     private boolean isPhotoSelected = false;
@@ -52,6 +44,7 @@ public class EditPostActivity extends AppCompatActivity {
     private Post currentPost;
     // Helper class for selecting photos from gallery or camera
     private PhotoSelectorHelper photoSelectorHelper;
+    private TokenManager tokenManager; // Field to hold the TokenManager instance
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +54,8 @@ public class EditPostActivity extends AppCompatActivity {
         // Initialize local database instance
         // Local database instance
         Log.i("EditPostActivity", "onCreate");
+
+        tokenManager = new TokenManager(this); // Initialize the TokenManager
 
         // Initialize UI components
         initializeViewComponents();
@@ -202,8 +197,7 @@ public class EditPostActivity extends AppCompatActivity {
     }
 
     private String getCurrentUserId() {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", "");
+        return tokenManager.getUserId();
     }
 
     @Override
