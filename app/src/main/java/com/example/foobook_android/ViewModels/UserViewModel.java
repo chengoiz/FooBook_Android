@@ -1,6 +1,7 @@
 package com.example.foobook_android.ViewModels;
 
 import android.app.Application;
+import android.util.Log;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -36,6 +37,12 @@ public class UserViewModel extends AndroidViewModel {
         return errorLiveData;
     }
 
+    public interface UserDetailsCallback {
+        void onSuccess(UserDetails userDetails);
+        void onError(String error);
+    }
+
+
     // Method to delete user account
     public void deleteUserAccount() {
         userRepository.deleteUser(new UserRepository.DeleteUserCallback() {
@@ -59,6 +66,22 @@ public class UserViewModel extends AndroidViewModel {
     // Getter for observing user deletion errors
     public LiveData<String> getDeleteUserError() {
         return deleteUserError;
+    }
+
+    public void fetchUserDetails(String userId, UserDetailsCallback callback) {
+        userRepository.fetchUserDetails(userId, new UserRepository.UserDetailsCallback() {
+            @Override
+            public void onSuccess(UserDetails userDetails) {
+                // Pass the details to the callback
+                callback.onSuccess(userDetails);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e("UserViewModel", "Error fetching user details", throwable);
+                // Handle error, e.g., by notifying the user
+            }
+        });
     }
 
     // Method to update user details

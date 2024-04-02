@@ -60,6 +60,10 @@ public class CommentsDataHolder {
         }
     }
 
+    public static void deleteAllComments() {
+        commentsMap.clear();
+    }
+
     // Counts the number of comments associated with a specific post position.
     // Returns 0 if the post has no comments.
     public static int getCommentCount(int postPosition) {

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.foobook_android.Api.LoginRequest;
 import com.example.foobook_android.ViewModels.LoginViewModel;
+import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.utility.FieldValidation;
 import com.example.foobook_android.R;
 import com.example.foobook_android.utility.TokenManager;
@@ -77,6 +78,8 @@ public class LogInActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), loginResponse.getReason(), Toast.LENGTH_LONG).show();
             }
         });
+
+        CommentsDataHolder.deleteAllComments();
 
         // Observes user details LiveData after successful login
         loginViewModel.getUserDetailsLiveData().observe(this, userDetails -> {

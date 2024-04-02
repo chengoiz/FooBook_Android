@@ -135,7 +135,6 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-
         Button viewFriendRequestsButton = findViewById(R.id.FriendRequestsButton);
         viewFriendRequestsButton.setOnClickListener(v -> {
             Intent intent = new Intent(FeedActivity.this, FriendRequestsActivity.class);
@@ -143,12 +142,9 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         });
 
         Button myProfileButton = findViewById(R.id.MyProfileButton);
-        String displayName = tokenManager.getDisplayName();
-        String profilePic = tokenManager.getProfilePic();
         myProfileButton.setOnClickListener(v -> {
-            postAdapter.navigateToUserPosts(getCurrentUserId(), displayName, profilePic);
+            postAdapter.navigateToUserPosts(getCurrentUserId());
         });
-
 
         ImageButton feedMenuBtn = findViewById(R.id.feedMenuBtn);
         feedMenuBtn.setOnClickListener(this::showFeedMenu);

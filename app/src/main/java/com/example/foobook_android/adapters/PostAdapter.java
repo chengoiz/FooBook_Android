@@ -120,10 +120,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         popup.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if (id == R.id.view_profile) {
-                // Navigate to the user's mini profile to view their posts
-                navigateToUserPosts(posts.get(position).getCreator().getId(),
-                        posts.get(position).getCreator().getDisplayName(),
-                        posts.get(position).getCreator().getProfilePic());
+                // Navigate to the user's profile to view their posts
+                navigateToUserPosts(posts.get(position).getCreator().getId());
             }
             return false;
         });
@@ -131,11 +129,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
 
-    public void navigateToUserPosts(String userId, String displayName, String ProfilePic) {
+    public void navigateToUserPosts(String userId) {
         Intent intent = new Intent(context, UserPostsActivity.class);
         intent.putExtra("VIEWED_USER_ID", userId);
-        intent.putExtra("VIEWED_USER_DISPLAY_NAME", displayName);
-        intent.putExtra("VIEWED_USER_PROFILE_PIC", ProfilePic);
         context.startActivity(intent);
     }
 

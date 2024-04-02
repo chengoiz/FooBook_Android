@@ -17,9 +17,11 @@ import com.bumptech.glide.Glide;
 import com.example.foobook_android.R;
 import com.example.foobook_android.ViewModels.FriendshipViewModel;
 import com.example.foobook_android.ViewModels.PostViewModel;
+import com.example.foobook_android.ViewModels.UserViewModel;
 import com.example.foobook_android.adapters.PostAdapter;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.utility.TokenManager;
+import com.example.foobook_android.utility.UserDetails;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -42,45 +44,67 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
     private TextView displayNameTextView;
     private ImageView profileImageView;
     private TokenManager tokenManager; // Field to hold the TokenManager instance
-
+    private UserViewModel userViewModel;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_posts);
-        initialize();
-        setButtons();
-        setObservers();
+        initializeViewModels(); // Initialize all ViewModels
+        initialize(); // Set up UI components
+        fetchAndDisplayUserDetails(); // Then, fetch and display user details
     }
 
     private void initialize() {
-        // Retrieving the viewed user's information passed from the previous activity
-        tokenManager = new TokenManager(this); // Initialize the TokenManager
-        userId = getIntent().getStringExtra("VIEWED_USER_ID");
-        displayName = getIntent().getStringExtra("VIEWED_USER_DISPLAY_NAME");
-        profilePic = getIntent().getStringExtra("VIEWED_USER_PROFILE_PIC");
-
-        // Initializing RecyclerView and setting its layout manager
+        // UI component setup without data fetching
+        postAdapter = new PostAdapter(this, new ArrayList<>(), this);
         RecyclerView postsRecyclerView = findViewById(R.id.feedRecyclerView);
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // Initializing UI components for displaying user information
+        postsRecyclerView.setAdapter(postAdapter);
         displayNameTextView = findViewById(R.id.userNameInProfile);
         profileImageView = findViewById(R.id.profileImageInProfile);
-
-        // Setting up the adapter for the RecyclerView
-        postAdapter = new PostAdapter(this, new ArrayList<>(), this);
-        postsRecyclerView.setAdapter(postAdapter);
-
-        // Initializing ViewModels
-        friendshipViewModel = new ViewModelProvider(this).get(FriendshipViewModel.class);
-        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
-
-        // Displaying the user's profile picture
-        Glide.with(this).load(profilePic).into(profileImageView);
     }
 
+    private void initializeViewModels() {
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        friendshipViewModel = new ViewModelProvider(this).get(FriendshipViewModel.class);
+        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
+        tokenManager = new TokenManager(this);
+        // Initialize RecyclerView and other UI components.
+    }
+
+    private void fetchAndDisplayUserDetails() {
+        userId = getIntent().getStringExtra("VIEWED_USER_ID");
+        if (userId != null && !userId.isEmpty()) {
+            userViewModel.fetchUserDetails(userId, new UserViewModel.UserDetailsCallback() {
+                @Override
+                public void onSuccess(UserDetails userDetails) {
+                    runOnUiThread(() -> {
+                        // Now update UI components with the fetched user details
+                        displayName = userDetails.getDisplayName();
+                        profilePic = userDetails.getProfilePic();
+
+                        TextView displayNameTextView = findViewById(R.id.userNameInProfile);
+                        displayNameTextView.setText(displayName + "'s Profile");
+
+                        ImageView profileImageView = findViewById(R.id.profileImageInProfile);
+                        Glide.with(UserPostsActivity.this).load(profilePic).into(profileImageView);
+
+                        setButtons();
+                        setObservers();
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    runOnUiThread(() -> Toast.makeText(UserPostsActivity.this, "Failed to fetch user details: " + error, Toast.LENGTH_SHORT).show());
+                }
+            });
+        } else {
+            Toast.makeText(this, "User ID is missing.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void setButtons() {
         // Handling friend request button visibility and action
@@ -169,6 +193,10 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
     protected void onResume() {
         super.onResume();
         postViewModel.fetchPostsByUserId(userId, "Bearer " + getAuthToken());
-        postAdapter.notifyDataSetChanged();
+        if (postAdapter != null) {
+            postAdapter.notifyDataSetChanged();
+        } else {
+            Log.e("UserPostsActivity", "postAdapter is null in onResume");
+        }
     }
 }
