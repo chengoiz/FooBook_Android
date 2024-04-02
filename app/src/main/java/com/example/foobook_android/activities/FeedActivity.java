@@ -2,7 +2,6 @@ package com.example.foobook_android.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -27,6 +26,7 @@ import com.example.foobook_android.post.Post;
 import com.example.foobook_android.post.PostManager;
 import com.example.foobook_android.R;
 import com.example.foobook_android.adapters.PostAdapter;
+import com.example.foobook_android.utility.TokenManager;
 import java.util.ArrayList;
 
 /**
@@ -41,8 +41,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
     private PhotoSelectorHelper photoSelectorHelper;
     private SwipeRefreshLayout swipeRefreshLayout;
     private UserViewModel userViewModel;
-
-
+    private TokenManager tokenManager; // Field to hold the TokenManager instance
 
 
     @Override
@@ -51,6 +50,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         setContentView(R.layout.activity_feed);
         recyclerView = findViewById(R.id.feedRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        tokenManager = new TokenManager(this); // Initialize the TokenManager
         initialize();
         // Setup UI components and their interactions
         setupButtons();
@@ -143,9 +143,8 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
         });
 
         Button myProfileButton = findViewById(R.id.MyProfileButton);
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        String displayName = sharedPreferences.getString("displayName", "");
-        String profilePic = sharedPreferences.getString("profilePicUrl", "");
+        String displayName = tokenManager.getDisplayName();
+        String profilePic = tokenManager.getProfilePic();
         myProfileButton.setOnClickListener(v -> {
             postAdapter.navigateToUserPosts(getCurrentUserId(), displayName, profilePic);
         });
@@ -317,8 +316,7 @@ public class FeedActivity extends AppCompatActivity implements PostAdapter.PostI
      * @return The current user ID.
      */
     private String getCurrentUserId() {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", "");
+        return tokenManager.getUserId();
     }
 
 

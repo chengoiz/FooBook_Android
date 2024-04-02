@@ -2,6 +2,7 @@ package com.example.foobook_android.post;
 
 import com.google.gson.annotations.SerializedName;
 
+// Represents the creator of a post, including their ID, display name, and profile picture URL.
 public class Creator {
     @SerializedName("_id")
     private String id;
@@ -35,6 +36,4 @@ public class Creator {
     public void setId(String id) {
         this.id = id;
     }
-
-    // Getters and setters
 }

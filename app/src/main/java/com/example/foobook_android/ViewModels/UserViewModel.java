@@ -7,15 +7,18 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.utility.UserDetails;
 
+// View model for handling user-related operations.
 public class UserViewModel extends AndroidViewModel {
-
+    // Repository for handling user-related operations
     private final UserRepository userRepository;
+
+    // Mutable live data objects for observing user details, errors, and user deletion status
     private final MutableLiveData<UserDetails> userDetailsLiveData;
     private final MutableLiveData<String> errorLiveData;
     private final MutableLiveData<String> deleteUserError = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isUserDeleted = new MutableLiveData<>();
 
-
+    // Constructor
     public UserViewModel(Application application) {
         super(application);
         userRepository = new UserRepository(application);
@@ -23,14 +26,17 @@ public class UserViewModel extends AndroidViewModel {
         errorLiveData = new MutableLiveData<>();
     }
 
+    // Getter for observing user details
     public MutableLiveData<UserDetails> getUserDetailsLiveData() {
         return userDetailsLiveData;
     }
 
+    // Getter for observing errors
     public MutableLiveData<String> getErrorLiveData() {
         return errorLiveData;
     }
 
+    // Method to delete user account
     public void deleteUserAccount() {
         userRepository.deleteUser(new UserRepository.DeleteUserCallback() {
             @Override
@@ -45,14 +51,17 @@ public class UserViewModel extends AndroidViewModel {
         });
     }
 
+    // Getter for observing user deletion status
     public LiveData<Boolean> getIsUserDeleted() {
         return isUserDeleted;
     }
 
+    // Getter for observing user deletion errors
     public LiveData<String> getDeleteUserError() {
         return deleteUserError;
     }
 
+    // Method to update user details
     public void updateUserDetails(String displayName, String profilePicUri) {
         // The userId is retrieved from the repository's stored data.
         String userId = userRepository.getUserId();

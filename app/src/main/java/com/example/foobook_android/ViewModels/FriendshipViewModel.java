@@ -13,8 +13,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+// View model for managing friendship-related data.
 public class FriendshipViewModel extends AndroidViewModel {
+    // Repository for handling friendship-related operations
     private final FriendshipRepository friendshipRepository;
+
+    // Mutable live data objects for observing data changes
     private final MutableLiveData<FriendRequestResponse> friendRequests = new MutableLiveData<>();
     private final MutableLiveData<FriendListResponse> friendList = new MutableLiveData<>();
     private final MutableLiveData<Boolean> acceptRequestResult = new MutableLiveData<>();
@@ -22,23 +26,22 @@ public class FriendshipViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> deleteFriend = new MutableLiveData<>();
     private final MutableLiveData<String> friendRequestResponse = new MutableLiveData<>();
 
-
-    public LiveData<Boolean> getAcceptRequestResult() {
-        return acceptRequestResult;
-    }
-
-    public LiveData<Boolean> getDeclineRequestResult() {
-        return declineRequestResult;
-    }
-
-
     public FriendshipViewModel(@NonNull Application application) {
         super(application);
         friendshipRepository = new FriendshipRepository(application.getApplicationContext());
     }
 
+    // Getter for observing acceptance request result
+    public LiveData<Boolean> getAcceptRequestResult() {
+        return acceptRequestResult;
+    }
 
+    // Getter for observing decline request result
+    public LiveData<Boolean> getDeclineRequestResult() {
+        return declineRequestResult;
+    }
 
+    // Fetches friend requests from server
     public LiveData<FriendRequestResponse> getFriendRequests(String userId, String authToken) {
         friendshipRepository.getFriendRequests(userId, authToken, new Callback<FriendRequestResponse>() {
             @Override
@@ -58,6 +61,7 @@ public class FriendshipViewModel extends AndroidViewModel {
         return friendRequests;
     }
 
+    // Accepts friend request
     public void acceptFriendRequest(String userId, String friendId) {
         friendshipRepository.acceptFriendRequest(userId, friendId, new Callback<Void>() {
             @Override
@@ -83,6 +87,7 @@ public class FriendshipViewModel extends AndroidViewModel {
         return friendRequestResponse;
     }
 
+    // Sends friend request
     public void sendFriendRequest(String currentUserId, String receiverUserId) {
         friendshipRepository.sendFriendRequest(currentUserId, receiverUserId, new Callback<Void>() {
             @Override
@@ -107,6 +112,7 @@ public class FriendshipViewModel extends AndroidViewModel {
         });
     }
 
+    // Declines friend request
     public void declineFriendRequest(String userId, String friendId) {
         friendshipRepository.declineFriendRequest(userId, friendId, new Callback<Void>() {
             @Override
@@ -123,7 +129,7 @@ public class FriendshipViewModel extends AndroidViewModel {
         });
     }
 
-
+    // Fetches friend list from server
     public LiveData<FriendListResponse> getFriendList(String userId) {
         friendshipRepository.getFriendList(userId, new Callback<FriendListResponse>() {
             @Override

@@ -1,7 +1,6 @@
 package com.example.foobook_android.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -13,6 +12,7 @@ import com.example.foobook_android.Api.LoginRequest;
 import com.example.foobook_android.ViewModels.LoginViewModel;
 import com.example.foobook_android.utility.FieldValidation;
 import com.example.foobook_android.R;
+import com.example.foobook_android.utility.TokenManager;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
@@ -109,15 +109,13 @@ public class LogInActivity extends AppCompatActivity {
 
     // Saves user details into SharedPreferences
     private void saveUserDetails(String userId, String token, String displayName, String[] friendList, String profilePicUrl) {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear(); // Clear existing data
-        editor.putString("userId", userId);
-        editor.putString("token", token);
-        editor.putString("displayName", displayName);
-        editor.putStringSet("friendList", new HashSet<>(Arrays.asList(friendList))); // Convert array to Set
-        editor.putString("profilePicUrl", profilePicUrl);
-        editor.apply(); // Apply changes
+        TokenManager tokenManager = new TokenManager(this);
+        tokenManager.clearData(); // Clear existing data from the sharedPreferences.
+        tokenManager.setUserId(userId);
+        tokenManager.setToken(token);
+        tokenManager.setDisplayName(displayName);
+        tokenManager.setFriendList(new HashSet<>(Arrays.asList(friendList)));
+        tokenManager.setProfilePic(profilePicUrl);
     }
 
     // Navigates to FeedActivity

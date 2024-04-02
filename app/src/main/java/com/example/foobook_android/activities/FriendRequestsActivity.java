@@ -1,22 +1,17 @@
 package com.example.foobook_android.activities;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.foobook_android.R;
 import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.ViewModels.FriendshipViewModel;
 import com.example.foobook_android.adapters.FriendRequestAdapter;
-
-
+import com.example.foobook_android.utility.TokenManager;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -25,6 +20,8 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
     private FriendshipViewModel friendshipViewModel;
     // Adapter for the RecyclerView to manage friend request items
     private FriendRequestAdapter adapter;
+    private TokenManager tokenManager; // Field to hold the TokenManager instance
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +60,7 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
     // Initializes components and data for the activity
     private void initialize() {
         // Repository for user-related data and operations
+        tokenManager = new TokenManager(this); // Initialize the TokenManager
         UserRepository userRepository = new UserRepository(this);
         // ID of the current user, used in friend request operations
         String userId = userRepository.getUserId(); // Retrieves the current user's ID
@@ -97,25 +95,20 @@ public class FriendRequestsActivity extends AppCompatActivity implements FriendR
 
     // Retrieves the authentication token from SharedPreferences
     private String getAuthToken() {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("token", "");
+        return tokenManager.getToken();
     }
 
     @Override
     // Handles acceptance of a friend request
     public void onAcceptRequest(String userId, String friendId) {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
         // Retrieve the current friend list
-        Set<String> friendList = sharedPreferences.getStringSet("friendList", new HashSet<>());
+        Set<String> friendList = tokenManager.getFriendList();
 
         // Add the new friend ID to the list
         friendList.add(friendId);
 
         // Save the updated friend list back to SharedPreferences
-        editor.putStringSet("friendList", friendList);
-        editor.apply(); // Apply changes
+        tokenManager.setFriendList(friendList);
         friendshipViewModel.acceptFriendRequest(userId, friendId);
     }
 

@@ -12,6 +12,8 @@ import com.example.foobook_android.Api.UserUpdateRequest;
 import com.example.foobook_android.Api.UserUpdateResponse;
 import com.example.foobook_android.Api.WebServiceApi;
 import com.example.foobook_android.models.User;
+import com.example.foobook_android.network.RetrofitClient;
+import com.example.foobook_android.utility.TokenManager;
 import com.example.foobook_android.utility.UserDetails;
 
 import java.util.Objects;
@@ -22,22 +24,23 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+// Manages user data operations, including fetching, updating, and deleting user details.
 public class UserRepository {
+    // API interface for network requests.
     WebServiceApi webServiceApi;
     private final Context context;
+    private final TokenManager tokenManager; // Manages access tokens for authenticated requests.
 
+    // Constructor initializes context, token manager, and web service API.
     public UserRepository(Context context) {
         this.context = context.getApplicationContext();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/").
-                addConverterFactory(GsonConverterFactory.create()).
-                build();
-        webServiceApi = retrofit.create(WebServiceApi.class);
+        tokenManager = new TokenManager(context);
+        webServiceApi = RetrofitClient.getClient().create(WebServiceApi.class);
     }
 
+    // Callback interfaces for async operations results.
     public interface UserDetailsCallback {
         void onSuccess(UserDetails userDetails);
-
         void onError(Throwable throwable);
     }
 
@@ -46,16 +49,17 @@ public class UserRepository {
         void onError(String message);
     }
 
+    // Retrieves the current user's authentication token.
     private String getAuthToken() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("token", "");
+        return tokenManager.getToken();
     }
 
+    // Retrieves the current user's ID.
     public String getUserId() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", "");
+        return tokenManager.getUserId();
     }
 
+    // Sends a request to update user details and handles the response or failure.
     public void updateUserDetails(String userId, String displayName, String profilePicUri, UserDetailsCallback callback) {
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest(displayName, profilePicUri);
 
@@ -78,6 +82,7 @@ public class UserRepository {
         });
     }
 
+    // Sends a request to delete the current user and handles the response or failure.
     public void deleteUser(DeleteUserCallback callback) {
         webServiceApi.deleteUser("Bearer " + getAuthToken()).enqueue(new Callback<Void>() {
             @Override
@@ -96,8 +101,8 @@ public class UserRepository {
         });
     }
 
-
-        public void fetchUserDetails(String Id, UserDetailsCallback callback) {
+    // Fetches detailed information for a user based on their ID and handles the response or failure.
+    public void fetchUserDetails(String Id, UserDetailsCallback callback) {
 
         if (Id == null || getAuthToken() == null) {
             Log.e("UserRepository", "User ID or Token is not available.");

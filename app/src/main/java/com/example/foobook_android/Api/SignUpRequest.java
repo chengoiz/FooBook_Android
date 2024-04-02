@@ -3,30 +3,27 @@ package com.example.foobook_android.Api;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import java.io.Serializable;
 
+
+// Defines the data structure for a sign-up request. This class is marked as an Entity
+// to be stored in a Room database, making it part of your app's local data model.
 @Entity
 public class SignUpRequest implements Serializable {
-    private String username;
-    private String password;
-    private String displayname;
-    private String profilePic;
+    private String username; // The desired username for the new account.
+    private String password; // The password for the new account.
+    private String displayname; // The display name for the new account.
+    private String profilePic; // Path to the profile picture for the new account.
 
+    // Primary key for the entity in the Room database. Auto-generate this value.
     @PrimaryKey(autoGenerate = true)
     private int id;
+    // Main constructor used when all properties including profile picture are provided.
     public SignUpRequest(String username, String password, String displayname, String profilePic) {
         this.username = username;
         this.password = password;
         this.displayname = displayname;
         this.profilePic = profilePic;
-    }
-
-    public SignUpRequest(String username, String password, String displayname) {
-        this.username = username;
-        this.password = password;
-        this.displayname = displayname;
-        this.profilePic = "drawable/defaultpic.png";
     }
 
     public String getUsername() {

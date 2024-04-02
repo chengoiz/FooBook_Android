@@ -1,9 +1,7 @@
 package com.example.foobook_android.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,15 +9,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.example.foobook_android.R;
 import com.example.foobook_android.ViewModels.UserViewModel;
 import com.example.foobook_android.comment.CommentsDataHolder;
 import com.example.foobook_android.utility.ImageUtility;
 import com.example.foobook_android.utility.PhotoSelectorHelper;
+import com.example.foobook_android.utility.TokenManager;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -31,10 +28,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private PhotoSelectorHelper photoSelectorHelper;
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
-    private Uri profilePictureUri;
     private UserViewModel userViewModel;
     private String profilePictureBase64; // Add this as a class member to store the Base64 image
-
+    private TokenManager tokenManager; // Field to hold the TokenManager instance
 
 
     @Override
@@ -42,6 +38,7 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        tokenManager = new TokenManager(this); // Initialize the TokenManager
         setUpFields();
         setUpHelpers();
         // Set up the button listeners
@@ -67,7 +64,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void setImage(Bitmap bitmap) {
         profilePictureBase64 = ImageUtility.bitmapToBase64(ImageUtility.compressBitmap(bitmap, QUALITY));
-        ivProfilePicture.setImageURI(profilePictureUri);
         ivProfilePicture.setImageBitmap(bitmap);
         ivProfilePicture.setVisibility(View.VISIBLE);
         tvNoFileChosen.setVisibility(View.INVISIBLE);
@@ -80,8 +76,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void saveProfileChanges() {
         String displayName = etDisplayName.getText().toString().trim();
-        String profilePicUri = (profilePictureUri != null) ? profilePictureUri.toString() : null;
-
         if (displayName.isEmpty()) {
             Toast.makeText(this, "Display name cannot be empty", Toast.LENGTH_SHORT).show();
             return;
@@ -90,7 +84,7 @@ public class EditProfileActivity extends AppCompatActivity {
         // Now call the updateUserDetails method from UserViewModel
         userViewModel.updateUserDetails(displayName, profilePictureBase64);
         CommentsDataHolder.updateCommenterName(displayName,
-                profilePictureBase64 != null ? profilePictureBase64 : getProfilePicture());
+                profilePictureBase64 != null ? profilePictureBase64 : getProfilePicture(), this);
         updateSharedPreferences(displayName);
 
         navigateToFeedActivity();
@@ -98,13 +92,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     private void updateSharedPreferences(String newDisplayName) {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("displayName", newDisplayName); // Update display name
+        tokenManager.setDisplayName(newDisplayName);
         if (profilePictureBase64 != null) {
-            editor.putString("profilePicUrl", profilePictureBase64);
+            tokenManager.setProfilePic(profilePictureBase64);
         }// Update profile pic name
-        editor.apply(); // Apply changes
     }
 
     private void navigateToFeedActivity() {
@@ -118,8 +109,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private String getProfilePicture() {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("profilePicUrl", "");
+        return tokenManager.getProfilePic();
     }
     // Handle the result from PhotoSelectorHelper
     @Override

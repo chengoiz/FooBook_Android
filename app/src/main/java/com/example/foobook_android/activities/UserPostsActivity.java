@@ -4,10 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,8 +19,9 @@ import com.example.foobook_android.ViewModels.FriendshipViewModel;
 import com.example.foobook_android.ViewModels.PostViewModel;
 import com.example.foobook_android.adapters.PostAdapter;
 import com.example.foobook_android.post.Post;
+import com.example.foobook_android.utility.TokenManager;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  * UserPostsActivity displays the posts of a specific user. It supports viewing, editing, and
@@ -42,6 +41,8 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
     String userId;
     private TextView displayNameTextView;
     private ImageView profileImageView;
+    private TokenManager tokenManager; // Field to hold the TokenManager instance
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -55,6 +56,7 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
 
     private void initialize() {
         // Retrieving the viewed user's information passed from the previous activity
+        tokenManager = new TokenManager(this); // Initialize the TokenManager
         userId = getIntent().getStringExtra("VIEWED_USER_ID");
         displayName = getIntent().getStringExtra("VIEWED_USER_DISPLAY_NAME");
         profilePic = getIntent().getStringExtra("VIEWED_USER_PROFILE_PIC");
@@ -119,15 +121,14 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
         startActivity(editIntent);
     }
 
-    private HashSet<String> getFriendList() {
+    private Set<String> getFriendList() {
         // Retrieving the current user's friends list from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return (HashSet<String>) sharedPreferences.getStringSet("friendList", new HashSet<>());
+        return tokenManager.getFriendList();
     }
 
     private boolean isFriend() {
         // Checking if the viewed user is in the current user's friends list
-        HashSet<String> friendsList = getFriendList();
+        Set<String> friendsList = getFriendList();
         return friendsList.contains(userId);
     }
 
@@ -155,14 +156,12 @@ public class UserPostsActivity extends AppCompatActivity implements PostAdapter.
 
     private String getCurrentUserId() {
         // Retrieving the current user's ID from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("userId", ""); // Replace "userId" with the actual key you used to store the user's ID
+        return tokenManager.getUserId();
     }
 
     private String getAuthToken() {
         // Retrieve the auth token from SharedPreferences.
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        return sharedPreferences.getString("token", "");
+        return tokenManager.getToken();
     }
 
     @SuppressLint("NotifyDataSetChanged")
