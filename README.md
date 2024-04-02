@@ -109,7 +109,7 @@ This comprehensive guide should make navigating and utilizing the FooBook_Androi
 
 ### Wrap-Up
 The latest advancements in FooBook_Android mark a significant enhancement in functionality and user interface. We encourage you to explore these updates, share your feedback, and contribute to ongoing development.
-For in-depth details on each feature, refer to the linked Jira tasks within this document.
+For in-depth details on each feature, refer to the [`linked Jira`](https://chengoizman.atlassian.net/jira/software/projects/AP/boards/4/backlog) tasks within this document.
 
 ## Photos
 <div align="center">

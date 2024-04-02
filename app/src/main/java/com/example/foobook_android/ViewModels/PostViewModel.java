@@ -12,6 +12,7 @@ import com.example.foobook_android.Api.ToggleLikeResponse;
 import com.example.foobook_android.Repositories.UserRepository;
 import com.example.foobook_android.post.Post;
 import com.example.foobook_android.Repositories.PostRepository;
+import com.example.foobook_android.utility.TokenManager;
 import com.example.foobook_android.utility.UserDetails;
 import java.util.List;
 import retrofit2.Call;
@@ -29,12 +30,15 @@ public class PostViewModel extends AndroidViewModel {
     private final MutableLiveData<String> profilePicLiveData = new MutableLiveData<>();
     private final MutableLiveData<PostsResponse> postsLiveData = new MutableLiveData<>();
     private final MutableLiveData<ToggleLikeResponse> toggleLikeResponse = new MutableLiveData<>();
-    private MutableLiveData<String> errorLiveData = new MutableLiveData<>(); // For error messages
+    private MutableLiveData<String> errorLiveData = new MutableLiveData<>(); // For error message
+    private TokenManager tokenManager; // Field to hold the TokenManager instance
+
 
 
     public PostViewModel(@NonNull Application application) {
         super(application);
         repository = new PostRepository(application);
+        tokenManager = new TokenManager(application); // Initialize the TokenManager
         latestPosts = repository.getLatestPosts();
     }
     // Getter for observing latest posts
@@ -137,7 +141,9 @@ public class PostViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(UserDetails userDetails) {
                 displayNameLiveData.postValue(userDetails.getDisplayName());
+                tokenManager.setDisplayName(userDetails.getDisplayName());
                 profilePicLiveData.postValue(userDetails.getProfilePic());
+                tokenManager.setProfilePic(userDetails.getProfilePic());
             }
 
             @Override
