@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.EditText;
 import android.widget.Toast;
 
+// Utility class for validating user input.
 public class UserInputValidator {
     private final EditText inputUserName, inputPassword, inputPasswordVer, inputDisplayName;
     private boolean isPhotoSelected;
@@ -19,10 +20,12 @@ public class UserInputValidator {
         this.isPhotoSelected = isPhotoSelected;
     }
 
+    // Setter for photo selection status
     public void setPhotoSelected(boolean photoSelected) {
         this.isPhotoSelected = photoSelected;
     }
 
+    // Validates user input
     public boolean isInputValid() {
         String userName = inputUserName.getText().toString();
         String password = inputPassword.getText().toString();

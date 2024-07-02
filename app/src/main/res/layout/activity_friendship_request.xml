@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.FriendRequestsActivity">
+
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/foobook_logo" />
+
+    <TextView
+        android:id="@+id/FriendRequestActivityTitle"
+        style="@style/pageTitle"
+        android:text="@string/friend_requests"
+        android:paddingStart="70dp"
+        android:paddingTop="20dp"
+        android:textSize="40dp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendRequestsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/FriendRequestActivityTitle"
+        android:layout_marginTop="15dp"
+        android:padding="8dp"
+        tools:listitem="@layout/item_friend_request" />
+
+</RelativeLayout>

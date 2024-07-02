@@ -1,64 +1,101 @@
 package com.example.foobook_android.post;
-import android.net.Uri;
 
-import com.example.foobook_android.comment.Comment;
-
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
+// Defines the Post entity for Room and includes information about a social media post.
+@Entity
 public class Post implements Serializable {
     public static final int PHOTO_PICKED = 1;
     public static final int NO_PHOTO = 0;
-    public static final int JSON_FILE = 1;
-    public static final int NOT_JSON_FILE = 0;
-    private String userName;
-    private String timestamp;
-    private String content;
-    private List<Comment> comments = new ArrayList<>();
+
+    @NonNull
+    @PrimaryKey
+    @SerializedName("_id")
+    private String postId;
+    @ColumnInfo(name = "userName")
+    private final String userName;
+
+    @ColumnInfo(name = "timestamp")
+    private final String timestamp;
+
+    @ColumnInfo(name = "text")
+    private String text;
+
+    @ColumnInfo(name = "likeCount")
+    @SerializedName("likeCount")
     private int likesCount;
-    private boolean isLikedByCurrentUser;
-    private String profileImage;
-    private String postImage;
+
+    @ColumnInfo(name = "userLiked")
+    @SerializedName("userLiked")
+    private boolean userLiked;
+
+    @SerializedName("canEdit")
+    private boolean canEdit;
+
+    @ColumnInfo(name = "profileImage")
+    private final String profileImage;
+
+    @ColumnInfo(name = "imageUrl")
+    @SerializedName("imageUrl")
+    private String imageUrl;
+
+    @ColumnInfo(name = "isImageSetByUser")
     private boolean isImageSetByUser;
+
+    @ColumnInfo(name = "isPhotoPicked")
     private int isPhotoPicked;
+
+    @ColumnInfo(name = "isJsonFile")
     private int isJsonFile;
 
+    @SerializedName("createdBy")
+    private Creator creator;
+
+    @ColumnInfo(name ="createdAt")
+    private String createdAt;
+    @ColumnInfo(name ="updatedBy")
+    private String updatedAt;
 
 
-
-    public Post(String userName, String timestamp, String content, String profileImage) {
+    public Post(String userName, String timestamp, String text, String profileImage) {
         this.userName = userName;
         this.timestamp = timestamp;
-        this.content = content;
+        this.text = text;
         this.profileImage = profileImage;
         this.isJsonFile = 0;
         this.isPhotoPicked = NO_PHOTO;
+        this.creator = null;
+        this.userLiked = false;
     }
-    public Post(String userName, String timestamp, String content,  String profileImage,
+    public Post(String userName, String timestamp, String text,  String profileImage,
                 String postImageUri) {
         this.userName = userName;
         this.timestamp = timestamp;
-        this.content = content;
+        this.text = text;
         this.profileImage = profileImage;
-        this.postImage = postImageUri;
+        this.imageUrl = postImageUri;
         this.isJsonFile = 0;
         this.isPhotoPicked = PHOTO_PICKED;
     }
 
+    // Toggles the like status of the post, updating the likes count accordingly.
     public boolean toggleLike() {
-        isLikedByCurrentUser = !isLikedByCurrentUser;
-        likesCount += isLikedByCurrentUser ? 1 : -1;
-        return isLikedByCurrentUser;
+        userLiked = !userLiked;
+        likesCount += userLiked ? 1 : -1;
+        return userLiked;
     }
 
     // Getters
     public int getLikesCount() {
         return likesCount;
     }
-
-    public boolean isLikedByCurrentUser() {
-        return isLikedByCurrentUser;
+    public boolean getUserLiked() {
+        return userLiked;
     }
     public boolean isImageSetByUser() {
         return isImageSetByUser;
@@ -66,37 +103,22 @@ public class Post implements Serializable {
     public int getIsPhotoPicked() {
         return isPhotoPicked;
     }
-
     public String getUserName() {
         return userName;
     }
-
     public String getTimestamp() {
         return timestamp;
     }
-
-    public String getContent() {
-        return content;
+    public String getText() {
+        return text;
     }
-
-
-    public String getProfileImageUrl() {
+    public String getProfileImage() {
         return profileImage;
     }
-
-    public String getPostImageUrl() {
-        return postImage;
+    public String getImageUrl() {
+        return imageUrl;
     }
-    public Uri getPostImageUri(){
-        return Uri.parse(postImage);
-    }
-    public String getPostImage(){
-        return postImage;
-    }
-    public List<Comment> getComments() {
-        return comments;
-    }
-    public  int getIsJsonFile() {
+    public int getIsJsonFile() {
         return this.isJsonFile;
     }
 
@@ -108,32 +130,61 @@ public class Post implements Serializable {
         this.isPhotoPicked = isPhotoPicked;
     }
 
-    public void setPostImage(String postImage) {
-        this.postImage = postImage;
+    public void setImageUrl(String postImage) {
+        this.imageUrl = postImage;
     }
 
     public void setImageSetByUser(boolean isImageSetByUser) {
         this.isImageSetByUser = isImageSetByUser;
     }
-
-
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setContent(String text) {
+        this.text = text;
+    }
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setUserLiked(boolean userLiked) {
+        this.userLiked = userLiked;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public Creator getCreator() {
+        return creator;
     }
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+    public void setCreator(Creator createdBy) {
+        this.creator = createdBy;
     }
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
+    public boolean isCanEdit() {
+        return canEdit;
+    }
+
+    public void setCanEdit(boolean canEdit) {
+        this.canEdit = canEdit;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

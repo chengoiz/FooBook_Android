@@ -1,40 +1,60 @@
 package com.example.foobook_android.comment;
 
 public class Comment {
+    // Fields to store the commenter's name, their comment text, and profile image URL.
     private String commenterName;
     private String commentText;
-    private String commenterProfileImage;
-
-
-    // Constructor
-    public Comment(String commenterName, String commentText, String commenterProfileImage) {
+    private String commenterProfilePic;
+    /**
+     * Constructor for creating a new Comment object.
+     *
+     * @param commenterName The name of the commenter.
+     * @param commentText The text of the comment.
+     * @param commenterProfilePic The profile pic of the commenter.
+     */
+    public Comment(String commenterName, String commenterProfilePic, String commentText) {
         this.commenterName = commenterName;
+        this.commenterProfilePic = commenterProfilePic;
         this.commentText = commentText;
-        this.commenterProfileImage = commenterProfileImage;
     }
-    // Getters
+
+    // Getters and Setters for the Comment class properties.
+
+    /**
+     * Gets the name of the commenter.
+     *
+     * @return The name of the commenter.
+     */
     public String getCommenterName() {
         return commenterName;
     }
 
-    public String getCommenterProfileImage() {
-        return commenterProfileImage;
-    }
+    /**
+     * Gets the comment text.
+     *
+     * @return The text of the comment.
+     */
     public String getCommentText() {
         return commentText;
     }
 
-    // Setters
-    public void setCommenterName(String commenterName) {
-        this.commenterName = commenterName;
+    public String getCommenterProfilePic() {
+        return commenterProfilePic;
     }
 
+    /**
+     * Sets the comment text.
+     *
+     * @param commentText The new text of the comment.
+     */
     public void setCommentText(String commentText) {
         this.commentText = commentText;
     }
 
-    public void setCommenterProfileImage(String commenterProfileImage) {
-        this.commenterProfileImage = commenterProfileImage;
+    public void setCommenterName(String commenterName) {
+        this.commenterName = commenterName;
     }
-
+    public void setCommenterProfilePic(String commenterProfilePic) {
+        this.commenterProfilePic = commenterProfilePic;
+    }
 }

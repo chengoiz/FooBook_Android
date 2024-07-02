@@ -12,11 +12,14 @@
         android:orientation="horizontal"
         android:paddingHorizontal="1dp">
 
-        <TextView
-            android:id="@+id/textView4"
-            style="@style/pageTitle"
-            android:text="@string/app_name"
-             />
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/foobook_logo" />
 
 
         <androidx.appcompat.widget.SwitchCompat
@@ -29,14 +32,16 @@
             android:textStyle="bold"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
+
         <ImageButton
             android:id="@+id/addPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:layout_toStartOf="@+id/search_button"
             android:background="@android:color/transparent"
             android:paddingRight="1dp"
-            app:srcCompat="@drawable/btn_add_post"
-            android:layout_toStartOf="@+id/search_button">
+            app:srcCompat="@drawable/btn_add_post">
 
         </ImageButton>
 
@@ -66,14 +71,58 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="8dp">
+
+        <!-- Friend List Button (Right) -->
+
+        <Button
+            android:id="@+id/MyProfileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:text="@string/my_profile" />
+
+        <Button
+            android:id="@+id/FriendRequestsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/friend_requests" />
+
+        <Button
+            android:id="@+id/FriendListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:text="@string/friend_list" />
+
+    </RelativeLayout>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/buttons"
+        android:layout_marginTop="15dp">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feedRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/title"
+        android:layout_below="@id/buttons"
         android:layout_marginTop="15dp"
         android:padding="8dp"
         tools:listitem="@layout/post_item" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/feedMenuBtn"

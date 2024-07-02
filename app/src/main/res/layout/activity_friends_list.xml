@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.FriendsListActivity">
+    <TextView
+        android:id="@+id/friendListTitle"
+        style="@style/pageTitle"
+        android:text="@string/friend_list"
+        android:paddingTop="20dp"
+        android:paddingStart="50dp"
+        android:textSize="50dp"
+        android:layout_centerHorizontal="true"
+        />
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/foobook_logo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendListRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/friendListTitle"
+        android:layout_marginTop="15dp"
+        android:padding="8dp"
+        tools:listitem="@layout/item_friend_list" />
+
+</RelativeLayout>

@@ -4,6 +4,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+// Utility class for field validation in Android EditText.
 public class FieldValidation {
     public static void setupFieldValidation(EditText editText) {
         editText.addTextChangedListener(new TextWatcher() {

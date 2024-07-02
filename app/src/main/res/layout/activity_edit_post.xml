@@ -12,38 +12,30 @@
       android:orientation="horizontal"
       android:paddingHorizontal="10dp">
 
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/foobook_logo" />
+
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/facebolt"
-        android:layout_weight="1"
-        android:text="@string/app_name"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="40sp"
+        android:id="@+id/EditPost"
+        style="@style/pageTitle"
+        android:text="Edit Post"
+        android:textSize="50dp"
+        android:paddingStart="50dp"
+        android:paddingTop="15dp"
+        android:layout_centerHorizontal="true"
         />
+
 
 
     <View
         android:layout_width="100dp"
         android:layout_height="0dp" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:srcCompat="@drawable/btn_search"
-        android:layout_weight="1"
-        >
-    </ImageButton>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:srcCompat="@drawable/btn_messenger"
-        android:layout_weight="1">
-    </ImageButton>
 
   </LinearLayout>
 
@@ -79,6 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:paddingStart="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/postTextInputLayout"
         app:layout_constraintEnd_toStartOf="@+id/btnCamera"
         app:layout_constraintTop_toTopOf="@+id/postTextInputLayout"
@@ -96,40 +89,41 @@
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
+
   <ImageView
       android:id="@+id/selectedImage"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginBottom="20dp"
       android:layout_below="@id/postButton"
-      android:layout_centerHorizontal="true"
       android:layout_marginHorizontal="10dp"
-      android:layout_marginTop="8dp"
-      android:scaleType="centerCrop"
+      android:layout_marginTop="24dp"
+      android:layout_marginBottom="20dp"
+      android:scaleType="fitCenter"
       android:visibility="visible" />
-
 
   <Button
       android:id="@+id/postButton"
-      android:layout_width="wrap_content"
+      android:layout_width="101dp"
       android:layout_height="wrap_content"
       android:layout_below="@id/newPostLayout"
       android:layout_alignParentEnd="true"
+      android:layout_centerHorizontal="true"
       android:layout_marginStart="16dp"
-      android:layout_marginTop="5dp"
-      android:layout_marginEnd="16dp"
+      android:layout_marginTop="6dp"
+      android:layout_marginEnd="292dp"
       android:layout_marginBottom="16dp"
-      android:text="@string/feedBtnPost" />
+      android:text="@string/feedSavePost" />
 
   <Button
       android:id="@+id/removePhoto"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_below="@id/newPostLayout"
-      android:layout_marginStart="16dp"
+      android:layout_marginStart="125dp"
       android:layout_marginTop="5dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
+      android:layout_centerHorizontal="true"
       android:text="@string/remove_photo"
       android:visibility="gone" />
 

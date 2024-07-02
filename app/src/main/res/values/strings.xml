@@ -1,14 +1,20 @@
 <resources>
     <string name="app_name">FooBook</string>
+    <string name="view_profile">View Profile</string>
     <string name="login_userName">Username</string>
     <string name="login_login_btn">Login</string>
     <string name="password">Password</string>
     <string name="login_signUp">Sign up for FooBook</string>
     <string name="password_confirm">Confirm Password</string>
+    <string name="send_friend_request">Send Friend Request</string>
     <string name="signUp_DisplayName">Display Name</string>
     <string name="signUp_choose_file">Choose File</string>
+    <string name="my_profile">My Profile</string>
+    <string name="user_profile_picture">User Profile Picture</string>
+    <string name="add_friend">Add Friend</string>
     <string name="signUp_TakePhoto">Take Photo</string>
     <string name="signUp_imageText">No File Chosen</string>
+    <string name="default_username">Default User</string>
     <string name="btnSignup">Sign Up</string>
     <string name="signUpTitle">Sign Up</string>
     <string name="registerBtnBack">Back</string>
@@ -22,7 +28,6 @@
     <string name="share">Share</string>
     <string name="likes">Likes: 0</string>
     <string name="post_content_goes_here">Post content goes here...</string>
-
     <string name="likes_count">Likes: %d</string>
     <string name="comments_count">Comments: %d</string>
     <string name="logout">Logout</string>
@@ -31,5 +36,16 @@
     <string name="comments_title">Comments</string>
     <string name="tomer">Tomer</string>
     <string name="write_your_comment_here">Write your comment here...</string>
+    <string name="view_friend_requests">Friend Requests</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
+    <string name="username">Username</string>
+    <string name="friend_requests">Friend Requests</string>
+    <string name="delete">Delete</string>
+    <string name="friends">Friends</string>
+    <string name="friend_list">Friend List</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="delete_user">Delete User</string>
+    <string name="feedSavePost">Save</string>
 
 </resources>

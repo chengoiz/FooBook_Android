@@ -1,75 +1,127 @@
-# FooBook_Android
-## Part 2 of the Final Project in the Advanced Systems Programming Course
+<div align="center">
+  <h1>FooBook_Android: Part 3</h1>
+</div>
+<p align="center">
+  <img src="https://github.com/RoeiMesi/FooBook_Android/assets/23407020/3d17bb9e-deb7-4f75-a8d4-13802d6e0e38" alt="foobook_logo">
+</p>
 
-### Getting Started
-Follow these instructions to get a copy of the project up and running on your local machine for development.
+Welcome to Part 3 of the FooBook_Android project. This phase brings critical updates to the app, integrating MongoDB for backend storage and Room for local database management. We've also incorporated JWT for secure authentication, enhanced UI components, and introduced a complete friend system, alongside other robust features.
 
-### Installing
-A step-by-step series to get a development environment running:
+## Getting Started
+To get started with these new features, please follow the instructions below.
 
-1. **Clone the repo or download the ZIP file**
-    - Git clone `https://github.com/RoeiMesi/FooBook_Android`
-    - Open Android Studio and press "Get from VCS" and paste the URL.
-    - Or download and extract the ZIP file from the GitHub repository page and open this folder from Android Studio.
+### Prerequisites
+Ensure that you have the latest version of Android Studio.
 
-2. **Android SDK**
-    - Your Android Studio SDK needs to be configured to:
-        - Minimal API Level: 29.
-        - Optimal API Level: 34.
+To fully utilize the functionalities of FooBook_Android, it's essential to have the [`Foobook_Server`](https://github.com/TomerBeren/FooBook_Server)
+operational, since this frontend application depends on its API endpoints for data access.
 
-3. **Sync project with gradle files and add configuration**
-   - After cloning, at the top right of your IDE, press the "Sync Project with Gradle Files".
-   - At the top of your screen click on "Add configuration" -> Add new -> Android App
-   - -> Pick a name for the app, and in the 'Module' category, choose: FooBook_Android.app.main
+### Installation
+1. **Clone the Repository:**
+   **git clone https://github.com/RoeiMesi/FooBook_Android**
+   
+2. **Open Project: Launch Android Studio and open the cloned project.**
 
-4. **Make sure you have an emulator or device set up.**
+3. **Sync Gradle: Use the 'Sync Now' feature in Android Studio to sync your project with the updated dependencies.**
 
-5. **Build and run the application.**
 
-### Login
-To login, use our hardcoded credentials:
-- Username: Tomer
-- Password: a5k8b123
+## New Features and Improvements
 
-### Registration
-- All the fields are required for the registration.
-- Your password must be of size 8 characters and include at least one letter and one number.
-- Note: For this part of the project registration is not saved and you can login only with the hardcoded details, valid registration will transport you back to the login page.
+### User Authentication and Security
+- Secure login and registration through JWT-based authentication.
+- Backend endpoints protection requiring valid JWTs.
 
-### Feed
-- **Adding a Post**: To add a post, click the "PLUS" button at the top of the screen. This will transport you to a new page where you can manage all your input. Blank posts are permitted.
-- **Editing/Deleting a Post**: To edit or delete a post, click the edit button located in the upper right corner of the post.
-- **Editing functionalities**: Editing will transport you to a new page where you can change the text if wanted, change the photo if wanted, or remove the current photo of the post. If no photo exists, there will be no button to remove it.
-- **Commenting on a Post**: To comment on a post, you need to click on the comment button, this will transport you to a new page where you will see all the comments.
-- **Adding a Comment**: To add a comment, type your text into the input box and press the send icon.
-- **Editing a Comment**: To edit a comment, click the edit button, make your changes, and then click save icon.
-- **Deleting a Comment**: To delete a comment, click the delete button.
-- **Liking a Post**: To like a post, simply click the like button.
-- **Logging Out**: To logout, click the logout button located on the lower right side of the page.
-- **Dark Mode**: To switch to dark mode, press the dark mode button on the top of the screen.
+### Friend System
+- A comprehensive system for managing friend requests, viewing, and interacting with friends within user profiles.
 
-# Project Development Approach
+### UI and UX Enhancements
+- Improved UI components for easier navigation and a visually appealing experience, including a dark mode.
+- Enhanced personalization through photo selection in posts and profile settings.
+- Smooth UI updates with consistent theming and data binding.
 
-## Starting Out
+### Database Management
+- MongoDB integration for efficient data handling and user information storage.
+- Room database for local data persistence, ensuring offline functionality.
+- Synchronization between local and remote databases to maintain data consistency.
 
-- Initial inspiration came from examining the Facebook app to determine the design elements and views we wanted to incorporate.
-- With a vision for our basic structure, we began crafting the activity layouts using XML within Android Studio.
-- We drew each page on a piece of paper to give us a sense of direction as for the design part.
+### Error Handling and Data Compliance
+- Advanced error handling mechanisms for a streamlined user experience.
+- Compliance with privacy standards in data management.
 
-## Adding Functionality
 
-- With our main layouts established, we turned our attention to incorporating various functionalities across the app.
-- To maintain organization and adhere to the principle of separation of concerns, we introduced new classes responsible for distinct functionalities such as managing posts and comments, implementing validators, and more.
-- Efforts were also placed on enhancing user interactions, adding navigational flows between different app pages, managing permissions, among other enhancements.
+## How to use FooBook_Android Features
 
-## Updating the Design
+This guide is designed to help you navigate and make full use of the FooBook_Android app's features. From creating and managing posts to handling friend requests, here's everything you need to know to enhance your user experience.
 
-- After embedding the core functionalities, we revisited our design, implementing adjustments to refine the app's aesthetics and user experience.
+### Creating and Managing Posts
 
-## Testing and Fixing
+#### Creating a New Post
+1. **Initiate Post Creation:** Tap the "+" icon at the top of the main screen to open the post creation interface.
+2. **Adding Photos:**
+   - **Camera:** Tap the small camera icon to open your phone's camera. Capture a photo to add it to your post.
+   - **Gallery:** Tap the photo icon next to the camera icon to select a photo from your gallery.
 
-- The app underwent rigorous testing on a variety of devices and Android versions to identify and rectify any issues, ensuring compatibility and a smooth user experience across different platforms.
+#### Editing and Deleting Posts
+- **Access Edit Options:** Click the pencil icon next to your post to see options for "Edit Post" and "Delete Post."
+   - **Edit Post:** Select this option to modify the content of your post. You can change the text or the photos attached.
+   - **Delete Post:** Choose this to remove your post permanently.
 
-## Wrap-up
+#### Interacting with Posts
+- **Liking Posts:** You can like any post by tapping the like button, regardless of whether the poster is a friend.
+- **Commenting:** Feel free to comment on any post to engage with other users.
 
-- Our development journey began with a simple conceptual sketch to capture the envisioned look and feel of the app. Following this, we laid out the foundational design, progressively building upon it with essential functionalities. Subsequent phases focused on design refinement, extensive testing on multiple devices, and necessary adjustments to deliver an app that performs seamlessly across a wide range of devices, embodying our initial vision and objectives.
+### Profile Management
+
+#### Accessing and Editing Your Profile
+- **View Your Profile:** Select "My Profile" to see your posts and profile information.
+- **Edit Profile Options:** Tap the popup button at the bottom right and choose "Edit Profile." Here, you can:
+   - **Change Profile Picture:** Choose "Take Picture" to snap a new photo or "Choose File" to select one from your gallery. If updating your photo, re-enter your name if you do not wish to change it.
+   - **Update Name:** You have the option to update your name directly in this section.
+
+#### Logout and Account Deletion
+- **Logout:** Select "Logout" from the popup menu to sign out of your account.
+- **Delete User:** Choose "Delete User" to permanently remove your account and all related data.
+
+### Friend System
+
+#### Managing Friends and Friend Requests
+- **Viewing Friend List:** Tap "Friend List" to see your friends. Here, you can delete friends or view their friends.
+- **Handling Friend Requests:** Use the "Friend Requests" button to accept or decline incoming requests.
+
+#### Interacting with Other Users' Profiles
+- **Viewing Profiles:** Click on a user's profile picture from a post in your feed to view their profile.
+   - **If Not Friends:** You'll see an "Add Friend" option and won't be able to view their posts until the friend request is accepted.
+   - **If Friends:** You can view their posts displayed beneath their name.
+
+This comprehensive guide should make navigating and utilizing the FooBook_Android app's features straightforward. If there's anything else you'd like to know or need further clarification on, don't hesitate to ask!
+
+
+## Development and Testing
+### Development Approach
+- Planned user journey and data flow for a seamless app experience.
+- Modular development strategy for easy feature testing and integration.
+- Adoption of MVVM architecture for code that's both maintainable and testable.
+
+### Testing
+- Comprehensive unit and integration testing of features.
+- End-to-end testing for ensuring feature compatibility and data integrity.
+- Application testing across different devices and Android versions for consistent user experience.
+
+### Wrap-Up
+The latest advancements in FooBook_Android mark a significant enhancement in functionality and user interface. We encourage you to explore these updates, share your feedback, and contribute to ongoing development.
+For in-depth details on each feature, refer to the [`linked Jira`](https://chengoizman.atlassian.net/jira/software/projects/AP/boards/4/backlog) tasks within this document.
+
+## Photos
+<div align="center">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/7976fecf-f863-4611-ab4f-31cdafe62632" alt="Image 1">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/8e4ac62c-daa7-4b1e-b255-cb64270deeec" alt="Image 2">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/b3186cb0-e58d-4b1c-b4e8-09854ddfc95f" alt="Image 3">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/1b7ad99d-61c1-4976-82b3-c6e948824e79" alt="Image 4">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/4ddac3ce-d4ac-4a2f-8800-3602efb4b39f" alt="Image 5">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/53cbd007-57c0-4762-8871-4a5c5fc14ba9" alt="Image 6">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/b0c3f749-61af-40e6-911e-fe14caebdd8c" alt="Image 7">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/c62bc21d-ba18-4171-93ab-1579f0d6315f" alt="Image 8">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/6b59bb92-6a10-498e-a79d-4839fe87652d" alt="Image 9">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/0e448103-6319-413d-9611-48abdfc2e987" alt="Image 10">
+  <img src="https://github.com/RoeiMesi/FakeFooBook_Android/assets/23407020/4e2f818b-6658-4dd7-981e-209ce5534638" alt="Image 11">
+</div>
