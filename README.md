@@ -13,12 +13,12 @@ To get started with these new features, please follow the instructions below.
 ### Prerequisites
 Ensure that you have the latest version of Android Studio.
 
-To fully utilize the functionalities of FooBook_Android, it's essential to have the [`Foobook_Server`](https://github.com/TomerBeren/FooBook_Server)
+To fully utilize the functionalities of FooBook_Android, it's essential to have the [`Foobook_Server`](https://github.com/chengoiz/FooBook_server.git)
 operational, since this frontend application depends on its API endpoints for data access.
 
 ### Installation
 1. **Clone the Repository:**
-   **git clone https://github.com/RoeiMesi/FooBook_Android**
+   **git clone https://github.com/chengoiz/FooBook_Android.git**
    
 2. **Open Project: Launch Android Studio and open the cloned project.**
 
